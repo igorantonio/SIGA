@@ -27,5 +27,6 @@ cannot find 'lodash' -> $ npm install lodash --save<br>
 			$ npm install		     acho melhor tentar logo eles)<br>
 
 Cannot found /data/db -> $ sudo mkdir -p /data/db  (Cria a pasta pra direcioar o armazenamento do bd)<br>
+sudo chown $USER /data/db, caso dê erro ao inicializar o mongo
 
 Unable to create/open lock file: /data/db/mongod.lock errno:13 Permission denied Is a mongod instance already running?, terminating -> $ sudo chow user /data/db<br>
