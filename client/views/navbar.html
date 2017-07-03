@@ -1,7 +1,15 @@
 <div class="navbar">
 
-    <div ng-controller="logoutController">
-        <a ng-click='logout()' class="btn btn-default">Logout</a>
+    <div class="myrow">
+
+        <div class="title"><p>Monitoramento de consumo de água na UFCG</p></div>
+
+        <div class="session">
+            <md-icon class="md-session" ng-controller="logoutController" ng-click='logout()'>
+                account_circle
+            </md-icon>
+        </div>
+
     </div>
 
 </div>

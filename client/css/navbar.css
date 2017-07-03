@@ -1,0 +1,39 @@
+.navbar {
+    background-color: #5e7ed2;
+    height: 8%;
+}
+
+.navbar p {
+    text-align: center;
+    font-size: 23px;
+    font-weight: 800;
+    color: #fff;
+    margin: 12px 0;
+    position: relative;
+    width: auto;
+}
+
+.myrow div {
+    display:table-cell;
+}
+
+.title {
+    width: 100%;
+}
+
+.session {
+    margin-right: 50px;
+    vertical-align: middle;
+}
+
+/* Rules for styling session icon. */
+.material-icons.md-session {
+    font-size: 24px;
+    color: rgb(249, 249, 249);
+    margin: 0 20px;
+    vertical-align: middle;
+}
+
+.material-icons.md-session:hover {
+    color: rgb(254, 254, 254);
+}
