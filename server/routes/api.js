@@ -64,11 +64,13 @@ router.get('/status', function(req, res) {
 
 router.get('/users', function(req, res) {
   var user_name = req.query.username;
-  User.find({username: user_name}, function (err, user) {
-        if (err != null){
-            console.log(err);
+  User.findOne({username: user_name}, function (err, user) {
+        if (err != null || !user){
+            return res.status(401).json({
+              status: false
+            });
         }
-        res.json(user);
+        res.status(200).json(user);
   });
 });
 
