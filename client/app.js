@@ -4,7 +4,7 @@ myApp.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'views/home.html',
-      access: {restricted: true}
+      access: {restricted: false}
     })
     .when('/login', {
       templateUrl: 'views/login.html',
