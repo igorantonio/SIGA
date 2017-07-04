@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'ngAnimate','ngAria', 'ngMaterial']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngAnimate','ngAria', 'ngMaterial', 'openlayers-directive']);
 
 myApp.config(function ($routeProvider) {
   $routeProvider
