@@ -1,21 +1,17 @@
-.dialogdemoBasicUsage #popupContainer {
-  position: relative; }
+.popup {
+	height: 100%;
+	width: 100%;
+}
 
-.dialogdemoBasicUsage .footer {
-  width: 100%;
-  text-align: center;
-  margin-left: 20px; }
+md-tabs {
+	width: 100%;
+}
 
-.dialogdemoBasicUsage .footer, .dialogdemoBasicUsage .footer > code {
-  font-size: 0.8em;
-  margin-top: 50px; }
+md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
+    color: #1070A0 !important;
+    background-color: #1070A0 !important;
+}
 
-.dialogdemoBasicUsage button {
-  width: 200px; }
-
-.dialogdemoBasicUsage div#status {
-  color: #c60008; }
-
-.dialogdemoBasicUsage .dialog-demo-prerendered md-checkbox {
-  margin-bottom: 0; }
-
+.content {
+	margin: 3%;
+}
