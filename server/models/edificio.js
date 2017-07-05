@@ -1,31 +1,24 @@
 // building model
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var passportLocalMongoose = require('passport-local-mongoose');
-
-var caracteristicas = new Schema({
-	localizacao: String,
-	area: Number,
-	pavimentos: Number,
-	ocupacaoMedia: Number,
-	baciasSanitarias: Number,
-	torneiras: Number,
-	duchas: Number,
-	chuveiros: Number,
-	pias: Number,
-	volumeReservatorio: Number
-})
 
 var Edificio = new Schema({
-  nome: String,
-  descricao: String,
-  atividade: String,
-  caracteristicasFisicas = caracteristicas,
-  consumoDeAgua: Schema,
-  estatisticas: Schema
+	nome: String,
+  	descricao: String,
+  	atividade: String,
+	caracteristicasFisicas: {
+		localizacao: { setor: String, bloco: String },
+		area: Number,
+		n_pavimentos: Number,
+		ocupacaoMedia: Number,
+		n_baciasSanitarias: Number,
+		n_torneiras: Number,
+		n_duchas: Number,
+		n_chuveiros: Number,
+		n_pias: Number,
+		volumeReservatorio: Number
+	},
+	consumoDiario: [{ dia: Date, consumo: Number }]
 });
 
-Building.plugin(passportLocalMongoose);
-
-
-module.exports = mongoose.model('buildings', Building);
+module.exports = mongoose.model('edificios', Edificio);
