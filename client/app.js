@@ -45,10 +45,3 @@ myApp.run(function ($rootScope, $location, $route, AuthService) {
       });
   });
 });
-
-myApp.config(function($mdThemingProvider) {
-    $mdThemingProvider.theme('default')
-        .primaryPalette('blue')
-        .accentPalette('blue-grey')
-        .warnPalette('orange');
-});

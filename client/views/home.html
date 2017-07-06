@@ -1,8 +1,40 @@
 
 <toolbar></toolbar>
 
+<div class="md-menu-demo" ng-controller="HomeController as ctrl" ng-cloak>
+    <div class="menu-demo-container" layout-align="center end" layout="column">
+        <md-menu>
+            <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+                <md-icon>sort</md-icon>
+            </md-button>
+            <md-menu-content width="4">
+                <md-menu-item>
+                    <md-button ng-click="ctrl.redial($event)">
+                        <md-icon>check_box</md-icon>
+                        Todos os prédios
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                        <md-icon>check_box_outline_blank</md-icon>
+                        Prédios normalizados
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                        <md-icon>check_box_outline_blank</md-icon>
+                        Prédios em alerta
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
+</div>
+
 <div ng-controller="MapController">
     <openlayers ol-center="center" height="600"></openlayers>
 </div>
 
 <footer></footer>
+
+
