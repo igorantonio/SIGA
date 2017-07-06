@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'ngAnimate','ngAria', 'ngMaterial', 'openlayers-directive']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngAnimate','ngAria', 'ngSanitize', 'ngMaterial', 'openlayers-directive']);
 
 myApp.config(function ($routeProvider) {
   $routeProvider
@@ -44,4 +44,11 @@ myApp.run(function ($rootScope, $location, $route, AuthService) {
         }
       });
   });
+});
+
+myApp.config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+        .primaryPalette('blue')
+        .accentPalette('blue-grey')
+        .warnPalette('orange');
 });

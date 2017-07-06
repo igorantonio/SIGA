@@ -1,8 +1,8 @@
 angular
     .module('myApp')
-    .directive('navbar', function () {
+    .directive('toolbar', function () {
         return {
-            templateUrl: 'views/navbar.html',
+            templateUrl: 'views/toolbar.html',
             restrict: 'E'
         }
     });

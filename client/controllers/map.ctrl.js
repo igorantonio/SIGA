@@ -4,7 +4,7 @@ angular.module('myApp')
         center: {
             "lat": -7.214455941427701,
             "lon": -395.90871261099613,
-            "zoom": 16
+            "zoom": 17
         }
     });
 }]);
