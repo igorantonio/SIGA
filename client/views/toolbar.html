@@ -1,21 +1,13 @@
 <div class="toolbar">
-
     <div class="myrow">
 
         <div class="title"><p>Monitoramento de consumo de água na UFCG</p></div>
 
-        <div class="session" ng-controller="SessionController">
-
-            <md-icon class="md-session" ng-click='logout($event)'>
+        <div class="session" ng-controller="SessionController as ctrl">
+            <md-icon class="md-session" ng-click='ctrl.changeSessionState($event)'>
                 account_circle
             </md-icon>
-
-            <md-icon class="md-session" ng-click='openDialog($event)'>
-                account_circle
-            </md-icon>
-
         </div>
 
     </div>
-
 </div>
