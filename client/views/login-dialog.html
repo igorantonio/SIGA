@@ -27,8 +27,10 @@
             </div>
         </md-dialog-content>
 
+        <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
+
         <md-dialog-actions layout="row">
-            <md-button type="submit" ng-disabled="loginForm.$invalid" class="md-raised md-primary">Login</md-button>
+            <md-button type="submit" ng-disabled="loginForm.$invalid" class="md-raised md-primary" md-autofocus>Login</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>
