@@ -21,4 +21,4 @@ var Edificio = new Schema({
 	consumoDiario: [{ dia: Date, consumo: Number }]
 });
 
-module.exports = mongoose.model('Edificio', Edificio);
+module.exports = mongoose.model('edificios', Edificio);
