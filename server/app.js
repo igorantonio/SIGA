@@ -21,6 +21,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // user schema/model
 var User = require('./models/user.js');
+var Edificio = require('./models/edificio.js');
+
 
 // create instance of express
 var app = express();

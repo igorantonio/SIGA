@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 var User = require('../models/user.js');
+var Edificio = require('../models/edificio.js');
 
 
 router.post('/register', function(req, res) {
@@ -20,6 +21,12 @@ router.post('/register', function(req, res) {
     });
   });
 });
+
+//Test only #TBD
+router.get('/isItWorking', function(req, res) {
+    res.json({ message: 'Yes! Its Working' });
+});
+
 
 router.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
@@ -74,4 +81,22 @@ router.get('/users', function(req, res) {
   });
 });
 
+router.post('/edificio', function(req,res){
+var edificio = new Edificio();
+  edificio.nome = req.body.nome;
+  edificio.descricao = req.body.descricao;
+  edificio.atividade = req.body.atividade;
+  edificio.save(function(error){
+    if(error) res.send(error);
+    res.json({message: 'Predio criado com sucesso!'});
+  });
+
+});
+router.get('/edificios', function(req,res){
+  Edificio.find(function(err, edificios){
+    if (err) res.send(err);
+    res.json(edificios);
+  });
+});
+  
 module.exports = router;
