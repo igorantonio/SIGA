@@ -69,10 +69,11 @@ app.get('/', function(req, res) {
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
+  /*next(err);*/
   res.status(404).send('404 - Not found');
 });
 
-app.use(function(req, res, next){
+/*app.use(function(req, res, next){
   res.status(404);
 
   // respond with html page
@@ -89,11 +90,12 @@ app.use(function(req, res, next){
 
   // default to plain-text. send()
   res.type('txt').send('Not found');
-});
+});*/
 
 app.use(function(err, req, res) {
   res.status(err.status || 500);
-  /*res.end(JSON.stringify({
+  res.status(404);
+  /*res.send(JSON.stringify({
     message: err.message,
     error: {}
   }));*/
