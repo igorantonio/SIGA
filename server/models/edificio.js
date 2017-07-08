@@ -18,7 +18,8 @@ var Edificio = new Schema({
 		n_pias: Number,
 		volumeReservatorio: Number
 	},
-	consumoDiario: [{ dia: Date, consumo: Number }]
+	consumoDiario: [{ dia: Date, consumo: Number }],
+	geolocalizacao: {latitude: Number, longitude: Number}
 });
 
 module.exports = mongoose.model('edificios', Edificio);
