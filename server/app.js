@@ -28,9 +28,12 @@ var Edificio = require('./models/edificio.js');
 var app = express();
 
 // require routes
-var routes = require('./routes/api.js');
-
+var userRouter = require('./routes/userApi.js');
+var edificioRouter = require('./routes/edificioApi.js');
+var routes = require('./routes/api.js')
 // define middleware
+
+
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -52,6 +55,10 @@ passport.deserializeUser(User.deserializeUser());
 
 // routes
 app.use('/', routes);
+app.use('/', routes);
+app.use('/', routes);
+app.use('/', edificioRouter);
+app.use('/', userRouter);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));
