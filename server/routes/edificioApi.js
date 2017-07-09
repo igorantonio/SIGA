@@ -18,14 +18,30 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req,res){
   });
 });
 
+router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
+  Edificio.findById(req.params.edificio_id, function(error,edificio){
+    if(error) res.send(edificio);
+    novoConsumo = {dia: req.body.dia, consumo: req.body.consumo}
+    edificio.consumoDiario.push(novoConsumo);
+    edificio.save(function(error){
+      if(error) res.send(error);
+      res.json(edificio.consumoDiario);
+    });
+  });
+});
+
+
 router.post('/edificio', function(req,res){
 var edificio = new Edificio();
   edificio.nome = req.body.nome;
   edificio.descricao = req.body.descricao;
   edificio.atividade = req.body.atividade;
+  edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
+  edificio.geolocalizacao = req.body.geolocalizacao;
+  edificio.consumoDiario = req.body.consumoDiario;
   edificio.save(function(error){
     if(error) res.send(error);
-    res.json({message: 'Predio criado com sucesso!'});
+    res.json(edificio);
   });
 
 });
@@ -51,6 +67,7 @@ router.post('/edificio/:edificio_id', function(req,res){
     edificio.atividade = req.body.atividade;
     edificio.geolocalizacao = req.body.geolocalizacao;
     edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
+    edificio.consumoDiario = req.body.consumoDiario; // Pessoalmente eu acho melhor que essa linha não exista;
     edificio.save(function(error){
     	if(error) res.send(error);
     	res.json(edificio);
