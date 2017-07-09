@@ -18,6 +18,30 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req,res){
   });
 });
 
+//Esse codigo leva em consideração apenas uma atualização de consumo por dia;
+router.get('/edificio/:edificio_id/estatisticas', function(req,res){
+  Edificio.findById(req.params.edificio_id, function(error, edificio){
+    if(error) res.send(edificio);
+    sum = 0.0;
+    max = -1.0;
+    min =  9999999;
+    edificio.consumoDiario.forEach(function(cd){
+      consumo = cd.consumo;
+      sum += consumo;
+      if (consumo > max){
+        max = consumo;
+        maxDia = cd.dia
+      };
+      if (min > consumo){
+        min = consumo;
+        minDia = cd.dia
+      };
+    });
+    total = edificio.consumoDiario.length;
+    res.json({media_dia: sum/total, total: sum, maximo:max, dia_maximo:maxDia, minimo: min, dia_minimo: minDia});
+  });
+});
+
 router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
   Edificio.findById(req.params.edificio_id, function(error,edificio){
     if(error) res.send(edificio);
