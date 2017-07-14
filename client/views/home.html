@@ -31,8 +31,10 @@
     </div>
 </div>
 
-<div ng-controller="MapController">
-    <openlayers ol-center="center" height="600"></openlayers>
+<div ng-controller="MapController as ctrl">
+    <openlayers ol-center="center" height="600px">
+        <ol-layer ol-layer-properties="layer" ng-repeat="layer in ctrl.geojsons"></ol-layer>
+    </openlayers>
 </div>
 
 <footer></footer>
