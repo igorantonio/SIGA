@@ -31,9 +31,9 @@
     </div>
 </div>
 
-<div ng-controller="MapController as ctrl">
-    <openlayers ol-center="center" height="600px">
-        <ol-layer ol-layer-properties="layer" ng-repeat="layer in ctrl.geojsons"></ol-layer>
+<div ng-controller="MapController">
+    <openlayers ol-center="center" ol-defaults="defaults"  height="600px">
+        <ol-layer ol-layer-properties="layer" ng-repeat="layer in layers"></ol-layer>
     </openlayers>
 </div>
 
