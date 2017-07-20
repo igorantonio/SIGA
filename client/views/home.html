@@ -32,11 +32,15 @@
 </div>
 
 <div ng-controller="MapController as ctrl">
-    <p>{{ctrl.oi}}</p>
+    <p>{{ctrl.oi}} {{helloMessage}}</p>
+ 
+<!-- Google Map -->
+<div class="col-md-12" >
+   <div id="map" style="width:100%; height:500px">
+     
+   </div>
 
-    <openlayers ol-center="center" ol-defaults="defaults"  height="590px">
-        <ol-layer ol-layer-properties="layer" ng-repeat="layer in layers"></ol-layer>
-    </openlayers>
+   
 </div>
 
 <footer></footer>

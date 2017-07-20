@@ -4,9 +4,92 @@ angular.module('myApp')
         var self = this;
 
         $scope.oi= 'sem id por hr';
-        self.oi ="";
+        self.oi ="lol";
+		self.map = new google.maps.Map(document.getElementById('map'), {
+		    center: {lat: -7.214455941427701, lng: -395.90871261099613},
+		     zoom: 17,
+
+		 }
+		     );
+  
+
+		var styles = {
+       default: null,
+       hide: [
+ {
+   "featureType": "administrative",
+   "elementType": "geometry",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ },
+ {
+   "featureType": "administrative.land_parcel",
+   "elementType": "labels",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ },
+ {
+   "featureType": "poi",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ },
+ {
+   "featureType": "poi",
+   "elementType": "labels.text",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ },
+ {
+   "featureType": "road",
+   "elementType": "labels.icon",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ },
+ {
+   "featureType": "road.local",
+   "elementType": "labels",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ },
+ {
+   "featureType": "transit",
+   "stylers": [
+     {
+       "visibility": "off"
+     }
+   ]
+ }
+]
+     };
+            self.map.setOptions({styles: styles['hide']});
+
+
+		
+		 
 
         angular.extend($scope, {
+
+
+
+        	
             center: {
                 "lat": -7.214455941427701,
                 "lon": -395.90871261099613,
