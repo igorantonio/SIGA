@@ -26,6 +26,7 @@ md-dialog-content {
 	margin: 3%;
 	color: #5E7ED2;
 	width: 60%;
+	height: 100%;
 	float: left;
 	display: inline;
 }
