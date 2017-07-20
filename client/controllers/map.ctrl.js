@@ -1,9 +1,9 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', 'GeoService', 'olData', function($scope, GeoService, olData) {
+    .controller('MapController', ['$scope', 'olData', function($scope, olData) {
 
         var self = this;
 
-        self.geojsons = GeoService.getEdificiosJson();
+        $scope.oi = 'sem id por hr';
 
         angular.extend($scope, {
             center: {
@@ -11,11 +11,27 @@ angular.module('myApp')
                 "lon": -395.90871261099613,
                 "zoom": 17
             },
-            layers: self.geojsons,
+            layers: [
+                {
+                    name: 'geojson',
+                    source: {
+                        type: 'GeoJSON',
+                        url: 'lib/json/all.geo.json'
+                    },
+                    style: {
+                        fill: {
+                            color: '#5E7ED2'
+                        },
+                        stroke: {
+                            color: 'white',
+                            width: 1
+                        }
+                    }
+                }
+            ],
             defaults: {
                 events: {
-                    map: [ 'singleclick', 'pointermove' ],
-                    layers: ['mousemove', 'singleclick']
+                    layers: [ 'click' ]
                 },
                 controls: {
                     zoom: true,
@@ -28,14 +44,14 @@ angular.module('myApp')
             }
         });
 
-        olData.getMap().then(function(map) {
-            $scope.$on('openlayers.layers.singleclick', function(event, feature) {
-                console.log(event);
+        $scope.$on('openlayers.layers.geojson.click', function(event, feature) {
+            $scope.$apply(function(scope) {
+                if(feature) {
+                    $scope.id = feature.getId();
+                } else {
+                    $scope.id = 'deu ruim';
+                }
             });
-        });
-
-        $scope.$on('openlayers.layers.mousemove', function(event, feature) {
-            console.log('oi')
         });
 
 }]);
