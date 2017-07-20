@@ -3,7 +3,10 @@ angular.module('myApp')
 
         var self = this;
 
-        var indexs = ['ginasio', 'reitoria'];
+        var indexs = ['ginasio', 'reitoria', 'ab', 'ba', 'dart', 'humanidades',
+            'central-linguas', 'bc', 'bc1', 'sintesufcg', 'bd', 'xerox', 'bv', 'adufcg',
+            'bg', 'bz'
+        ];
 
         self.geojsons = [];
 
