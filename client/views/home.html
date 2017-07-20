@@ -31,11 +31,12 @@
     </div>
 </div>
 
-<div ng-controller="MapController">
+<div ng-controller="MapController as ctrl">
+    <p>{{ctrl.oi}}</p>
+
     <openlayers ol-center="center" ol-defaults="defaults"  height="590px">
         <ol-layer ol-layer-properties="layer" ng-repeat="layer in layers"></ol-layer>
     </openlayers>
-    <p>{{id}}</p>
 </div>
 
 <footer></footer>

@@ -3,7 +3,8 @@ angular.module('myApp')
 
         var self = this;
 
-        $scope.oi = 'sem id por hr';
+        $scope.oi= 'sem id por hr';
+        self.oi ="";
 
         angular.extend($scope, {
             center: {
