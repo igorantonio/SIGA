@@ -1,5 +1,5 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', '$http', 'olData', '$mdDialog', function($scope, olData, $http, $mdDialog) {
+    .controller('MapController', ['$scope', '$http', '$mdDialog', function($scope, $http, $mdDialog) {
 
     var self = this;
 
@@ -83,12 +83,21 @@ angular.module('myApp')
         var location = new google.maps.LatLng(parseFloat(edificio.geolocalizacao.latitude), parseFloat(edificio.geolocalizacao.longitude));
         var marker = new google.maps.Marker({
            position: location,
-           map: map
+           map: self.map
         });
+        marker.addListener('click', function(ev) {
+        $mdDialog.show({
+            templateUrl: '../views/modal.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            fullscreen: $scope.customFullscreen
+        });
+    });
     };
 
     //Marker actionsudsadsgdjsgd
-    var myLatlng = new google.maps.LatLng(-7.214455941427701,-395.90871261099613);
+    /*var myLatlng = new google.maps.LatLng(-7.214455941427701,-395.90871261099613);
     var marker = new google.maps.Marker({
           position: myLatlng,
           map: self.map
@@ -103,6 +112,8 @@ angular.module('myApp')
             fullscreen: $scope.customFullscreen
         });
     });
+
+    */
     //end
 
 
@@ -110,16 +121,53 @@ angular.module('myApp')
       $http.get("/edificio")
         .then(function(response) {
           var edificios = response.data;
-
           for (var i in edificios) {
             addMarker(edificios[i]);
           }
         })
-    }
+    };
+
+$scope.loadData = function () {
+	console.log('ue');
+    $http.get("/edificio")
+        .then(function(response, ev){
+
+            $scope.data = response.data;
+            console.log("arrombaram");
+            for (var i in response.data){
+
+            	            console.log("arrombaram mto");
+            	            console.log(response.data[i]);
+            	if (response.data[i].hasOwnProperty('geolocalizacao') 
+            		&& response.data[i]['geolocalizacao'].hasOwnProperty('latitude')){
+            		console.log("entrou");
+
+
+            		 addMarker(response.data[i]);
+
+            	};
+            	
+
+            }
+             //return if uccess on fetch
+            
+        }, function() {
+        	            console.log(response.data);
+            $scope.data = "error in fetching data"; //return if error on fetch
+        });
+    };
+
+    $scope.loadData();
+
+
+   
+    //$scope.loadData();
+
+   //self.drawMakers();
 
     self.map.setOptions({styles: styles['hide']});
 
-    angular.extend($scope, {
+    /*angular.extend($scope, {
       center: {
             "lat": -7.214455941427701,
             "lon": -395.90871261099613,
@@ -156,7 +204,7 @@ angular.module('myApp')
                   mouseWheelZoom: true
               }
           }
-      });
+      });*/
 
       $scope.$on('openlayers.layers.geojson.click', function(event, feature) {
           $scope.$apply(function(scope) {
