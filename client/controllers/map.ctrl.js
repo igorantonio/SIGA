@@ -1,5 +1,5 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', 'olData', function($scope, olData) {
+    .controller('MapController', ['$scope', '$http', 'olData', function($scope, olData, $http) {
 
         var self = this;
 
@@ -79,8 +79,23 @@ angular.module('myApp')
  }
 ]
      };
+
+			function addMarker(edificio){
+    			var location = {lat: edificio.geolocalizacao.latitude, 
+    				lng: edificio.geolocalizacao.longitude};
+    				var marker = new google.maps.Marker({
+			          position: uluru,
+			          map: map
+			        });
+    		};
+
             self.map.setOptions({styles: styles['hide']});
 
+
+
+
+
+            
 
 		
 		 
