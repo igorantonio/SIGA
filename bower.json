@@ -1,0 +1,10 @@
+{
+  "name": "monitora-ufcg",
+  "authors": [
+    "André Andrade <oandrevictor@gmail.com>"
+  ],
+  "description": "a monitoring app",
+  "main": "",
+  "license": "MIT",
+  "homepage": ""
+}

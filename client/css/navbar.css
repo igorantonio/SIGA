@@ -1,9 +1,9 @@
-.navbar {
+.toolbar {
     background-color: #5e7ed2;
     height: 8%;
 }
 
-.navbar p {
+.toolbar p {
     text-align: center;
     font-size: 23px;
     font-weight: 800;

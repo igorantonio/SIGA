@@ -1,0 +1,35 @@
+
+.dialogdemoBasicUsage button {
+    width: 200px;
+}
+
+.dialogdemoBasicUsage div#status {
+    color: #c60008;
+}
+
+.dialogdemoBasicUsage .dialog-demo-prerendered md-checkbox {
+    margin-bottom: 0;
+}
+
+.dialogdemoBasicUsage #popupContainer {
+    position: relative;
+}
+
+#login-dialog {
+    max-width: 90%;
+    width: 500px;
+}
+
+#login-dialog > form > md-toolbar > div {
+    background-color: #5e7ed2;
+}
+
+#login-dialog > form > md-dialog-actions > button:disabled {
+    background-color: #e6e6e6;
+}
+
+#login-dialog > form > md-dialog-actions > button:not([disabled]) {
+    background-color: #5e7ed2;
+}
+
+

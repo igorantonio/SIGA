@@ -1,0 +1,19 @@
+<div class="toolbar">
+    <div class="myrow">
+
+
+        <div class="title">
+            <h5><img src="lib/icons/eye.png" alt="" id="eye" /> Monitora UFCG</h5>
+       		<h2 id="name" >Consumo de água na UFCG</h2>
+        </div>
+
+        <div class="session" ng-controller="SessionController as ctrl">
+            <md-icon class="md-session" ng-click='ctrl.changeSessionState($event)'>
+                account_circle
+            </md-icon>
+        </div>
+
+        <button type="button" ng-controller="ModalController" ng-click="showTabDialog()"> TabDialog</button>
+
+    </div>
+</div>

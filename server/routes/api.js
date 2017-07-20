@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 var User = require('../models/user.js');
+var Edificio = require('../models/edificio.js');
 
 
 router.post('/register', function(req, res) {
@@ -20,6 +21,7 @@ router.post('/register', function(req, res) {
     });
   });
 });
+
 
 router.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
@@ -73,5 +75,6 @@ router.get('/users', function(req, res) {
         res.status(200).json(user);
   });
 });
+
 
 module.exports = router;

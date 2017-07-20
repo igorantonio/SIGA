@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'ngAnimate','ngAria', 'ngMaterial', 'openlayers-directive']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngAnimate','ngAria', 'ngSanitize', 'ngMaterial', 'openlayers-directive']);
 
 myApp.config(function ($routeProvider) {
   $routeProvider
@@ -8,24 +8,12 @@ myApp.config(function ($routeProvider) {
     })
     .when('/login', {
       templateUrl: 'views/login.html',
-      controller: 'loginController',
+      controller: 'SessionController',
       access: {restricted: false}
-    })
-    .when('/logout', {
-      controller: 'logoutController',
-      access: {restricted: true}
     })
     .when('/register', {
       templateUrl: 'views/register.html',
       controller: 'registerController',
-      access: {restricted: false}
-    })
-    .when('/one', {
-      template: '<h1>This is page one!</h1>',
-      access: {restricted: true}
-    })
-    .when('/two', {
-      template: '<h1>This is page two!</h1>',
       access: {restricted: false}
     })
     .otherwise({

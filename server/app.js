@@ -21,14 +21,19 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // user schema/model
 var User = require('./models/user.js');
+var Edificio = require('./models/edificio.js');
+
 
 // create instance of express
 var app = express();
 
 // require routes
-var routes = require('./routes/api.js');
-
+var userRouter = require('./routes/userApi.js');
+var edificioRouter = require('./routes/edificioApi.js');
+var routes = require('./routes/api.js')
 // define middleware
+
+
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -50,24 +55,51 @@ passport.deserializeUser(User.deserializeUser());
 
 // routes
 app.use('/', routes);
+app.use('/', routes);
+app.use('/', routes);
+app.use('/', edificioRouter);
+app.use('/', userRouter);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
 
+
 // error hndlers
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+  /*next(err);*/
+  res.status(404).send('404 - Not found');
 });
 
-app.use(function(req, res, err) {
+
+/*app.use(function(req, res, next){
+  res.status(404);
+
+  // respond with html page
+  if (req.accepts('html')) {
+    res.render('404', { url: req.url });
+    return;
+  }
+
+  // respond with json
+  if (req.accepts('json')) {
+    res.send({ error: 'Not found' });
+    return;
+  }
+
+  // default to plain-text. send()
+  res.type('txt').send('Not found');
+});*/
+
+app.use(function(err, req, res) {
   res.status(err.status || 500);
-  res.end(JSON.stringify({
+  res.status(404);
+  /*res.send(JSON.stringify({
     message: err.message,
     error: {}
-  }));
+  }));*/
 });
 
 module.exports = app;

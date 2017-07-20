@@ -1,0 +1,1 @@
+map.setOptions({styles: styles['hide']});

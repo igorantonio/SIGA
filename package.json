@@ -4,7 +4,6 @@
     "start": "node server/server.js"
   },
   "dependencies": {
-    "@angular/material": "^2.0.0-beta.7",
     "angular-openlayers-directive": "^1.19.3",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
