@@ -3,11 +3,9 @@ angular.module('myApp')
 
     var self = this;
 
-    $scope.oi= 'sem id por hr';
     self.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -7.214455941427701, lng: -395.90871261099613},
          zoom: 17,
-
       }
     );
   
@@ -128,7 +126,7 @@ angular.module('myApp')
     };
 
 $scope.loadData = function () {
-	console.log('ue');
+
     $http.get("/edificio")
         .then(function(response, ev){
 
@@ -136,17 +134,12 @@ $scope.loadData = function () {
             console.log("arrombaram");
             for (var i in response.data){
 
-            	            console.log("arrombaram mto");
-            	            console.log(response.data[i]);
             	if (response.data[i].hasOwnProperty('geolocalizacao') 
             		&& response.data[i]['geolocalizacao'].hasOwnProperty('latitude')){
             		console.log("entrou");
 
-
             		 addMarker(response.data[i]);
-
             	};
-            	
 
             }
              //return if uccess on fetch
@@ -159,60 +152,6 @@ $scope.loadData = function () {
 
     $scope.loadData();
 
-
-   
-    //$scope.loadData();
-
-   //self.drawMakers();
-
     self.map.setOptions({styles: styles['hide']});
 
-    /*angular.extend($scope, {
-      center: {
-            "lat": -7.214455941427701,
-            "lon": -395.90871261099613,
-            "zoom": 17
-      },
-      layers: [
-          {
-              name: 'geojson',
-              source: {
-                  type: 'GeoJSON',
-                  url: 'lib/json/all.geo.json'
-              },
-              style: {
-                  fill: {
-                      color: '#5E7ED2'
-                  },
-                  stroke: {
-                      color: 'white',
-                      width: 1
-                  }
-                }
-              }
-          ],
-          defaults: {
-              events: {
-                  layers: [ 'click' ]
-              },
-              controls: {
-                  zoom: true,
-                  rotate: true,
-                  attribution: true
-              },
-              interactions: {
-                  mouseWheelZoom: true
-              }
-          }
-      });*/
-
-      $scope.$on('openlayers.layers.geojson.click', function(event, feature) {
-          $scope.$apply(function(scope) {
-              if(feature) {
-                  $scope.id = feature.getId();
-              } else {
-                  $scope.id = 'deu ruim';
-              }
-          });
-      });
 }]);
