@@ -78,7 +78,8 @@ angular.module('myApp')
     };
 
     function addMarker(edificio){
-        var location = new google.maps.LatLng(parseFloat(edificio.geolocalizacao.latitude), parseFloat(edificio.geolocalizacao.longitude));
+        //*var location = new google.maps.LatLng(parseFloat(edificio.geolocalizacao.latitude), parseFloat(edificio.geolocalizacao.longitude));
+        var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
         var marker = new google.maps.Marker({
            position: location,
            map: self.map
@@ -100,7 +101,6 @@ angular.module('myApp')
           position: myLatlng,
           map: self.map
     });
-
     marker.addListener('click', function(ev) {
         $mdDialog.show({
             templateUrl: '../views/modal.html',
@@ -110,7 +110,6 @@ angular.module('myApp')
             fullscreen: $scope.customFullscreen
         });
     });
-
     */
     //end
 
@@ -153,5 +152,7 @@ $scope.loadData = function () {
     $scope.loadData();
 
     self.map.setOptions({styles: styles['hide']});
+
+
 
 }]);
