@@ -3,13 +3,6 @@ angular.module('myApp')
 
     var self = this;
 
-    self.map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -7.214455941427701, lng: -395.90871261099613},
-         zoom: 17,
-      }
-    );
-  
-
     var styles = {
        default: null,
        hide: [
@@ -78,14 +71,20 @@ angular.module('myApp')
     };
 
     function addMarker(edificio){
-        //*var location = new google.maps.LatLng(parseFloat(edificio.geolocalizacao.latitude), parseFloat(edificio.geolocalizacao.longitude));
+
+    	// sets the current location from the edificio data
         var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
         var marker = new google.maps.Marker({
            position: location,
            map: self.map
         });
+        // modal referring to the current building
         marker.addListener('click', function(ev) {
         $mdDialog.show({
+        	locals: { ed: edificio },
+		  	controller: ['$scope', 'ed', function($scope, ed) { 
+		    $scope.ed = ed;
+		  }],
             templateUrl: '../views/modal.html',
             parent: angular.element(document.body),
             targetEvent: ev,
@@ -95,51 +94,20 @@ angular.module('myApp')
     });
     };
 
-    //Marker actionsudsadsgdjsgd
-    /*var myLatlng = new google.maps.LatLng(-7.214455941427701,-395.90871261099613);
-    var marker = new google.maps.Marker({
-          position: myLatlng,
-          map: self.map
-    });
-    marker.addListener('click', function(ev) {
-        $mdDialog.show({
-            templateUrl: '../views/modal.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            fullscreen: $scope.customFullscreen
-        });
-    });
-    */
-    //end
-
-
-    var drawMakers = function() {
-      $http.get("/edificio")
-        .then(function(response) {
-          var edificios = response.data;
-          for (var i in edificios) {
-            addMarker(edificios[i]);
-          }
-        })
-    };
-
+    
+// request the edificios' data from the api and send it to the addMarker method to be drawn
 $scope.loadData = function () {
 
     $http.get("/edificio")
         .then(function(response, ev){
-
             $scope.data = response.data;
-            console.log("arrombaram");
             for (var i in response.data){
-
-            	if (response.data[i].hasOwnProperty('geolocalizacao') 
-            		&& response.data[i]['geolocalizacao'].hasOwnProperty('latitude')){
-            		console.log("entrou");
-
-            		 addMarker(response.data[i]);
+            	var edificio = response.data[i];
+            	// the following line checks if the json edificio object have the required params to be drawn
+            	if (edificio.hasOwnProperty('geolocalizacao') 
+            		&& edificio['geolocalizacao'].hasOwnProperty('latitude')){
+            		 addMarker(edificio);
             	};
-
             }
              //return if uccess on fetch
             
@@ -149,9 +117,16 @@ $scope.loadData = function () {
         });
     };
 
+    //draws the base map calling the google api 
+    self.map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -7.214455941427701, lng: -395.90871261099613},
+         zoom: 17,
+      }
+    );
+
     $scope.loadData();
 
-    self.map.setOptions({styles: styles['hide']});
+    self.map.setOptions({styles: styles['hide']}); // removes the non necessary info from the map
 
 
 
