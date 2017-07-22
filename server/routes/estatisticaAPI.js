@@ -36,8 +36,7 @@ router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
       return elem.consumo>= req.params.ano;
     }) ;
     
-        res.json({edificios: consumos});
-
+        res.json({consumos: consumos});
     }
     );
 
