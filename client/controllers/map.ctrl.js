@@ -74,24 +74,29 @@ angular.module('myApp')
 
     	// sets the current location from the edificio data
         var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
+        var image = '../lib/icons/marker.png';
+
         var marker = new google.maps.Marker({
            position: location,
+           icon: {size: new google.maps.Size(30, 30),
+                 scaledSize: new google.maps.Size(30, 30),
+                 url: image},
            map: self.map
         });
+
         // modal referring to the current building
         marker.addListener('click', function(ev) {
-        $mdDialog.show({
-        	locals: { ed: edificio },
-		  	controller: ['$scope', 'ed', function($scope, ed) { 
-		    $scope.ed = ed;
-		  }],
-            templateUrl: '../views/modal.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            fullscreen: $scope.customFullscreen
+          $scope.edificio = edificio;
+
+          $mdDialog.show({
+              templateUrl: '../views/modal.html',
+              parent: angular.element(document.body),
+              scope: $scope.$new(), 
+              targetEvent: ev,
+              clickOutsideToClose: true,
+              fullscreen: $scope.customFullscreen
+          });
         });
-    });
     };
 
     

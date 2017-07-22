@@ -8,22 +8,22 @@
           </md-tab-label>
           <md-tab-body>
             <div class="content-tab1">
-              <h3 class="topic">{{ed.nome}} </h3>
+              <h3 class="topic">{{edificio.nome}}</h3>
               <br>
-              <p>Tipo de predio</p>
-              <p>Descrição breve sobre as atividades do prédio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate.mi.</p>
+              <p>{{edificio.atividade}}</p>
+              <p>{{edificio.descricao}}</p>
               <h4 class="topic">Características</h4>
               <br>
-              <p class="topic">Localização:</p> Setor X, Bloco XY<br>
-              <p class="topic">Area: </p> 000m²<br>
-              <p class="topic">Nº de pavimentos: </p> 00<br>
-              <p class="topic">Ocupação média: </p> 00<br>
-              <p class="topic">Nº de bacias sanitárias: </p> 00<br>
-              <p class="topic">Nº de torneiras: </p> 00<br>
-              <p class="topic">Nº de duchas: </p> 00<br>
-              <p class="topic">Nº de chuveiros: </p> 00<br>
-              <p class="topic">Nº de pias: </p> 00 <br>
-              <p class="topic">Volume do reservatório: </p> 0m³
+              <p class="topic">Localização: </p> {{edificio.caracteristicasFisicas.localizacao.setor}}, {{edificio.caracteristicasFisicas.localizacao.bloco}}<br>
+              <p class="topic">Area: </p> {{edificio.caracteristicasFisicas.area}}<br>
+              <p class="topic">Nº de pavimentos: </p> {{edificio.caracteristicasFisicas.n_pavimentos}}<br>
+              <p class="topic">Ocupação média: </p> {{edificio.caracteristicasFisicas.ocupacaoMedia}}<br>
+              <p class="topic">Nº de bacias sanitárias: </p> {{edificio.caracteristicasFisicas.n_baciasSanitarias}}<br>
+              <p class="topic">Nº de torneiras: </p> {{edificio.caracteristicasFisicas.n_torneiras}}<br>
+              <p class="topic">Nº de duchas: </p> {{edificio.caracteristicasFisicas.n_duchas}}<br>
+              <p class="topic">Nº de chuveiros: </p> {{edificio.caracteristicasFisicas.n_chuveiros}}<br>
+              <p class="topic">Nº de pias: </p> {{edificio.caracteristicasFisicas.n_pias}}<br>
+              <p class="topic">Volume do reservatório: </p> {{edificio.caracteristicasFisicas.volumeReservatorio}}
             </div>
             <img src="lib/icons/default.jpg" alt="" />
           </md-tab-body>
