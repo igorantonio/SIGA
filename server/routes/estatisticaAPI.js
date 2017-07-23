@@ -52,6 +52,16 @@ var filtrarPorAno = function(consumos, ano){
 
 };
 
+var filtrarPorMes = function(consumos, mes){
+  var consumosFiltrados = [];
+  consumos.forEach(function(cd){
+    if (cd.dia.getMonth() == mes-1){
+      consumosFiltrados.push(cd);
+    };
+  });
+  return consumosFiltrados;
+}
+
 
 router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
@@ -67,9 +77,7 @@ router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
 router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
     if(error) res.send(edificio);
-    var consumos = edificio.consumoDiario.filter(function(elem, i, array){
-      return elem.dia.getMonth() == req.params.mes;
-    }) ;
+    var consumos = filtrarPorMes(edificio.consumoDiario, req.params.mes);
     res.json(calculaEstatisticas(consumos));
     }
     );
