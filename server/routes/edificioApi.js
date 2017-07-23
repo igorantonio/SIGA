@@ -36,6 +36,15 @@ router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
   });
 });
 
+var filtrarPorSetor = function(setor,edificios){
+  edificiosFiltrados = [];
+  edificios.forEach(function(edificio){
+    if (edificio.caracteristicasFisicas.localizacao.setor == setor){
+     edificiosFiltrados.push(edificio);
+  }
+  });
+  return edificiosFiltrados;
+}
 
 router.post('/edificio', function(req,res){
 var edificio = new Edificio();
@@ -54,8 +63,12 @@ var edificio = new Edificio();
   });
 
 });
+
 router.get('/edificio', function(req,res){
   Edificio.find(function(err, edificios){
+    if (req.query.setor != null){
+      edificios = filtrarPorSetor(req.query.setor, edificios);
+    }
     if (err) res.send(err);
     res.json(edificios);
   });
