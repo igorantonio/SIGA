@@ -36,6 +36,8 @@ var calculaEstatisticas = function(consumos){
   var max = -1;
   var min = 9999999999;
   var acum = 0;
+  var maxDia;
+  var minDia;
   consumos.forEach(function(cd){
     var consumo = cd.consumo;
     acum += consumo;
@@ -81,9 +83,16 @@ router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
 
 
 router.get('/estatistica/setor/:setor', function(req,res){
-  Edificio.findBySetor(req.params.setor,  function(error, edificio){
-    if(error) res.send(edificio);
-        res.json(calculaEstatisticas(edificio.consumoDiario));
+  Edificio.findBySetor(req.params.setor,  function(error, edificios){
+    if(error) res.send(edificios);
+
+var consumos = [];
+    for (i in edificios){
+      consumos = consumos.concat(edificios[i].consumoDiario);
+    }
+    console.log(consumos);
+
+        res.json(calculaEstatisticas(consumos));
     }
     );
 

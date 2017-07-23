@@ -21,6 +21,10 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req,res){
 
 
 router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
+  if (req.body.dia == null){
+    res.send('Deu ruim');
+    return;
+      };
   Edificio.findById(req.params.edificio_id, function(error,edificio){
     if(error) res.send(edificio);
     novoConsumo = {dia: req.body.dia, consumo: req.body.consumo}
@@ -41,6 +45,9 @@ var edificio = new Edificio();
   edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
   edificio.geolocalizacao = req.body.geolocalizacao;
   edificio.consumoDiario = req.body.consumoDiario;
+  if (req.body.consumoDiario == null){
+    edificio.consumoDiario = [];
+  };
   edificio.save(function(error){
     if(error) res.send(error);
     res.json(edificio);
