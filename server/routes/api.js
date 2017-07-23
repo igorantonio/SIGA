@@ -14,10 +14,8 @@ router.post('/register', function(req, res) {
         err: err
       });
     }
-    passport.authenticate('local')(req, res, function () {
-      return res.status(200).json({
-        status: 'Registration successful!'
-      });
+    return res.status(200).json({
+      status: 'Registration successful!'
     });
   });
 });

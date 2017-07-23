@@ -80,12 +80,12 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             $http.get('/logout')
             // handle success
                 .success(function (data) {
-                    user = false;
+                    user = {status: false};
                     deferred.resolve();
                 })
                 // handle error
                 .error(function (data) {
-                    user = false;
+                    user = {status: false};
                     deferred.reject();
                 });
 

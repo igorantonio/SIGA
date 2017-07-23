@@ -12,7 +12,7 @@ angular.module('myApp')
                 AuthService.register($scope.registerForm.username, $scope.registerForm.password)
                 // handle success
                     .then(function () {
-                        $location.path('/login');
+                        $location.path('/');
                         $scope.disabled = false;
                         $scope.registerForm = {};
                     })
