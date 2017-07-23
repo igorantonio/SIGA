@@ -5,6 +5,8 @@ var passport = require('passport');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
+
+// Estatisticas referentes a edificios
 router.get('/estatistica/edificio/:edificio_id', function(req,res){
   Edificio.findById(req.params.edificio_id, function(error, edificio){
     if(error) res.send(edificio);
@@ -33,7 +35,7 @@ router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
     if(error) res.send(edificio);
     var consumos = edificio.consumoDiario.filter(function(elem, i, array){
-      return elem.consumo>= req.params.ano;
+      return elem.dia.getFullYear() == req.params.ano;
     }) ;
     
         res.json({consumos: consumos});
@@ -41,6 +43,19 @@ router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
     );
 
 });
+
+router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
+  Edificio.findById(req.params.edificio_id,  function(error, edificio){
+    if(error) res.send(edificio);
+    var consumos = edificio.consumoDiario.filter(function(elem, i, array){
+      return elem.dia.getMonth() == req.params.mes;
+    }) ;
+        res.json({consumos: consumos});
+    }
+    );
+
+});
+
 
 
 
