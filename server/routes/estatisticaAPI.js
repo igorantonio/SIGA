@@ -13,20 +13,6 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     sum = 0.0;
     max = -1.0;
     min =  9999999;
-    /*edificio.consumoDiario.forEach(function(cd){
-      consumo = cd.consumo;
-      sum += consumo;
-      if (consumo > max){
-        max = consumo;
-        maxDia = cd.dia
-      };
-      if (min > consumo){
-        min = consumo;
-        minDia = cd.dia
-      };
-    });
-    total = edificio.consumoDiario.length;
-    res.json({media_dia: sum/total, total: sum, maximo:max, dia_maximo:maxDia, minimo: min, dia_minimo: minDia});*/
     res.json(calculaEstatisticas(edificio.consumoDiario));
   });
 });
@@ -36,6 +22,8 @@ var calculaEstatisticas = function(consumos){
   var max = -1;
   var min = 9999999999;
   var acum = 0;
+  var maxDia;
+  var minDia;
   consumos.forEach(function(cd){
     var consumo = cd.consumo;
     acum += consumo;
@@ -53,7 +41,6 @@ var calculaEstatisticas = function(consumos){
   return {total: acum, media: sum/total, total: sum, maximo:max, dia_max:maxDia, minimo: min, dia_minimo: minDia};
 };
 
-//Como ainda não tem nenhum com nada, ele ta filtrando pelo consumo. Basta arrumar e trocar o elem.consumo para elem.date.YEAR(?)
 router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
     if(error) res.send(edificio);
@@ -79,11 +66,17 @@ router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
 
 });
 
-
 router.get('/estatistica/setor/:setor', function(req,res){
-  Edificio.findBySetor(req.params.setor,  function(error, edificio){
-    if(error) res.send(edificio);
-        res.json(calculaEstatisticas(edificio.consumoDiario));
+  Edificio.findBySetor(req.params.setor,  function(error, edificios){
+    if(error) res.send(edificios);
+
+var consumos = [];
+    for (i in edificios){
+      consumos = consumos.concat(edificios[i].consumoDiario);
+    }
+    console.log(consumos);
+
+        res.json(calculaEstatisticas(consumos));
     }
     );
 
