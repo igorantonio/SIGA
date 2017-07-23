@@ -154,6 +154,17 @@ $scope.loadData = function () {
 
     };
 
+var originatorEv;
 
+        this.openMenu = function($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+        };
+
+this.redial = function() {
+  for (key in self.markers){
+        self.markers[key].setVisible(true);
+  };
+};
 
 }]);
