@@ -13,7 +13,17 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     sum = 0.0;
     max = -1.0;
     min =  9999999;
-    res.json(calculaEstatisticas(edificio.consumoDiario));
+    var consumos = edificio.consumoDiario;
+    if (req.query.ano != null){
+      consumos = filtrarPorAno(consumos, req.query.ano);
+    }
+    if (req.query.mes != null){
+      consumos = filtrarPorMes(consumos, req.query.mes);
+    }
+    if (req.query.dia != null){
+      consumos = filtrarPorDia(consumos, req.query.dia);
+    }
+    res.json(calculaEstatisticas(consumos));
   });
 });
 
@@ -62,8 +72,18 @@ var filtrarPorMes = function(consumos, mes){
   return consumosFiltrados;
 }
 
+var filtrarPorDia = function(consumos, dia){
+  var consumosFiltrados =[];
+  consumos.forEach(function(cd){
+    if (cd.dia.getDate() == dia){
+      consumosFiltrados.push(cd);
+    };
+  });
+  return consumosFiltrados;
+}
 
-router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
+
+/*router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
     if(error) res.send(edificio);
     var consumos = filtrarPorAno(edificio.consumoDiario, req.params.ano);
@@ -83,7 +103,7 @@ router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
     );
 
 });
-
+*/
 router.get('/estatistica/setor/:setor', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
     if(error) res.send(edificios);
@@ -92,7 +112,16 @@ var consumos = [];
     for (i in edificios){
       consumos = consumos.concat(edificios[i].consumoDiario);
     }
-    console.log(consumos);
+
+    if (req.query.ano != null){
+      consumos = filtrarPorAno(consumos, req.query.ano);
+    }
+    if (req.query.mes != null){
+      consumos = filtrarPorMes(consumos, req.query.mes);
+    }
+    if (req.query.dia != null){
+      consumos = filtrarPorDia(consumos, req.query.dia);
+    }
 
         res.json(calculaEstatisticas(consumos));
     }
@@ -100,6 +129,7 @@ var consumos = [];
 
 });
 
+/*
 router.get('/estatistica/setor/:setor/ano/:ano', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
     if(error) res.send(edificios);
@@ -115,7 +145,7 @@ var consumos = [];
 
 });
 
-
+*/
 
 
 
