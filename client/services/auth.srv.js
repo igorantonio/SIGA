@@ -10,11 +10,12 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             getUserStatus: getUserStatus,
             login: login,
             logout: logout,
-            register: register
+            register: register,
+            getUser: getUser
         });
 
         function isLoggedIn() {
-            if (user) {
+            if (user.status) {
                 return true;
             } else {
                 return false;
@@ -26,15 +27,19 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             // handle success
                 .success(function (data) {
                     if (data.status) {
-                        user = true;
+                        user = {status: true};
                     } else {
-                        user = false;
+                        user = {status: false};
                     }
                 })
                 // handle error
                 .error(function (data) {
-                    user = false;
+                    user = {status: false};
                 });
+        }
+
+        function getUser() {
+            return user;
         }
 
         function login(username, password) {
@@ -48,16 +53,16 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             // handle success
                 .success(function (data, status) {
                     if (status === 200 && data.status) {
-                        user = true;
+                        user = {status: true, username: username};
                         deferred.resolve();
                     } else {
-                        user = false;
+                        user = {status: false};
                         deferred.reject();
                     }
                 })
                 // handle error
                 .error(function (data) {
-                    user = false;
+                    user = {status: false};
                     deferred.reject();
                 });
 
@@ -89,18 +94,17 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
 
         }
 
-        function register(name, username, password) {
+        function register(username, password) {
 
             // create a new instance of deferred
             var deferred = $q.defer();
 
             // send a post request to the server
             $http.post('/register',
-                {name: name, username: username, password: password})
+                {username: username, password: password})
             // handle success
                 .success(function (data, status) {
                     if (status === 200 && data.status) {
-                        console.log(username);
                         deferred.resolve();
                     } else {
                         deferred.reject();
