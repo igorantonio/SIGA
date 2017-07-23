@@ -13,20 +13,6 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     sum = 0.0;
     max = -1.0;
     min =  9999999;
-    /*edificio.consumoDiario.forEach(function(cd){
-      consumo = cd.consumo;
-      sum += consumo;
-      if (consumo > max){
-        max = consumo;
-        maxDia = cd.dia
-      };
-      if (min > consumo){
-        min = consumo;
-        minDia = cd.dia
-      };
-    });
-    total = edificio.consumoDiario.length;
-    res.json({media_dia: sum/total, total: sum, maximo:max, dia_maximo:maxDia, minimo: min, dia_minimo: minDia});*/
     res.json(calculaEstatisticas(edificio.consumoDiario));
   });
 });
