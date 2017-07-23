@@ -22,4 +22,8 @@ var Edificio = new Schema({
 	geolocalizacao: {latitude: Number, longitude: Number}
 });
 
+Edificio.static('findBySetor', function (setor, callback) {
+	return this.find( { 'caracteristicasFisicas.localizacao.setor': setor }, callback  )
+});
+
 module.exports = mongoose.model('edificios', Edificio);
