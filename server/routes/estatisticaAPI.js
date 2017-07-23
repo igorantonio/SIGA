@@ -41,12 +41,22 @@ var calculaEstatisticas = function(consumos){
   return {total: acum, media: sum/total, total: sum, maximo:max, dia_max:maxDia, minimo: min, dia_minimo: minDia};
 };
 
+var filtrarPorAno = function(consumos, ano){
+  var consumosFiltrados = [];
+  consumos.forEach(function(cd){
+    if (cd.dia.getFullYear() == ano ){
+        consumosFiltrados.push(cd);
+    };
+  });
+  return consumosFiltrados;
+
+};
+
+
 router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
     if(error) res.send(edificio);
-    var consumos = edificio.consumoDiario.filter(function(elem, i, array){
-      return elem.dia.getFullYear() == req.params.ano;
-    }) ;
+    var consumos = filtrarPorAno(edificio.consumoDiario, req.params.ano);
     res.json(calculaEstatisticas(consumos));
     
     }
@@ -81,6 +91,23 @@ var consumos = [];
     );
 
 });
+
+router.get('/estatistica/setor/:setor/ano/:ano', function(req,res){
+  Edificio.findBySetor(req.params.setor,  function(error, edificios){
+    if(error) res.send(edificios);
+
+var consumos = [];
+    for (i in edificios){
+      consumos = consumos.concat(edificios[i].consumoDiario);
+    }
+    consumos = filtrarPorAno(consumos ,req.params.ano);
+      res.json(calculaEstatisticas(consumos));
+    }
+    );
+
+});
+
+
 
 
 
