@@ -41,7 +41,6 @@ var calculaEstatisticas = function(consumos){
   return {total: acum, media: sum/total, total: sum, maximo:max, dia_max:maxDia, minimo: min, dia_minimo: minDia};
 };
 
-//Como ainda não tem nenhum com nada, ele ta filtrando pelo consumo. Basta arrumar e trocar o elem.consumo para elem.date.YEAR(?)
 router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
     if(error) res.send(edificio);
@@ -66,7 +65,6 @@ router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
     );
 
 });
-
 
 router.get('/estatistica/setor/:setor', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
