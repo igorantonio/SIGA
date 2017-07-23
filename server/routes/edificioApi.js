@@ -41,8 +41,6 @@ var edificio = new Edificio();
   edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
   edificio.geolocalizacao = req.body.geolocalizacao;
   edificio.consumoDiario = req.body.consumoDiario;
-  edificio.geolocalizacao.latitude = req.body.latitude;
-  edificio.geolocalizacao.longitude = req.body.longitude;
   edificio.save(function(error){
     if(error) res.send(error);
     res.json(edificio);
