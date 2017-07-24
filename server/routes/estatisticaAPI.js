@@ -84,7 +84,6 @@ var filtrarPorDia = function(consumos, dia){
 }
 
 var rangeConsumos = function(consumos, startDate, endDate) {
-  var consumosFiltrados = [];
   var start = 0;
   var end = consumos.length;
 
@@ -104,6 +103,7 @@ var rangeConsumos = function(consumos, startDate, endDate) {
   return {i: start, j: end};
 };
 
+// URL com startDate e endDate como query. EX: /estatistica/edificio/:edificio_id/range?startDate=2017-05-10&endDate=2017-05-15
 router.get('/estatistica/edificio/:edificio_id/range', function(req, res) {
   Edificio.findById(req.params.edificio_id, function(error, edificio) {
     if(error) res.send(edificio);
