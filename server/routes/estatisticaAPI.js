@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var moment = require('moment');
 
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
@@ -82,6 +83,41 @@ var filtrarPorDia = function(consumos, dia){
   return consumosFiltrados;
 }
 
+var rangeConsumos = function(consumos, startDate, endDate) {
+  var consumosFiltrados = [];
+  var start = 0;
+  var end = consumos.length;
+
+  for (var i = 0; i < consumos.length; i++) {
+  dia = new Date(consumos[i].dia);
+    if (dia.getDate() == startDate.getDate() &&
+        dia.getMonth() == startDate.getMonth() &&
+        dia.getFullYear() == startDate.getFullYear()) {
+      start = i;
+    }else if (dia.getDate() == endDate.getDate() &&
+        dia.getMonth() == endDate.getMonth() &&
+        dia.getFullYear() == endDate.getFullYear()) {
+      end = i;
+    };
+  };
+
+  return {i: start, j: end};
+};
+
+router.get('/estatistica/edificio/:edificio_id/range', function(req, res) {
+  Edificio.findById(req.params.edificio_id, function(error, edificio) {
+    if(error) res.send(edificio);
+
+    var startDate = new Date(req.query.startDate);
+    var endDate = new Date(req.query.endDate);
+    var consumos = edificio.consumoDiario;
+    var range = rangeConsumos(consumos, startDate, endDate);
+    var consumos = consumos.slice(range.i, range.j + 1);
+
+    res.json(calculaEstatisticas(consumos));
+  });
+});
+
 
 /*router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
   Edificio.findById(req.params.edificio_id,  function(error, edificio){
@@ -108,7 +144,7 @@ router.get('/estatistica/setor/:setor', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
     if(error) res.send(edificios);
 
-var consumos = [];
+    var consumos = [];
     for (i in edificios){
       consumos = consumos.concat(edificios[i].consumoDiario);
     }
