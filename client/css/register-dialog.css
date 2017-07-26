@@ -1,0 +1,20 @@
+#register-dialog md-dialog-content {
+    height: 170px;
+}
+
+#register-dialog {
+    max-width: 90%;
+    width: 500px;
+}
+
+#register-dialog > form > md-toolbar > div {
+    background-color: #5e7ed2;
+}
+
+#register-dialog > form > md-dialog-actions > button:disabled {
+    background-color: #e6e6e6;
+}
+
+#register-dialog > form > md-dialog-actions > button:not([disabled]) {
+    background-color: #5e7ed2;
+}
