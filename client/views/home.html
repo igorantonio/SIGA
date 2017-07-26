@@ -2,6 +2,11 @@
 <toolbar></toolbar>
 
 <div class="md-menu-demo" ng-controller="HomeController as ctrl" ng-cloak>
+    
+</div>
+   
+
+<div ng-controller="MapController as ctrl">
     <div class="menu-demo-container" layout-align="center end" layout="column">
         <md-menu>
             <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
@@ -15,7 +20,7 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                    <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                    <md-button ng-click="ctrl.checkVoicemail()">
                         <md-icon>check_box_outline_blank</md-icon>
                         Prédios normalizados
                     </md-button>
@@ -26,13 +31,28 @@
                         Prédios em alerta
                     </md-button>
                 </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.showOnlySetor('A');">
+                        <md-icon>check_box_outline_blank</md-icon>
+                        Setor A
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.showOnlySetor('B');">
+                        <md-icon>check_box_outline_blank</md-icon>
+                        Setor B
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.showOnlySetor('C');">
+                        <md-icon>check_box_outline_blank</md-icon>
+                        Setor C
+                    </md-button>
+                </md-menu-item>
             </md-menu-content>
         </md-menu>
     </div>
-</div>
-   
 
-<div ng-controller="MapController as ctrl">
     <div class="col-md-12" >
        <div id="map" style="width:100%; height:550px"></div>
     </div>

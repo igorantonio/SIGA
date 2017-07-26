@@ -18,31 +18,13 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req,res){
   });
 });
 
-//Esse codigo leva em consideração apenas uma atualização de consumo por dia;
-router.get('/edificio/:edificio_id/estatisticas', function(req,res){
-  Edificio.findById(req.params.edificio_id, function(error, edificio){
-    if(error) res.send(edificio);
-    sum = 0.0;
-    max = -1.0;
-    min =  9999999;
-    edificio.consumoDiario.forEach(function(cd){
-      consumo = cd.consumo;
-      sum += consumo;
-      if (consumo > max){
-        max = consumo;
-        maxDia = cd.dia
-      };
-      if (min > consumo){
-        min = consumo;
-        minDia = cd.dia
-      };
-    });
-    total = edificio.consumoDiario.length;
-    res.json({media_dia: sum/total, total: sum, maximo:max, dia_maximo:maxDia, minimo: min, dia_minimo: minDia});
-  });
-});
+
 
 router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
+  if (req.body.dia == null){
+    res.send('Deu ruim');
+    return;
+      };
   Edificio.findById(req.params.edificio_id, function(error,edificio){
     if(error) res.send(edificio);
     novoConsumo = {dia: req.body.dia, consumo: req.body.consumo}
@@ -54,6 +36,15 @@ router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
   });
 });
 
+var filtrarPorSetor = function(setor,edificios){
+  edificiosFiltrados = [];
+  edificios.forEach(function(edificio){
+    if (edificio.caracteristicasFisicas.localizacao.setor == setor){
+     edificiosFiltrados.push(edificio);
+  }
+  });
+  return edificiosFiltrados;
+}
 
 router.post('/edificio', function(req,res){
 var edificio = new Edificio();
@@ -63,16 +54,44 @@ var edificio = new Edificio();
   edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
   edificio.geolocalizacao = req.body.geolocalizacao;
   edificio.consumoDiario = req.body.consumoDiario;
-  edificio.geolocalizacao.latitude = req.body.latitude;
-  edificio.geolocalizacao.longitude = req.body.longitude;
+  if (!validarEdificio(edificio, res)){
+    return;
+    }
+  if (req.body.consumoDiario == null){
+    edificio.consumoDiario = [];
+  };
   edificio.save(function(error){
     if(error) res.send(error);
     res.json(edificio);
   });
 
 });
+
+validarEdificio = function(edificio, res){
+  valid = true;
+  if (edificio == null){
+    res.status(400).send('Something really wrong happend here!');
+    valid = false;
+  }
+  else if (edificio.nome == null || edificio.nome == ""){
+    res.status(400).send('The name chosen is not valid!');
+    valid = false;
+  }
+  else if (edificio.descricao == null){
+    res.status(400).send('The description chosen is not valid!');
+    valid = false;
+  }
+  else if(edificio.geolocalizacao==null || edificio.geolocalizacao.latitude == null || edificio.geolocalizacao.longitude ==null ){
+    res.status(400).send('Geolocalization needs to be specified!');
+  };
+  return valid;
+};
+
 router.get('/edificio', function(req,res){
   Edificio.find(function(err, edificios){
+    if (req.query.setor != null){
+      edificios = filtrarPorSetor(req.query.setor, edificios);
+    }
     if (err) res.send(err);
     res.json(edificios);
   });
