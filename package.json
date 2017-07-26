@@ -11,6 +11,7 @@
     "debug": "^2.2.0",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "moment": "^2.18.1",
     "mongoose": "^4.4.5",
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",

@@ -9,18 +9,23 @@
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/navbar.css"/>
+    <link rel="stylesheet" href="css/modal.css"/>
     <link rel="stylesheet" href="css/session.css"/>
+    <link rel="stylesheet" href="css/login-dialog.css"/>
+    <link rel="stylesheet" href="css/register-dialog.css"/>
     <link rel="stylesheet" href="lib/angular-material.min.css"/>
     <link rel="stylesheet" href="lib/material-icons.css"/>
     <link rel="stylesheet" href="lib/openlayers.css"/>
     <link rel="stylesheet" href="lib/angular-openlayers-directive.css"/>
 
+
 </head>
-<body>
+<body ng-app>
 
     <div ng-view></div>
 
     <!-- libs -->
+
     <script src="lib/jquery-2.2.1.min.js"></script>
     <script src="lib/bootstrap.min.js"></script>
     <script src="lib/openlayers.js"></script>
@@ -29,19 +34,29 @@
     <script src="lib/angular-aria.js"></script>
     <script src="lib/angular-animate.js"></script>
     <script src="lib/angular-material.js"></script>
+    <script src="lib/angular-material.min.js"></script>
     <script src="lib/angular-material-icons.min.js"></script>
     <script src="lib/angular-sanitize.min.js"></script>
     <script src="lib/angular-openlayers-directive.js"></script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlZ6zBQoklkLVXNAMiIoL8BnlRWfg_4VY"
+   async defer></script>
 
     <!-- scripts -->
     <script src="./app.js"></script>
+    <script src="./services/auth.srv.js"></script>
+    <script src="./controllers/home.ctrl.js"></script>
+    <script src="./controllers/config/mapconfig.js"></script>
     <script src="./controllers/session.ctrl.js"></script>
     <script src="./controllers/login.dialog.ctrl.js"></script>
     <script src="./controllers/register.ctrl.js"></script>
     <script src="./controllers/map.ctrl.js"></script>
-    <script src="./controllers/home.ctrl.js"></script>
+    <script src="./controllers/modal.ctrl.js"></script>
+    <script src="./controllers/register.dialog.ctrl.js"></script>
     <script src="./services/auth.srv.js"></script>
+    <!-- #This script is not in the project <script src="./directives/navbar.drct.js"></script>-->
+    <script src="./controllers/home.ctrl.js"></script>
     <script src="./directives/toolbar.drct.js"></script>
+    <script src="./directives/footer.js"></script>
 
 </body>
 </html>
