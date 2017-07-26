@@ -54,6 +54,9 @@ var edificio = new Edificio();
   edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
   edificio.geolocalizacao = req.body.geolocalizacao;
   edificio.consumoDiario = req.body.consumoDiario;
+  if (!validarEdificio(edificio, res)){
+    return;
+    }
   if (req.body.consumoDiario == null){
     edificio.consumoDiario = [];
   };
@@ -63,6 +66,26 @@ var edificio = new Edificio();
   });
 
 });
+
+validarEdificio = function(edificio, res){
+  valid = true;
+  if (edificio == null){
+    res.status(400).send('Something really wrong happend here!');
+    valid = false;
+  }
+  else if (edificio.nome == null || edificio.nome == ""){
+    res.status(400).send('The name chosen is not valid!');
+    valid = false;
+  }
+  else if (edificio.descricao == null){
+    res.status(400).send('The description chosen is not valid!');
+    valid = false;
+  }
+  else if(edificio.geolocalizacao==null || edificio.geolocalizacao.latitude == null || edificio.geolocalizacao.longitude ==null ){
+    res.status(400).send('Geolocalization needs to be specified!');
+  };
+  return valid;
+};
 
 router.get('/edificio', function(req,res){
   Edificio.find(function(err, edificios){
