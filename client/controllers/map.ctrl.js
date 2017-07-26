@@ -1,74 +1,9 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', '$http', '$mdDialog', function($scope, $http, $mdDialog) {
+    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', function($scope, $http, $mdDialog, $window) {
 
     var self = this;
 	self.markers = {};
-    var styles = {
-       default: null,
-       hide: [
-           {
-             "featureType": "administrative",
-             "elementType": "geometry",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           },
-           {
-             "featureType": "administrative.land_parcel",
-             "elementType": "labels",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           },
-           {
-             "featureType": "poi",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           },
-           {
-             "featureType": "poi",
-             "elementType": "labels.text",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           },
-           {
-             "featureType": "road",
-             "elementType": "labels.icon",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           },
-           {
-             "featureType": "road.local",
-             "elementType": "labels",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           },
-           {
-             "featureType": "transit",
-             "stylers": [
-               {
-                 "visibility": "off"
-               }
-             ]
-           }
-          ]
-    };
+   
 
     function addMarker(edificio){
 
@@ -124,7 +59,7 @@ $scope.loadData = function () {
             $scope.data = "error in fetching data"; //return if error on fetch
         });
     };
-
+self.initMap = function(){
     //draws the base map calling the google api 
     self.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -7.214455941427701, lng: -395.90871261099613},
@@ -133,8 +68,15 @@ $scope.loadData = function () {
     );
 
     $scope.loadData();
+ self.map.setOptions({styles: styles['hide']}); 
 
-    self.map.setOptions({styles: styles['hide']}); // removes the non necessary info from the map
+};
+
+self.initMap();
+
+    
+
+   // removes the non necessary info from the map
 
     self.showOnlySetor = function(setor){
     	for (key in self.markers){
