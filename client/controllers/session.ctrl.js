@@ -21,7 +21,7 @@ angular.module('myApp')
                 var confirm = $mdDialog.confirm()
                     .parent(angular.element(document.querySelector('#popupContainer')))
                     .clickOutsideToClose(true)
-                    .title(user.username + 'Você está logado. Deseja deslogar?')
+                    .title(user.username + ' você está logado. Deseja deslogar?')
                     .targetEvent(ev)
                     .ok('Deslogar');
 

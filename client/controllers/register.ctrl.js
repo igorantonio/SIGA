@@ -1,6 +1,8 @@
 angular.module('myApp')
-    .controller('registerController', ['$scope', '$location', 'AuthService',
-        function ($scope, $location, AuthService) {
+    .controller('registerController', ['$scope', '$location', 'AuthService', '$mdDialog',
+        function ($scope, $location, AuthService, $mdDialog) {
+
+            var self = this;
 
             $scope.register = function () {
 
@@ -25,5 +27,21 @@ angular.module('myApp')
                     });
 
             };
+
+            self.isLoggedIn = function () {
+                return AuthService.isLoggedIn();
+            };
+            
+            self.showRegisterDialog = function (ev) {
+
+                $mdDialog.show({
+                    templateUrl: '../views/register-dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                })
+
+            }
 
         }]);
