@@ -54,15 +54,15 @@ var edificio = new Edificio();
   edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
   edificio.geolocalizacao = req.body.geolocalizacao;
   edificio.consumoDiario = req.body.consumoDiario;
-  if (!validarEdificio(edificio, res)){
+  /*if (!validarEdificio(edificio, res)){
     return;
-    }
+    }*/
   if (req.body.consumoDiario == null){
     edificio.consumoDiario = [];
   };
   edificio.save(function(error){
     if(error) res.send(error);
-    res.json(edificio);
+    else res.json(edificio);
   });
 
 });
@@ -73,10 +73,10 @@ validarEdificio = function(edificio, res){
     res.status(400).send('Something really wrong happend here!');
     valid = false;
   }
-  else if (edificio.nome == null || edificio.nome == ""){
+  /*else if (edificio.nome == null || edificio.nome == ""){
     res.status(400).send('The name chosen is not valid!');
     valid = false;
-  }
+  }*/
   else if (edificio.descricao == null){
     res.status(400).send('The description chosen is not valid!');
     valid = false;
