@@ -14,6 +14,7 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     sum = 0.0;
     max = -1.0;
     min =  9999999;
+    
     var consumos = edificio.consumoDiario;
     if (req.query.ano != null){
       consumos = filtrarPorAno(consumos, req.query.ano);
