@@ -26,9 +26,15 @@ md-dialog-content {
 	margin: 3%;
 	color: #5E7ED2;
 	width: 60%;
-	height: 100%;
+	height: 80%;
 	float: left;
 	display: inline;
+}
+
+.content-tab2 {
+	margin: 3%;
+	color: #5E7ED2;
+	height: 100%;
 }
 
 .image {
