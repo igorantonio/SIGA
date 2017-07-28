@@ -33,9 +33,15 @@
              <md-icon md-svg-icon="lib/icons/graph.svg"></md-icon>
           </md-tab-label>
           <md-tab-body>
-            <div class="content">
-              <h1 class="md-display-2">Tab Two</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+            <div class="content-tab2">
+                <div ng-app="myApp" ng-controller="ChartController as main">
+                  <h3 class="topic">Exibindo consumo {{type}}</h3>
+                  <line-chart height="250px" data="main.data"></line-chart>
+                  <h3>Change the values: </h3>
+                  <p ng-repeat="datum in main.data[0].values">
+                    <input type="number" ng-model="datum.y"> 
+                  </p>
+                </div>
             </div>
           </md-tab-body>
         </md-tab>

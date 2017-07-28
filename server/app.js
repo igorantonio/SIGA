@@ -9,6 +9,7 @@ var hash = require('bcrypt-nodejs');
 var path = require('path');
 var passport = require('passport');
 var localStrategy = require('passport-local' ).Strategy;
+var nvd3 = require('nvd3');
 
 // mongoose
 mongoose.connect('mongodb://localhost/mean-auth');
