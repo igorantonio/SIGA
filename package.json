@@ -2,6 +2,7 @@
   "name": "mean-auth",
   "scripts": {
     "start": "node server/server.js",
+    "serve": "nodemon server/server.js",
     "test": "mocha"
   },
   "dependencies": {

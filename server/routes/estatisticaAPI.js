@@ -17,13 +17,16 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     var consumos = edificio.consumoDiario;
     if (req.query.ano != null){
       consumos = filtrarPorAno(consumos, req.query.ano);
-    }
+    };
     if (req.query.mes != null){
       consumos = filtrarPorMes(consumos, req.query.mes);
-    }
+    };
     if (req.query.dia != null){
       consumos = filtrarPorDia(consumos, req.query.dia);
-    }
+    };
+    if (req.query.inicio != null && req.query.fim != null){
+      consumos = filtrarRange(consumos, req.query.inicio, req.query.fim);
+    };
     res.json(calculaEstatisticas(consumos));
   });
 });
@@ -60,7 +63,6 @@ var filtrarPorAno = function(consumos, ano){
     };
   });
   return consumosFiltrados;
-
 };
 
 var filtrarPorMes = function(consumos, mes){
@@ -83,109 +85,44 @@ var filtrarPorDia = function(consumos, dia){
   return consumosFiltrados;
 }
 
-var rangeConsumos = function(consumos, startDate, endDate) {
+var filtrarRange = function(consumos, startDate, endDate) {
   var start = 0;
   var end = consumos.length;
+  var consumosFiltrados = [];
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
+  consumos.forEach(function(cd){
+if (cd.dia.getTime() >= startDate.getTime() && cd.dia.getTime() <= endDate.getTime()){
+  consumosFiltrados.push(cd);
+};
+  });
+  return consumosFiltrados;
 
-  for (var i = 0; i < consumos.length; i++) {
-  dia = new Date(consumos[i].dia);
-    if (dia.getDate() == startDate.getDate() &&
-        dia.getMonth() == startDate.getMonth() &&
-        dia.getFullYear() == startDate.getFullYear()) {
-      start = i;
-    }else if (dia.getDate() == endDate.getDate() &&
-        dia.getMonth() == endDate.getMonth() &&
-        dia.getFullYear() == endDate.getFullYear()) {
-      end = i;
-    };
-  };
-
-  return {i: start, j: end};
 };
 
-// URL com startDate e endDate como query. EX: /estatistica/edificio/:edificio_id/range?startDate=2017-05-10&endDate=2017-05-15
-router.get('/estatistica/edificio/:edificio_id/range', function(req, res) {
-  Edificio.findById(req.params.edificio_id, function(error, edificio) {
-    if(error) res.send(edificio);
-
-    var startDate = new Date(req.query.startDate);
-    var endDate = new Date(req.query.endDate);
-    var consumos = edificio.consumoDiario;
-    var range = rangeConsumos(consumos, startDate, endDate);
-    var consumos = consumos.slice(range.i, range.j + 1);
-
-    res.json(calculaEstatisticas(consumos));
-  });
-});
-
-
-/*router.get('/estatistica/edificio/:edificio_id/ano/:ano', function(req,res){
-  Edificio.findById(req.params.edificio_id,  function(error, edificio){
-    if(error) res.send(edificio);
-    var consumos = filtrarPorAno(edificio.consumoDiario, req.params.ano);
-    res.json(calculaEstatisticas(consumos));
-    
-    }
-    );
-
-});
-
-router.get('/estatistica/edificio/:edificio_id/mes/:mes', function(req,res){
-  Edificio.findById(req.params.edificio_id,  function(error, edificio){
-    if(error) res.send(edificio);
-    var consumos = filtrarPorMes(edificio.consumoDiario, req.params.mes);
-    res.json(calculaEstatisticas(consumos));
-    }
-    );
-
-});
-*/
 router.get('/estatistica/setor/:setor', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
     if(error) res.send(edificios);
-
     var consumos = [];
     for (i in edificios){
       consumos = consumos.concat(edificios[i].consumoDiario);
-    }
-
+    };
     if (req.query.ano != null){
       consumos = filtrarPorAno(consumos, req.query.ano);
-    }
+    };
     if (req.query.mes != null){
       consumos = filtrarPorMes(consumos, req.query.mes);
-    }
+    };
     if (req.query.dia != null){
       consumos = filtrarPorDia(consumos, req.query.dia);
-    }
-
+    };
+    if (req.query.inicio != null && req.query.fim != null){
+      consumos = filtrarRange(consumos, inicio, fim);
+    };
         res.json(calculaEstatisticas(consumos));
-    }
-    );
+    });
 
 });
-
-/*
-router.get('/estatistica/setor/:setor/ano/:ano', function(req,res){
-  Edificio.findBySetor(req.params.setor,  function(error, edificios){
-    if(error) res.send(edificios);
-
-var consumos = [];
-    for (i in edificios){
-      consumos = consumos.concat(edificios[i].consumoDiario);
-    }
-    consumos = filtrarPorAno(consumos ,req.params.ano);
-      res.json(calculaEstatisticas(consumos));
-    }
-    );
-
-});
-
-*/
-
-
-
-
 
 
 module.exports = router;
