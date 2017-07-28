@@ -1,8 +1,9 @@
 angular.module('myApp')
     .controller('ChartController', ['$scope', function($scope) {
-     $scope.type = "diário";
+     $scope.type = "mensal";
+
 	  this.data = [{
-	    key: 'Data',
+	    key: 'Consumo',
 	    values: [{
 	      x: 0,
 	      y: 0,
@@ -44,45 +45,46 @@ angular.module('myApp')
 	    },
 	    template: '<svg ng-attr-height="{{ height }}" ng-attr-width="{{ width }}"></svg>',
 	    link: function(scope, element) {
-	      var svg = element.find('svg'),
-	        chart;
-	      
-	      var update = function() {
-	        d3.select(svg[0])
-	          .datum(scope.data)
-	          .call(chart);
-	      };
-	      
-	      scope.$watch(function() { return angular.toJson(scope.data); }, function() {
-	        if (chart) {
-	          update();
-	        }
-	      });
-	      
-	      scope.$on('chartloaded', update);
-	      
-	      nv.addGraph(function() {
-	        chart = nv.models.lineChart()
-	          .showLegend(false)
-	          .showYAxis(true)
-	          .showXAxis(true);
 
-	        chart.xAxis
-	          .axisLabel('x')
-	          .tickFormat(d3.format('.2f'));
+		    var svg = element.find('svg'),
+		      chart;
+		    
+		    var update = function() {
+		      d3.select(svg[0])
+		        .datum(scope.data)
+		        .call(chart);
+		    };
+		      
+		    scope.$watch(function() { return angular.toJson(scope.data); }, function() {
+		      if (chart) {
+		        update();
+		      }
+		    });
+		      
+		    scope.$on('chartloaded', update);
+		    
+		    nv.addGraph(function() {
+		      	chart = nv.models.lineChart()
+		        	.showLegend(true)
+		        	.showYAxis(true)
+		        	.showXAxis(true);
 
-	        chart.yAxis
-	          .axisLabel('y')
-	          .tickFormat(d3.format('.2f'));
+		    	chart.xAxis
+		          .axisLabel('Período')
+		          .tickFormat(d3.format('.2f'));
 
-	        nv.utils.windowResize(function() {
-	          chart.update()
-	        });
+		        chart.yAxis
+		          .axisLabel('Litros')
+		          .tickFormat(d3.format('.2f'));
 
-	        scope.$emit('chartloaded');
-	        
-	        return chart;
-	      });
+		        nv.utils.windowResize(function() {
+		          chart.update()
+		        });
+
+		        scope.$emit('chartloaded');
+		        
+		       	return chart;
+	      	});
 	    }
 	  }
 }]);
