@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-
+var EstatisticaAPI = require('./EstatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
@@ -18,7 +18,35 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req,res){
   });
 });
 
+router.get('/edificio/:edificio_id/consumoDiario', function(req,res){
+  Edificio.findById(req.params.edificio_id, function(error,edificio){
+        if(error) {
+          res.send(edificio);
+          return;
+        };
+    consumos = edificio.consumoDiario;
+  if (req.query.ano != null){
+      consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
+    };
+    if (req.query.mes != null){
+      consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
+    };
+    if (req.query.dia != null){
+      consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
+    };
+    if (req.query.inicio != null && req.query.fim != null){
+      consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
+    };
+    consumosFiltrados = [];
+    consumos.forEach(function(cd){
+      var newConsumo = {dia: cd.dia, consumo: cd.consumo};
+      consumosFiltrados.push(newConsumo);
+    });
+    res.json(consumosFiltrados);
 
+  }
+
+)});
 
 router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
   if (req.body.dia == null){
@@ -109,3 +137,4 @@ router.route('/edificio/:edificio_id')
 
 
 module.exports = router;
+

@@ -101,6 +101,7 @@ if (cd.dia.getTime() >= startDate.getTime() && cd.dia.getTime() <= endDate.getTi
 
 };
 
+
 router.get('/estatistica/setor/:setor', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
     if(error) res.send(edificios);
@@ -126,4 +127,19 @@ router.get('/estatistica/setor/:setor', function(req,res){
 });
 
 
-module.exports = router;
+module.exports.data = {
+  router: router,
+  filtrarRange: function(consumos, startDate, endDate) {
+    return filtrarRange(consumos,startDate,endDate);
+    },
+  filtrarPorDia: function(consumos, dia){
+    return filtrarPorDia(consumos,dia);
+  },
+  filtrarPorMes: function(consumos, mes){
+    return filtrarPorMes(consumos, mes)
+  },
+  filtrarPorAno: function(consumos, ano){
+    return filtrarPorAno(consumos, ano)
+  }
+
+}
