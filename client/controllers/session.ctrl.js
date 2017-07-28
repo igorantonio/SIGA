@@ -16,11 +16,12 @@ angular.module('myApp')
             };
 
             self.logout = function (ev) {
+                var user = AuthService.getUser();
 
                 var confirm = $mdDialog.confirm()
                     .parent(angular.element(document.querySelector('#popupContainer')))
                     .clickOutsideToClose(true)
-                    .title('Você está logado. Deseja deslogar?')
+                    .title(user.username + ' você está logado. Deseja deslogar?')
                     .targetEvent(ev)
                     .ok('Deslogar');
 

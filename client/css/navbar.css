@@ -1,18 +1,24 @@
 .toolbar {
-    background-color: #5e7ed2;
-    height: 8%;
+    background-color: #3498db;
+    top:0;
+    left:0;
+    right:0;
+
 }
 
 .toolbar p {
     text-align: center;
     font-size: 23px;
     font-weight: 800;
-    color: #fff;
+    color: #ecf0f1;
     margin: 12px 0;
     position: relative;
     width: auto;
 }
 
+.toolbar h2{
+    color: #ecf0f1;
+}
 .myrow div {
     display:table-cell;
 }
@@ -43,6 +49,7 @@
 #name {
     font-weight: bold;
     margin-top: 0px;
+    color: #ecf0f1;
 }
 
 #eye {

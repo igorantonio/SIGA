@@ -3,12 +3,8 @@
   <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
   <form class="form" ng-submit="register()">
     <div class="form-group">
-      <label>Name</label>
-      <input type="text" class="form-control" name="name" ng-model="registerForm.name" required>
-    </div>
-    <div class="form-group">
-      <label>Username</label>
-      <input type="text" class="form-control" name="username" ng-model="registerForm.username" required>
+      <label>E-mail</label>
+      <input type="email" class="form-control" name="username" ng-model="registerForm.username" required>
     </div>
     <div class="form-group">
       <label>Password</label>
