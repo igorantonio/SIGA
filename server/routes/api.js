@@ -65,7 +65,7 @@ router.get('/status', function(req, res) {
 router.get('/users', function(req, res) {
   var user_name = req.query.username;
   User.findOne({username: user_name}, function (err, user) {
-        if (err != null || !user){
+        if (err != null){
             return res.status(401).json({
               status: false
             });
