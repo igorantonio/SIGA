@@ -102,7 +102,6 @@ router.get('/edificio', function(req,res){
       edificios = filtrarPorSetor(req.query.setor, edificios);
     }
     if (req.query.nivelAlerta != null){
-      console.log(typeof req.query.nivelAlerta);
       nivelAlerta = req.query.nivelAlerta;
       if (nivelAlerta =="0"){
         margem = 0.2;
@@ -113,8 +112,6 @@ router.get('/edificio', function(req,res){
       edificios.forEach( function(ed){
         total = 0.0;
         ed.historicoConsumo.forEach( function(cd){
-          console.log(cd.data.toDateString(), (new Date()).toDateString() );
-
           if (cd.data.toDateString() == (new Date()).toDateString() ){
             total += cd.consumo;
           }
@@ -131,6 +128,8 @@ router.get('/edificio', function(req,res){
     else{res.json(edificios);}
   });
 });
+
+
 
 router.get('/edificio/:edificio_id', function(req,res){
   Edificio.findById(req.params.edificio_id, function(error,edificio){
