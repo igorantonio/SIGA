@@ -1,8 +1,8 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', function($scope, $http, $mdDialog, $window) {
+    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', 'edificioService', function($scope, $http, $mdDialog, $window, edificioService) {
 
     var self = this;
-	self.markers = {};
+	   self.markers = {};
    
 
     function addMarker(edificio){
@@ -24,6 +24,7 @@ angular.module('myApp')
         // modal referring to the current building
         marker.addListener('click', function(ev) {
           $scope.edificio = edificio;
+          edificioService.setEdificioId(edificio._id);
 
           $mdDialog.show({
               templateUrl: '../views/modal.html',
@@ -59,6 +60,7 @@ $scope.loadData = function () {
             $scope.data = "error in fetching data"; //return if error on fetch
         });
     };
+
 self.initMap = function(){
     //draws the base map calling the google api 
     self.map = new google.maps.Map(document.getElementById('map'), {

@@ -1,46 +1,27 @@
 angular.module('myApp')
-    .controller('ChartController', ['$scope', function($scope) {
+    .controller('ChartController', ['$scope', 'edificioService', function($scope, edificioService) {
      $scope.type = "mensal";
+     $scope.consumo = edificioService.getConsumo();
 
-	  this.data = [{
-	    key: 'Consumo',
-	    values: [{
-	      x: 0,
-	      y: 0,
-	    }, {
-	      x: 1,
-	      y: 1
-	    }, {
-	      x: 2,
-	      y: 4
-	    }, {
-	      x: 3,
-	      y: 9
-	    }, {
-	      x: 4,
-	      y: 16
-	    }, {
-	      x: 5,
-	      y: 25
-	    }, {
-	      x: 6,
-	      y: 1
-	    }, {
-	      x: 7,
-	      y: 4
-	    }, {
-	      x: 8,
-	      y: 9
-	    }, {
-	      x: 9,
-	      y: 1
-	    }, {
-	      x: 10,
-	      y: 4
-	    }, {
-	      x: 11,
-	      y: 9
-	    }],
+    $scope.loadData = function () {
+    	$http.get("/edificio/" + $scope.edificioId + "/consumo")
+    		.then(function(response, ev){
+    			$scope.data = response;
+    			console.log($scope.data);
+        });
+    };
+
+    $scope.loadData();
+
+    //Change dia and consumo in data to x and y, respectively
+    var str = JSON.stringify($scope.data);
+    str = str.replace("\"dia\":", "\"y\":");
+    str = str.replace("\"consumo\":", "\"x\":");
+    $scope.data = JSON.parse(str);
+
+	this.data = [{
+		key: 'Consumo',
+	    values: $scope.data,
 	    area: true
 	  }];
 	}])
@@ -88,12 +69,11 @@ angular.module('myApp')
 		        	.showXAxis(true);
 
 		    	chart.xAxis
-		          .axisLabel('Período')
-		          .tickFormat(d3.format('.2f'));
+		          .axisLabel('Período');
 
 		        chart.yAxis
 		          .axisLabel('Litros')
-		          .tickFormat(d3.format('.2f'));
+		          /*.tickFormat(d3.format('.2f'))*/;
 
 		        nv.utils.windowResize(function() {
 		          chart.update()
