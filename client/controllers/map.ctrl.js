@@ -59,6 +59,7 @@ $scope.loadData = function () {
             $scope.data = "error in fetching data"; //return if error on fetch
         });
     };
+
 self.initMap = function(){
     //draws the base map calling the google api 
     self.map = new google.maps.Map(document.getElementById('map'), {
