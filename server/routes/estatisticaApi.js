@@ -15,7 +15,7 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     max = -1.0;
     min =  9999999;
     
-    var consumos = edificio.consumoDiario;
+    var consumos = edificio.historicoConsumo;
     if (req.query.ano != null){
       consumos = filtrarPorAno(consumos, req.query.ano);
     };
@@ -46,29 +46,29 @@ var calculaEstatisticas = function(consumos){
   var max = -1;
   var min = 9999999999;
   var acum = 0;
-  var maxDia;
-  var minDia;
+  var maxdata;
+  var mindata;
   consumos.forEach(function(cd){
     var consumo = cd.consumo;
     acum += consumo;
     sum += consumo;
     if (consumo> max){
       max = consumo;
-      maxDia = cd.dia;
+      maxdata = cd.data;
     };
     if (min > consumo){
       min = consumo;
-      minDia = cd.dia;
+      mindata = cd.data;
     };
   });
   total = consumos.length;
-  return {total: acum, media: sum/total, total: sum, maximo:max, dia_max:maxDia, minimo: min, dia_minimo: minDia};
+  return {total: acum, media: sum/total, total: sum, maximo:max, data_max:maxdata, minimo: min, data_minimo: mindata};
 };
 
 var filtrarPorAno = function(consumos, ano){
   var consumosFiltrados = [];
   consumos.forEach(function(cd){
-    if (cd.dia.getFullYear() == ano ){
+    if (cd.data.getFullYear() == ano ){
         consumosFiltrados.push(cd);
     };
   });
@@ -78,7 +78,7 @@ var filtrarPorAno = function(consumos, ano){
 var filtrarPorMes = function(consumos, mes){
   var consumosFiltrados = [];
   consumos.forEach(function(cd){
-    if (cd.dia.getMonth() == mes-1){
+    if (cd.data.getMonth() == mes-1){
       consumosFiltrados.push(cd);
     };
   });
@@ -88,7 +88,7 @@ var filtrarPorMes = function(consumos, mes){
 var filtrarPorDia = function(consumos, dia){
   var consumosFiltrados =[];
   consumos.forEach(function(cd){
-    if (cd.dia.getDate() == dia){
+    if (cd.data.getDate() == dia){
       consumosFiltrados.push(cd);
     };
   });
@@ -102,7 +102,7 @@ var filtrarRange = function(consumos, startDate, endDate) {
   startDate = new Date(startDate);
   endDate = new Date(endDate);
   consumos.forEach(function(cd){
-if (cd.dia.getTime() >= startDate.getTime() && cd.dia.getTime() <= endDate.getTime()){
+if (cd.data.getTime() >= startDate.getTime() && cd.data.getTime() <= endDate.getTime()){
   consumosFiltrados.push(cd);
 };
   });
@@ -116,7 +116,7 @@ router.get('/estatistica/setor/:setor', function(req,res){
     if(error) res.send(edificios);
     var consumos = [];
     for (i in edificios){
-      consumos = consumos.concat(edificios[i].consumoDiario);
+      consumos = consumos.concat(edificios[i].historicoConsumo);
     };
     if (req.query.ano != null){
       consumos = filtrarPorAno(consumos, req.query.ano);
@@ -149,6 +149,9 @@ module.exports.data = {
   },
   filtrarPorAno: function(consumos, ano){
     return filtrarPorAno(consumos, ano)
+  },
+  calculaEstatisticas: function(consumos){
+    return calculaEstatisticas(consumos)
   }
 
 }
