@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var EstatisticaAPI = require('./EstatisticaApi.js');
+var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
@@ -58,8 +58,10 @@ router.post('/edificio/:edificio_id/consumo/new', function(req,res){
     novoConsumo = {dia: req.body.dia, consumo: req.body.consumo}
     edificio.consumoDiario.push(novoConsumo);
     edificio.save(function(error){
-      if(error) res.send(error);
+      if(error){ res.send(error);}
+      else{
       res.json(edificio.consumoDiario);
+    }
     });
   });
 });

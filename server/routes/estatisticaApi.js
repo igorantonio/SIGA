@@ -20,6 +20,10 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
       consumos = filtrarPorAno(consumos, req.query.ano);
     };
     if (req.query.mes != null){
+      if  (!verificarMes(req.query.mes)){
+        res.status(401);
+        return;
+      }
       consumos = filtrarPorMes(consumos, req.query.mes);
     };
     if (req.query.dia != null){
@@ -32,6 +36,11 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
   });
 });
 
+var verificarMes = function(mes){
+  return mes >=1 && mes <= 12;
+};
+
+var verifica
 var calculaEstatisticas = function(consumos){
   var sum = 0.0;
   var max = -1;
