@@ -61,7 +61,7 @@ app.use('/', routes);
 app.use('/', routes);
 app.use('/', edificioRouter);
 app.use('/', userRouter);
-app.use('/', estatisticaRouter);
+app.use('/', estatisticaRouter.data.router);
 
 
 app.get('/', function(req, res) {
