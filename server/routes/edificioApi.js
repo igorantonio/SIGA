@@ -18,7 +18,7 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req,res){
   });
 });
 
-router.get('/edificio/:edificio_id/consumoDiario', function(req,res){
+router.get('/edificio/:edificio_id/consumo', function(req,res){
   Edificio.findById(req.params.edificio_id, function(error,edificio){
         if(error) {
           res.send(edificio);
@@ -48,7 +48,7 @@ router.get('/edificio/:edificio_id/consumoDiario', function(req,res){
 
 )});
 
-router.post('/edificio/:edificio_id/consumoDiario/new', function(req,res){
+router.post('/edificio/:edificio_id/consumo/new', function(req,res){
   if (req.body.dia == null){
     res.send('Deu ruim');
     return;
