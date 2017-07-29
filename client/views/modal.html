@@ -19,7 +19,8 @@
                             <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
                             <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
 
-                            <md-button flex="50" ng-click="showInfos = !showInfos">Informações detalhadas</md-button>
+                            <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
+                                       flex="50" ng-click="showInfos = !showInfos">Informações detalhadas</md-button>
                             <div id="info-detalhada" ng-if="showInfos">
                                 <p>Características</p>
                                 <p>Localização: Setor {{edificio.caracteristicasFisicas.localizacao.setor}}, Bloco {{edificio.caracteristicasFisicas.localizacao.bloco}}</p>
