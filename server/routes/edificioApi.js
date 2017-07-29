@@ -58,8 +58,10 @@ router.post('/edificio/:edificio_id/consumo/new', function(req,res){
     novoConsumo = {dia: req.body.dia, consumo: req.body.consumo}
     edificio.consumoDiario.push(novoConsumo);
     edificio.save(function(error){
-      if(error) res.send(error);
+      if(error){ res.send(error);}
+      else{
       res.json(edificio.consumoDiario);
+    }
     });
   });
 });
