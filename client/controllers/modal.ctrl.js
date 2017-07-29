@@ -1,12 +1,11 @@
 angular.module('myApp')
-    .controller('ModalController', ['$scope', '$mdDialog', '$mdBottomSheet', function ($scope, $mdDialog, $mdBottomSheet) {
+    .controller('ModalController', ['$scope', '$mdDialog', function ($scope, $mdDialog) {
         $scope.status = '  ';
         $scope.customFullscreen = false;
 
         $scope.showTabDialog = function (ev) {
             $mdDialog.show({
-                controller: DialogController,
-                templateUrl: './views/modal.html',
+                templateUrl: '../views/modal.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
@@ -17,38 +16,47 @@ angular.module('myApp')
                     $scope.status = 'You cancelled the dialog.';
                 });
         };
+
     }]);
 
 
 angular.module('myApp')
-    .controller('DialogController', ['$scope', '$mdDialog', '$mdBottomSheet',
-        function ($scope, $mdDialog, $mdBottomSheet) {
+    .controller('DialogController', ['$scope','$mdDialog', '$q', '$http',
+        function ($scope, $mdDialog, $q, $http) {
 
             var self = this;
 
-            $scope.hide = function () {
+            $scope.showInfos = false;
+
+            $scope.hide = function() {
                 $mdDialog.hide();
             };
 
-            $scope.cancel = function () {
+            $scope.cancel = function() {
                 $mdDialog.cancel();
             };
 
-            $scope.answer = function (answer) {
+            $scope.answer = function(answer) {
                 $mdDialog.hide(answer);
             };
 
-            $scope.showListBottomSheet = function(ev) {
-                $mdBottomSheet.show({
-                    controller: DialogController,
-                    templateUrl: '../views/info.predio.html',
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: true,
-                    targetEvent: ev,
-                }).then(function(clickedItem) {
-                    console.log("HIIIIIIIIIIIIIII")
-                }).catch(function(error) {
+            function getEstatisticas() {
+                var q = $q.defer();
+                var route = "/estatistica/edificio/" + $scope.edificio._id;
+
+                $http.get(route).then(function(info) {
+                    q.resolve(info.data);
+                    self.estatisticas = info.data;
+                }, function(info){
+                    console.log('Rota errada')
                 });
+
+                return q.promise;
+            }
+
+            var init = function () {
+                getEstatisticas();
             };
 
+            init();
         }]);

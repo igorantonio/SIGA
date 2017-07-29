@@ -6,7 +6,6 @@ var moment = require('moment');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
-
 // Estatisticas referentes a edificios
 router.get('/estatistica/edificio/:edificio_id', function(req,res){
   Edificio.findById(req.params.edificio_id, function(error, edificio){
@@ -71,7 +70,7 @@ var filtrarPorMes = function(consumos, mes){
     };
   });
   return consumosFiltrados;
-}
+};
 
 var filtrarPorDia = function(consumos, dia){
   var consumosFiltrados =[];
@@ -81,7 +80,7 @@ var filtrarPorDia = function(consumos, dia){
     };
   });
   return consumosFiltrados;
-}
+};
 
 var rangeConsumos = function(consumos, startDate, endDate) {
   var start = 0;
@@ -182,10 +181,5 @@ var consumos = [];
 });
 
 */
-
-
-
-
-
 
 module.exports = router;

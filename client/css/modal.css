@@ -31,6 +31,48 @@ md-dialog-content {
 	display: inline;
 }
 
+.content-tab1 > p {
+	text-align: justify;
+	line-break: strict;
+	display: block;
+	margin: 0 0;
+}
+
+.content-tab1 #info-detalhada > p {
+	text-align: justify;
+	line-break: strict;
+	display: block;
+	margin: 0 15px;
+}
+
+.content-tab1 .ed-bloco {
+	margin: 0 0;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.content-tab1 .ed-name {
+	font-size: 12px;
+}
+
+.content-tab1 .ed-atividade {
+	margin-top: 15px;
+	margin-bottom: 0;
+	font-size: 15px;
+}
+
+.content-tab1 .ed-descricao {
+	margin-bottom: 12px;
+}
+
+.content-tab1 > button {
+	margin: 12px 0;
+	background-color: #f9f9f9;
+	color: #0f0f0f;
+	font-size: 14px;
+
+}
+
 .image {
 	width: 40%;
 	float: right;
@@ -42,3 +84,4 @@ md-dialog-content {
 	margin: 0px;
 	display: inline;
 }
+
