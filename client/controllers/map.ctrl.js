@@ -2,20 +2,22 @@ angular.module('myApp')
     .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', function($scope, $http, $mdDialog, $window) {
 
     var self = this;
-	self.markers = {};
+	  self.markers = {};
+    var normalizadoImg = '../lib/icons/marker.png';
+    /*var alertaLeveImg = '../lib/icons/marker1.png';
+    var alertaGraveImg = '../lib/icons/marker2.png';*/
    
 
     function addMarker(edificio){
 
     	// sets the current location from the edificio data
         var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
-        var image = '../lib/icons/marker.png';
 
         var marker = new google.maps.Marker({
            position: location,
            icon: {size: new google.maps.Size(30, 30),
                  scaledSize: new google.maps.Size(30, 30),
-                 url: image},
+                 url: normalizadoImg},
            map: self.map,
            edificio: edificio._id
         });
@@ -96,6 +98,23 @@ self.initMap();
 
     };
 
+    self.showEdificiosAlerta = function(nivelAlerta) {
+      for (key in self.markers){
+        self.markers[key].setVisible(true);
+      };
+      $http.get("/edificio", { params: {nivelAlerta: nivelAlerta }})
+        .then(function(response, ev) {
+          for (var i in response.data) {
+            var edificio = response.data[i];
+            if (nivelAlerta == '0') {
+              self.markers[edificio._id].setIcon('../lib/icons/algo.png');
+            } else if (nivelAlerta == '1') {
+              self.markers[edificio._id].setIcon('../lib/icons/algo2.png');
+            }
+          }
+        })
+    }
+
 var originatorEv;
 
         this.openMenu = function($mdOpenMenu, ev) {
@@ -107,6 +126,8 @@ this.redial = function() {
   for (key in self.markers){
         self.markers[key].setVisible(true);
   };
+  //showEdificiosAlerta(0);
+  //showEdificiosAlerta(1);
 };
 
 }]);
