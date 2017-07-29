@@ -65,19 +65,24 @@ md-dialog-content {
 	margin-bottom: 12px;
 }
 
-.content-tab1 > button {
+.content-tab1 button {
 	margin: 12px 0;
-	background-color: #fefefe;
-	color: #0f0f0f;
 	font-size: 14px;
 }
 
-.content-tab1 > button:hover {
+.content-tab1 .md-raised {
 	background-color: #fefefe;
+	color: #5E7ED2;
+}
+
+.content-tab1 .md-raised:hover {
+	background-color: #f1f1f1;
+	color: #3e3e3e;
 }
 
 .content-tab1 .selected-button {
 	background-color: #d3d6d1;
+	color: #5E7ED2;
 }
 
 .image {
