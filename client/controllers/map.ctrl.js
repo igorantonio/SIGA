@@ -3,21 +3,25 @@ angular.module('myApp')
 
     var self = this;
 	  self.markers = {};
-    var normalizadoImg = '../lib/icons/marker.png';
-    /*var alertaLeveImg = '../lib/icons/marker1.png';
-    var alertaGraveImg = '../lib/icons/marker2.png';*/
-   
+    var icons = { normalizado: {size: new google.maps.Size(30, 30),
+                                scaledSize: new google.maps.Size(30, 30),
+                                url: '../lib/icons/marker.png'},
+                  alerta0: {size: new google.maps.Size(30, 30),
+                            scaledSize: new google.maps.Size(30, 30),
+                            url:'../lib/icons/algo.png'},
+                  alerta1: {size: new google.maps.Size(30, 30),
+                            scaledSize: new google.maps.Size(30, 30),
+                            url:'../lib/icons/algo1.png'}
+                  };
 
-    function addMarker(edificio){
+    function addMarker(edificio, icon){
 
     	// sets the current location from the edificio data
         var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
 
         var marker = new google.maps.Marker({
            position: location,
-           icon: {size: new google.maps.Size(30, 30),
-                 scaledSize: new google.maps.Size(30, 30),
-                 url: normalizadoImg},
+           icon: icon,
            map: self.map,
            edificio: edificio._id
         });
@@ -43,16 +47,18 @@ angular.module('myApp')
 // request the edificios' data from the api and send it to the addMarker method to be drawn
 $scope.loadData = function () {
 
-    $http.get("/edificio")
+    $http.get("/edificio", {params: {withAlerta: true}})
         .then(function(response, ev){
             $scope.data = response.data;
             for (var i in response.data){
-            	var edificio = response.data[i];
-            	// the following line checks if the json edificio object have the required params to be drawn
-            	if (edificio.hasOwnProperty('geolocalizacao') 
-            		&& edificio['geolocalizacao'].hasOwnProperty('latitude')){
-            		 addMarker(edificio);
-            	};
+              for (var j in response.data[i]) {
+              	var edificio = response.data[i][j];
+              	// the following line checks if the json edificio object have the required params to be drawn
+              	if (edificio.hasOwnProperty('geolocalizacao') 
+              		&& edificio['geolocalizacao'].hasOwnProperty('latitude')){
+              		addMarker(edificio, icons[i]);
+              	};
+              }
             }
              //return if uccess on fetch
             
@@ -99,21 +105,19 @@ self.initMap();
     };
 
     self.showEdificiosAlerta = function(nivelAlerta) {
-      for (key in self.markers){
-        self.markers[key].setVisible(true);
-      };
       $http.get("/edificio", { params: {nivelAlerta: nivelAlerta }})
         .then(function(response, ev) {
           for (var i in response.data) {
             var edificio = response.data[i];
+            console.log(edificio);
             if (nivelAlerta == '0') {
-              self.markers[edificio._id].setIcon('../lib/icons/algo.png');
+              self.markers[edificio._id].setIcon(icons.alerta0);
             } else if (nivelAlerta == '1') {
-              self.markers[edificio._id].setIcon('../lib/icons/algo2.png');
+              self.markers[edificio._id].setIcon(icons.alerta1);
             }
           }
-        })
-    }
+        });
+    };
 
 var originatorEv;
 
@@ -126,8 +130,6 @@ this.redial = function() {
   for (key in self.markers){
         self.markers[key].setVisible(true);
   };
-  //showEdificiosAlerta(0);
-  //showEdificiosAlerta(1);
 };
 
 }]);

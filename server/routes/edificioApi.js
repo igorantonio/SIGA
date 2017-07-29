@@ -96,36 +96,46 @@ var edificio = new Edificio();
 
 });
 
+var emAlerta = function(edificios, margem) {
+  edificiosFiltrados = [];
+  edificios.forEach( function(ed){
+    total = 0.0;
+    ed.historicoConsumo.forEach( function(cd){
+      if (cd.data.toDateString() == (new Date()).toDateString() ){
+        total += cd.consumo;
+      }
+    });
+    if (total >= ed.mediaEsperada + margem * ed.mediaEsperada){
+    edificiosFiltrados.push(ed);
+    }
+  });
+  return edificiosFiltrados;
+}
+
 router.get('/edificio', function(req,res){
   Edificio.find(function(err, edificios){
     if (req.query.setor != null){
       edificios = filtrarPorSetor(req.query.setor, edificios);
     }
     if (req.query.nivelAlerta != null){
-      console.log(typeof req.query.nivelAlerta);
       nivelAlerta = req.query.nivelAlerta;
       if (nivelAlerta =="0"){
         margem = 0.2;
       }else if (nivelAlerta == "1"){
         margem = 0.3;
       };
-      edificiosFiltrados = [];
-      edificios.forEach( function(ed){
-        total = 0.0;
-        ed.historicoConsumo.forEach( function(cd){
-          console.log(cd.data.toDateString(), (new Date()).toDateString() );
-
-          if (cd.data.toDateString() == (new Date()).toDateString() ){
-            total += cd.consumo;
-          }
-        });
-        if (total >= ed.mediaEsperada + margem * ed.mediaEsperada){
-          edificiosFiltrados.push(ed);
-        }
-      });
-      res.send(edificiosFiltrados);
+      var result = emAlerta(edificios, margem);
+      res.send(result);
       return;
-  }
+    }
+    if (req.query.withAlerta) {
+      if (req.query.withAlerta == 'true') {
+        var result0 = emAlerta(edificios, 0.2);
+        var result1 = emAlerta(edificios, 0.3);
+        res.json({todos: edificios, alerta0: result0, alerta1: result1});
+        return;
+      }
+    }
     if (err){
       res.send(err)}
     else{res.json(edificios);}
