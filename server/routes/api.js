@@ -20,7 +20,6 @@ router.post('/register', function(req, res) {
   });
 });
 
-
 router.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     if (err) {
@@ -73,6 +72,7 @@ router.get('/users', function(req, res) {
         res.status(200).json(user);
   });
 });
+
 
 
 module.exports = router;

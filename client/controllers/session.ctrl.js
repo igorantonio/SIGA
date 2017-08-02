@@ -9,10 +9,14 @@ angular.module('myApp')
                 var isLogged = AuthService.isLoggedIn();
 
                 if (isLogged) {
-                    self.logout(ev);
+                    self.panel(ev);
                 } else {
                     self.login(ev);
                 }
+            };
+
+            self.panel = function (ev){
+                $location.path('/panel');
             };
 
             self.logout = function (ev) {
