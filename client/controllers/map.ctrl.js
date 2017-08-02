@@ -3,7 +3,7 @@ angular.module('myApp')
 
     var self = this;
 	  self.markers = {};
-    var icons = { normalizado: {size: new google.maps.Size(30, 30),
+    var icons = { todos: {size: new google.maps.Size(30, 30),
                                 scaledSize: new google.maps.Size(30, 30),
                                 url: '../lib/icons/marker.png'},
                   alerta0: {size: new google.maps.Size(30, 30),
@@ -105,15 +105,20 @@ self.initMap();
     };
 
     self.showEdificiosAlerta = function(nivelAlerta) {
+      for (key in self.markers){
+        self.markers[key].setVisible(false);
+      };
       $http.get("/edificio", { params: {nivelAlerta: nivelAlerta }})
         .then(function(response, ev) {
           for (var i in response.data) {
             var edificio = response.data[i];
             console.log(edificio);
-            if (nivelAlerta == '0') {
-              self.markers[edificio._id].setIcon(icons.alerta0);
-            } else if (nivelAlerta == '1') {
+            if (nivelAlerta == '1') {
               self.markers[edificio._id].setIcon(icons.alerta1);
+              self.markers[edificio._id].setVisible(true);
+            } else if (nivelAlerta == '0') {
+              self.markers[edificio._id].setIcon(icons.alerta0);
+              self.markers[edificio._id].setVisible(true);
             }
           }
         });
