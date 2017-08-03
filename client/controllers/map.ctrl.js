@@ -1,5 +1,5 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', function ($scope, $http, $mdDialog, $window) {
+    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', 'edificioService', function($scope, $http, $mdDialog, $window, edificioService) {
 
         var self = this;
         self.markers = {};
@@ -101,7 +101,10 @@ angular.module('myApp')
 
         var originatorEv;
 
-        this.openMenu = function ($mdOpenMenu, ev) {
+
+
+
+        this.openMenu = function($mdOpenMenu, ev) {
             originatorEv = ev;
             $mdOpenMenu(ev);
         };

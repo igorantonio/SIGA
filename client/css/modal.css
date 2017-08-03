@@ -19,17 +19,18 @@ md-tab-body {
 }
 
 md-dialog-content {
-	height: 1000px;
+	height: 80vh;
 }
 
 .content-tab1 {
 	margin: 3%;
 	color: #5E7ED2;
 	width: 60%;
-	height: 100%;
+	height: 80%;
 	float: left;
 	display: inline;
 }
+
 
 .content-tab1 > p {
 	text-align: justify;
@@ -83,6 +84,11 @@ md-dialog-content {
 .content-tab1 .selected-button {
 	background-color: #d3d6d1;
 	color: #5E7ED2;
+}
+.content-tab2 {
+	margin: 3%;
+	color: #5E7ED2;
+	height: 80%;
 }
 
 .image {
