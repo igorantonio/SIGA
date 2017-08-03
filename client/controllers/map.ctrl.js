@@ -5,13 +5,13 @@ angular.module('myApp')
 	  self.markers = {};
     var icons = { todos: {size: new google.maps.Size(30, 30),
                                 scaledSize: new google.maps.Size(30, 30),
-                                url: '../lib/icons/marker.png'},
+                                url: '../lib/icons/marker_blue.png'},
                   alerta0: {size: new google.maps.Size(30, 30),
                             scaledSize: new google.maps.Size(30, 30),
-                            url:'../lib/icons/algo.png'},
+                            url:'../lib/icons/marker_yellow.png'},
                   alerta1: {size: new google.maps.Size(30, 30),
                             scaledSize: new google.maps.Size(30, 30),
-                            url:'../lib/icons/algo1.png'}
+                            url:'../lib/icons/marker_red.png'}
                   };
 
     function addMarker(edificio, icon){
@@ -50,13 +50,13 @@ $scope.loadData = function () {
     $http.get("/edificio", {params: {withAlerta: true}})
         .then(function(response, ev){
             $scope.data = response.data;
-            for (var i in response.data){
-              for (var j in response.data[i]) {
+            for (i in response.data){
+              for (j in response.data[i]) {
               	var edificio = response.data[i][j];
               	// the following line checks if the json edificio object have the required params to be drawn
               	if (edificio.hasOwnProperty('geolocalizacao') 
               		&& edificio['geolocalizacao'].hasOwnProperty('latitude')){
-              		addMarker(edificio, icons[i]);
+              	   addMarker(edificio, icons[i]);
               	};
               }
             }
@@ -67,6 +67,7 @@ $scope.loadData = function () {
             $scope.data = "error in fetching data"; //return if error on fetch
         });
     };
+
 self.initMap = function(){
     //draws the base map calling the google api 
     self.map = new google.maps.Map(document.getElementById('map'), {
@@ -81,9 +82,6 @@ self.initMap = function(){
 };
 
 self.initMap();
-
-    
-
    // removes the non necessary info from the map
 
     self.showOnlySetor = function(setor){
