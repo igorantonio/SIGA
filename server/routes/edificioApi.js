@@ -105,7 +105,12 @@ var emAlerta = function(edificios, margem) {
         total += cd.consumo;
       }
     });
-    if (total >= ed.mediaEsperada + margem * ed.mediaEsperada){
+    if (margem == 0.2){
+      if(total >= ed.mediaEsperada + margem * ed.mediaEsperada && (total < (ed.mediaEsperada + 0.3* ed.mediaEsperada))){
+        edificiosFiltrados.push(ed);
+      };
+    }
+    else if (total >= ed.mediaEsperada + margem * ed.mediaEsperada){
     edificiosFiltrados.push(ed);
     }
   });

@@ -15,6 +15,10 @@ angular.module('myApp')
                   };
 
     function addMarker(edificio, icon){
+    		if (self.markers.hasOwnProperty(edificio._id)){
+    			self.markers[edificio._id].setIcon(icon);
+    			return;
+              		};
 
     	// sets the current location from the edificio data
         var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
@@ -58,9 +62,9 @@ $scope.loadData = function () {
               	// the following line checks if the json edificio object have the required params to be drawn
               	if (edificio.hasOwnProperty('geolocalizacao') 
               		&& edificio['geolocalizacao'].hasOwnProperty('latitude')){
-              			console.log("aehozz");
+              		addMarker(edificio,icons[i]);
+              	
 
-              	   addMarker(edificio, icons[i]);
               	};
               }
             }
@@ -93,11 +97,9 @@ self.initMap();
     	$http.get("/edificio",  {
     params: { setor: setor }})
         .then(function(response, ev){
-        	console.log(response.data);
             for (var i in response.data){
             	var edificio = response.data[i];
             	self.markers[edificio._id].setVisible(true);
-             //return if uccess on fetch
 			}            
         }, function() {
             $scope.data = "error in fetching data"; //return if error on fetch
