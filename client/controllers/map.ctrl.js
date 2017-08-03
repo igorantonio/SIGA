@@ -93,6 +93,7 @@ self.initMap();
     	$http.get("/edificio",  {
     params: { setor: setor }})
         .then(function(response, ev){
+        	console.log(response.data);
             for (var i in response.data){
             	var edificio = response.data[i];
             	self.markers[edificio._id].setVisible(true);
