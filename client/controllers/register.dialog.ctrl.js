@@ -21,6 +21,7 @@ angular.module('myApp')
                         $location.path('/');
                         self.disabled = false;
                         self.registerForm = {};
+                        self.close();
                     })
                     // handle error
                     .catch(function () {

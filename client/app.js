@@ -14,7 +14,7 @@ myApp.config(function ($routeProvider) {
     .when('/register', {
       templateUrl: 'views/register.html',
       controller: 'registerController',
-      access: {restricted: false}
+      access: {restricted: true}
     })
     .otherwise({
       redirectTo: '/'

@@ -27,7 +27,7 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             // handle success
                 .success(function (data) {
                     if (data.status) {
-                        user = {status: true};
+                        user = {status: true, user: data.user};
                     } else {
                         user = {status: false};
                     }
@@ -39,7 +39,7 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
         }
 
         function getUser() {
-            return user;
+            return user.user;
         }
 
         function login(username, password) {
@@ -53,10 +53,10 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             // handle success
                 .success(function (data, status) {
                     if (status === 200 && data.status) {
-                        user = {status: true, username: username};
+                        getUserStatus();
                         deferred.resolve();
                     } else {
-                        user = {status: false};
+                        etUserStatus();
                         deferred.reject();
                     }
                 })
