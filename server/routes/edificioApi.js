@@ -142,6 +142,8 @@ router.get('/edificio', function(req,res){
   });
 });
 
+
+
 router.get('/edificio/:edificio_id', function(req,res){
   Edificio.findById(req.params.edificio_id, function(error,edificio){
     if(error) res.send(edificio);
