@@ -55,6 +55,8 @@ router.get('/logout', function(req, res) {
   });
 });
 
+
+
 router.get('/status', function(req, res) {
   if (!req.isAuthenticated()) {
     return res.status(200).json({
@@ -62,16 +64,6 @@ router.get('/status', function(req, res) {
     });
   }
 
-<<<<<<< HEAD
-router.get('/users', function(req, res) {
-  var user_name = req.query.username;
-  User.findOne({username: user_name}, function (err, user) {
-        if (err != null){
-            return res.status(401).json({
-              status: false
-            });
-        }
-        res.status(200).json(user);
   passport.deserializeUser(function(id, done) {
     User.findById(id, function(err, user) {
       done(err, user);
