@@ -11,10 +11,11 @@
 
                             <p class="ed-bloco">Bloco{{edificio.caracteristicasFisicas.localizacao.bloco}}</p>
                             <p class="ed-name">{{edificio.nome}}</p>
-                            <p class="ed-atividade">Aqui vai a atividade do edifício: {{edificio.atividade}}</p>
-                            <p class="ed-descricao">Aqui vai a descrição do edifício: {{edificio.descricao}}</p>
+                            <p class="ed-atividade">Atividade: {{edificio.atividade}}</p>
+                            <p class="ed-descricao">{{edificio.descricao}}</p>
                             <p>Consumo total: {{ctrl.estatisticas.total}}</p>
                             <p>Consumo médio: {{ctrl.estatisticas.media}}</p>
+                            <p>Consumo médio esperado: {{edificio.mediaEsperada}}</p>
                             <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
                             <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
 

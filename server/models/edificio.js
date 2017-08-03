@@ -18,8 +18,10 @@ var Edificio = new Schema({
 		n_pias: Number,
 		volumeReservatorio: Number
 	},
-	consumoDiario: [{ dia: {type: Date, required: true}, consumo: {type: Number, required: true} }],
-	geolocalizacao: {latitude: {type: Number, required: true}, longitude: {type:Number, required: true}}
+	mediaEsperada: {type: Number, required: true},
+	historicoConsumo: [{ data: {type: Date, required: true}, consumo: {type: Number, required: true} }],
+	geolocalizacao: {latitude: {type: Number, required: true}, longitude: {type:Number, required: true}},
+	vazamentos: [{data:  {type: Date, required: true}, volume: {type: Number, required: true}}]
 });
 
 Edificio.static('findBySetor', function (setor, callback) {
