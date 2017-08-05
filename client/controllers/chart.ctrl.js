@@ -1,7 +1,7 @@
 angular.module('myApp')
-    .controller('ChartController', ['$scope', function($scope) {
-     $scope.type = "diário";
-	  this.data = [{
+    .controller('ChartController', ['$scope', 'edificioService', '$http', function($scope, edificioService, $http) {
+     $scope.type = edificioService.getEdificioId();
+	 $scope.data = [{
 	    key: 'Data',
 	    values: [{
 	      x: 0,
@@ -24,7 +24,24 @@ angular.module('myApp')
 	    }],
 	    area: true
 	  }];
-	}])
+	
+
+$scope.loadData = function () {
+
+    $http.get("/edificio/"+edificioService.getEdificioId()+"/consumo")
+        .then(function(response, ev){
+        	$scope.data = [{key: 'Data', values: response.data, area:true}];
+            
+        }, function() {
+            $scope.data = "error in fetching data"; //return if error on fetch
+        });
+    };
+    var load = function(){
+    	$scope.loadData();
+    };
+    load();
+
+    }])
 
 	.factory('d3', [function() {
 	  return d3;
@@ -68,8 +85,8 @@ angular.module('myApp')
 	          .showXAxis(true);
 
 	        chart.xAxis
-	          .axisLabel('x')
-	          .tickFormat(d3.format('.2f'));
+	          .axisLabel('data')
+	          .tickFormat(function(d) { return d3.time.format('%b %d')(new Date(d)); });
 
 	        chart.yAxis
 	          .axisLabel('y')
