@@ -12,8 +12,12 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
         edificio.geolocalizacao.latitude = req.body.latitude;
         edificio.geolocalizacao.longitude = req.body.longitude;
         edificio.save(function(error) {
-            if (error) res.send(error);
+            if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
             res.json(edificio);
+          }
         });
     });
 });
@@ -21,9 +25,8 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
 /// Obter os consumos de um edificio
 router.get('/edificio/:edificio_id/consumo', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
-            if (error) {
-                res.send(error.message);
-                return;
+             if (error){ 
+              res.status(400).json({err: error});
             };
             consumos = edificio.historicoConsumo;
             if (req.query.ano != null) {
@@ -55,8 +58,8 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
-        res.status(422);
-        return;
+              res.status(400).json({err: error});
+
     };
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
         if (error) res.send(edificio);
@@ -78,10 +81,12 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
 
 router.get('/edificio/:edificio_id/vazamentos', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) {
-            res.status(400);
-            res.send(error.message);
-        };
+         if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(edificio);
+          };
         // Filtrar
         //Checar com eles, se tiver dois vazamentos no mesmo dia. o que fazer? Juntar?
         vazamentosFiltrados = edificio.vazamentos;
@@ -92,11 +97,9 @@ router.get('/edificio/:edificio_id/vazamentos', function(req, res) {
 
 router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) {
-            res.status(400);
-            res.send(error.message);
-            return;
-        };
+         if (error){ 
+              res.status(400).json({err: error});
+          };
         vazamentosFiltrados = [];
         edificio.vazamentos.forEach(function(vazamento) {
             if (vazamento._id != req.params.vazamento_id) {
@@ -105,9 +108,8 @@ router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, r
         })
         edificio.vazamentos = vazamentosFiltrados;
         edificio.save(function(error) {
-            if (error) {
-                res.status(400);
-                res.send(error.message);
+            if (error){ 
+              res.status(400).json({err: error});
             } else {
                 res.json(edificio.vazamentos);
             }
@@ -167,7 +169,9 @@ router.post('/edificio', function(req, res) {
         edificio.vazamentos = [];
     }
     edificio.save(function(error) {
-        if (error) res.send(error);
+        if (error){ 
+          res.status(400);
+          res.send(error.message);}
         else res.json(edificio);
     });
 
