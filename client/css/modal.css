@@ -19,7 +19,7 @@ md-tab-body {
 }
 
 md-dialog-content {
-	height: 1000px;
+	height: 80vh;
 }
 
 .content-tab1 {
@@ -31,10 +31,64 @@ md-dialog-content {
 	display: inline;
 }
 
+
+.content-tab1 > p {
+	text-align: justify;
+	line-break: strict;
+	display: block;
+	margin: 0 0;
+}
+
+.content-tab1 #info-detalhada > p {
+	text-align: justify;
+	line-break: strict;
+	display: block;
+	margin: 0 15px;
+}
+
+.content-tab1 .ed-bloco {
+	margin: 0 0;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.content-tab1 .ed-name {
+	font-size: 12px;
+}
+
+.content-tab1 .ed-atividade {
+	margin-top: 15px;
+	margin-bottom: 0;
+	font-size: 15px;
+}
+
+.content-tab1 .ed-descricao {
+	margin-bottom: 12px;
+}
+
+.content-tab1 button {
+	margin: 12px 0;
+	font-size: 14px;
+}
+
+.content-tab1 .md-raised {
+	background-color: #fefefe;
+	color: #5E7ED2;
+}
+
+.content-tab1 .md-raised:hover {
+	background-color: #f1f1f1;
+	color: #3e3e3e;
+}
+
+.content-tab1 .selected-button {
+	background-color: #d3d6d1;
+	color: #5E7ED2;
+}
 .content-tab2 {
 	margin: 3%;
 	color: #5E7ED2;
-	height: 100%;
+	height: 80%;
 }
 
 .image {
@@ -48,3 +102,4 @@ md-dialog-content {
 	margin: 0px;
 	display: inline;
 }
+
