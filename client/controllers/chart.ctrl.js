@@ -83,10 +83,15 @@ $scope.loadData = function () {
 	          .showLegend(false)
 	          .showYAxis(true)
 	          .showXAxis(true);
+	         //chart.x(function(d){return new Date(d)});
+	         //chart.lines.xScale(d3.time.scale.utc());
+	         chart.xScale(d3.time.scale());
+
 
 	        chart.xAxis
 	          .axisLabel('data')
-	          .tickFormat(function(d) { return d3.time.format('%b %d')(new Date(d)); });
+	          .tickFormat(function(d) { return d3.time.format('%b %d %y')(new Date(d)); })
+	          .ticks(d3.time.dats,1);
 
 	        chart.yAxis
 	          .axisLabel('y')

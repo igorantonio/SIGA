@@ -44,11 +44,14 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
             consumosFiltrados = [];
             consumos.forEach(function(cd) {
                 var newConsumo = {
-                    x: cd.data,
+                    x: cd.data.getTime(),
                     y: cd.consumo
                 };
                 consumosFiltrados.push(newConsumo);
             });
+            consumosFiltrados.sort(function(a, b) {
+              return a.x - b.x;
+             });
             res.json(consumosFiltrados);
 
         }
