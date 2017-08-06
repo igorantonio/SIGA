@@ -5,7 +5,6 @@ angular.module('myApp')
             var self = this;
 
             self.changeSessionState = function (ev) {
-
                 var isLogged = AuthService.isLoggedIn();
 
                 if (isLogged) {

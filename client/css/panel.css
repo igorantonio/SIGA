@@ -1,0 +1,20 @@
+#row {
+	display: grid;
+}
+
+#menu {
+	width: 20%; 
+	float: left;
+	background: #EBE8DE;
+}
+
+#panel {
+	width: 80%; 
+	float: right;
+}
+
+#divs {
+	overflow:auto;
+	height: 100%;
+  	display: inline-block;
+}
