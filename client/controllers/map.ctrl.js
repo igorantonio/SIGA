@@ -1,5 +1,5 @@
 angular.module('myApp')
-    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', function($scope, $http, $mdDialog, $window) {
+    .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', 'edificioService', function($scope, $http, $mdDialog, $window, edificioService) {
 
     var self = this;
 	  self.markers = {};
@@ -34,6 +34,7 @@ angular.module('myApp')
         // modal referring to the current building
         marker.addListener('click', function(ev) {
           $scope.edificio = edificio;
+          edificioService.setEdificioId(edificio._id);
 
           $mdDialog.show({
               templateUrl: '../views/modal.html',

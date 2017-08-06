@@ -1,13 +1,11 @@
 angular.module('myApp')
   .service('edificioService', function() {
     var edificioId = {};
-
-    return {
-      getEdificioId: function () {
-          return edificioId;
-      },
-      setEdificioId: function (value) {
-          edificioId = value;
-      }
+    this.getEdificioId = function(){
+      return edificioId;
     };
+    this.setEdificioId = function(id){
+      edificioId = id;
+    }
+
 });
