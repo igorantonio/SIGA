@@ -7,17 +7,21 @@ var Edificio = require('../models/edificio.js');
 
 
 router.post('/register', function(req, res) {
-  User.register(new User({ username: req.body.username }),
-    req.body.password, function(err, account) {
-    if (err) {
-      return res.status(500).json({
-        err: err
+  if (req.isAuthenticated()) {
+    User.register(new User({ username: req.body.username }),
+      req.body.password, function(err, account) {
+      if (err) {
+        return res.status(400).json({
+          err: err
+        });
+      }
+      return res.status(200).json({
+        status: 'Registration successful!'
       });
-    }
-    return res.status(200).json({
-      status: 'Registration successful!'
     });
-  });
+  } else {
+    res.status(401).json({status: 'Administrador não logado no sistema'});
+  }
 });
 
 
@@ -51,28 +55,26 @@ router.get('/logout', function(req, res) {
   });
 });
 
+
+
 router.get('/status', function(req, res) {
   if (!req.isAuthenticated()) {
     return res.status(200).json({
       status: false
     });
   }
-  res.status(200).json({
-    status: true
-  });
-});
 
-router.get('/users', function(req, res) {
-  var user_name = req.query.username;
-  User.findOne({username: user_name}, function (err, user) {
-        if (err != null || !user){
-            return res.status(401).json({
-              status: false
-            });
-        }
-        res.status(200).json(user);
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
   });
-});
 
+  if (!req.user) {
+    res.status(500).json({status: false});
+  } else {
+    res.status(200).json({status: true, user: req.user});
+  }
+});
 
 module.exports = router;
