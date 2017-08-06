@@ -9,38 +9,30 @@
     display: table;
     background-color: #F5F6F7;
 }
+
 body{
 	margin: 0;
 	padding:0;
 }
+
 #content{
 	position: absolute;
 	top:0;
 	right:0;
 	bottom:0;
 	left: 0;
-	  padding-top: 85px;
-
 }
+
 #map{
 	 width: 100%;
     height: 82%;
     position: absolute;
     overflow: hidden;
 }
-#header{
-	top:0;
-	left:0;
-	right:0;
-    height: 75px;
-    position: absolute;
 
-}
-
-.menu-demo-container{
+.menu-demo-container {
+    display:table-cell;
     background-color: #ecf0f1;
-;
-
 }
 
 .menudemoBasicUsage .md-menu-demo {
@@ -69,3 +61,12 @@ body{
 #register-button:hover {
     color: #424784;
 }
+
+.material-icons.md-ufcg-info-button:hover {
+    color: #5e7ed2;
+}
+
+.material-icons.md-filtro-ed:hover {
+    color: #5e7ed2;
+}
+
