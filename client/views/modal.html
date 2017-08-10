@@ -45,10 +45,10 @@
           </md-tab-label>
           <md-tab-body>
             <div class="content-tab2">
-                <div ng-app="myApp" ng-controller="ChartController as main">
+                <div ng-app="myApp" ng-controller="ChartController as main" ng-cloak="" ng-app="app">
                   <h3 class="topic">Consumo {{type}}</h3>
                   <h3 class="topic">{{edificioId}}</h3>
-                  <line-chart height="250px" data="main.data"></line-chart>
+                  <line-chart height="250px" data="data"></line-chart>
                   
                 </div>
             </div>

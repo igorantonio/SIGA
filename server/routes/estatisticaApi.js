@@ -20,7 +20,7 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
     };
     if (req.query.mes != null){
       if  (!verificarMes(req.query.mes)){
-        res.status(401);
+        res.status(422);
         return;
       }
       consumos = filtrarPorMes(consumos, req.query.mes);
