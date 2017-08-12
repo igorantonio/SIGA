@@ -298,5 +298,4 @@ router.route('/edificio/:edificio_id')
         });
     });
 
-
 module.exports = router;
