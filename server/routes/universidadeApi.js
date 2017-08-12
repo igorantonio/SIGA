@@ -17,21 +17,21 @@ router.get('/universidade', function (req, res) {
     var mediaEsperada = 40;
 
     Edificio.find({}, function (error, edificios) {
-        
+
         if (error) {
             res.send("ERROR!")
             return;
         };
 
         edificios.forEach(function (edificio) {
-            
+
             numeroPredios++;
-            
+
             // SOMA CONSUMOS DE TODOS OS PRÉDIOS POR DATA
             edificio.historicoConsumo.forEach(function (c) {
-                                
+
                 temData = false;
-                consumos.forEach(function (ct) {                                     
+                consumos.forEach(function (ct) {
                     if (ct.data.getTime() === c.data.getTime()) {
                         ct.consumo = ct.consumo + c.consumo;
                         temData = true;
@@ -45,27 +45,52 @@ router.get('/universidade', function (req, res) {
         });
 
         var consumoEstatisticas = EstatisticaAPI.data.calculaEstatisticas(consumos);
-        
+
         var jsonMe = {
             "estatisticas": consumoEstatisticas,
             "infos": {
                 "nome": nome,
                 "atividade": atividade,
                 "descricao": descricao
-            }
+            },
+            "consumos": consumos
         };
 
         res.json(jsonMe);
     })
 });
 
+router.get('/universidade/consumo', function (req, res) {
+
+    var consumos = [];
+
+    Edificio.find({}, function (error, edificios) {
+
+        if (error) {
+            res.send("ERROR!")
+            return;
+        };
+
+        edificios.forEach(function (edificio) {
+
+            edificio.historicoConsumo.forEach(function (c) {
+
+                temData = false;
+                consumos.forEach(function (ct) {
+                    if (ct.data.getTime() === c.data.getTime()) {
+                        ct.consumo = ct.consumo + c.consumo;
+                        temData = true;
+                    }
+                });
+
+                if (!temData) {
+                    consumos.push(c);
+                }
+            });
+        });
+
+        res.json(consumos);
+    })
+});
+
 module.exports = router;
-
-
-/* 
-	mediaEsperada: {type: Number, required: true},
-	historicoConsumo: [{ data: {type: Date, required: true}, consumo: {type: Number, required: true} }],
-	geolocalizacao: {latitude: {type: Number, required: true}, longitude: {type:Number, required: true}},
-    vazamentos: [{data:  {type: Date, required: true}, volume: {type: Number, required: true}}]
-
-*/
