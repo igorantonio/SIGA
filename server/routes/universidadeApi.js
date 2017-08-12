@@ -34,7 +34,9 @@ router.get('/universidade', function (req, res) {
         };
 
         edificios.forEach(function (edificio) {
-                        
+            
+            numeroPredios++;
+            
             // SOMA CONSUMOS DE TODOS OS PRÉDIOS POR DATA
             edificio.historicoConsumo.forEach(function (c) {
                                 
@@ -50,12 +52,13 @@ router.get('/universidade', function (req, res) {
                     consumos.push(c);
                 }
             });
-
         });
 
         var consumoEstatisticas = EstatisticaAPI.data.calculaEstatisticas(consumos);
+        
+        var jsonMe = {"estatisticas":consumoEstatisticas}
 
-        res.json(edificios);
+        res.json(jsonMe);
     })
 });
 
@@ -63,23 +66,9 @@ module.exports = router;
 
 
 /* 
-
 	mediaEsperada: {type: Number, required: true},
 	historicoConsumo: [{ data: {type: Date, required: true}, consumo: {type: Number, required: true} }],
 	geolocalizacao: {latitude: {type: Number, required: true}, longitude: {type:Number, required: true}},
     vazamentos: [{data:  {type: Date, required: true}, volume: {type: Number, required: true}}]
-
-Consumo total: 0
-Consumo médio:
-Consumo médio esperado:
-Consumo máximo: -1
-Consumo mínimo: 9999999999
-
-/estatistica/edificio/edId
-
-total: 0,
-media: null,
-maximo: -1,
-minimo: 9999999999
 
 */

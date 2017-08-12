@@ -186,12 +186,11 @@ angular.module('myApp')
 
                 function getEstatisticas() {
                     var q = $q.defer();
-                    var route = "/estatistica/edificio/" + $scope.edificio._id;
-                    // Quando houver rota para UFCG, alterar aqui.
+                    var route = "/universidade";        
 
                     $http.get(route).then(function(info) {
                         q.resolve(info.data);
-                        self.estatisticas = info.data;
+                        self.estatisticas = info.data.estatisticas;
                     }, function(info){
                         console.log('Rota errada')
                     });
@@ -201,6 +200,7 @@ angular.module('myApp')
 
                 var init = function () {
                     getEstatisticas();
+                    console.log(self.estatisticas);
                 };
 
                 init();
