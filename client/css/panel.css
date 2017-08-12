@@ -3,18 +3,34 @@
 }
 
 #menu {
-	width: 20%; 
+	width: 30%;
 	float: left;
-	background: #EBE8DE;
+}
+
+#menu ul {
+	margin: 30%;
+}
+
+#menu ul li {
+	margin: 0px;
+	padding: 0px;
+	border-bottom: 1px solid #CCC;
+	text-align: left;
+	list-style-type: none;
 }
 
 #panel {
-	width: 80%; 
+	width: 70%; 
 	float: right;
 }
 
 #divs {
 	overflow:auto;
-	height: 100%;
+	width: 80%;
   	display: inline-block;
-}
+ }
+
+.navBardemoBasicUsage md-content .ext-content {
+  padding: 50px;
+  margin: 20px;
+  background-color: #FFF2E0; }
