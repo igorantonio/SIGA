@@ -20,6 +20,7 @@
 }
 
 #panel {
+	margin-top: 5%;
 	width: 70%; 
 	float: right;
 }
@@ -30,7 +31,27 @@
   	display: inline-block;
  }
 
-.navBardemoBasicUsage md-content .ext-content {
-  padding: 50px;
-  margin: 20px;
-  background-color: #FFF2E0; }
+.menu-container {
+	height: 4vh;
+	width: 100%;
+	background-color: #ecf0f1;
+}
+
+.listdemoListControls md-list {
+  padding-top: 0; }
+
+.listdemoListControls md-list-item > p,
+.listdemoListControls md-list-item > .md-list-item-inner > p,
+.listdemoListControls md-list-item .md-list-item-inner > p,
+.listdemoListControls md-list-item .md-list-item-inner > .md-list-item-inner > p {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */ }
+
+
+

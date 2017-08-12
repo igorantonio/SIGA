@@ -18,7 +18,7 @@ myApp.config(function ($routeProvider) {
     })
     .when('/panel', {
       templateUrl: 'views/panel.html',
-      controller: 'panelController',
+      controller: 'PanelController as ctrl',
       access: {restricted: true}
     })
     .otherwise({
