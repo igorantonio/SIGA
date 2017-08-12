@@ -21,7 +21,6 @@ router.get('/caixa/:caixa_id/vazamentos', function(req, res) {
         //Checar com eles, se tiver dois vazamentos no mesmo dia. o que fazer? Juntar?
         vazamentosFiltrados = caixa.vazamentos;
         res.json(vazamentosFiltrados);
-
     })
 });
 
