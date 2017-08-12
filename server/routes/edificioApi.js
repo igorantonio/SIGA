@@ -65,7 +65,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
 
     };
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) res.send(edificio);
+        if (error) {res.send(edificio);}
         data = new Date(req.body.data);
         novoConsumo = {
             data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
@@ -300,3 +300,15 @@ router.route('/edificio/:edificio_id')
 
 
 module.exports = router;
+
+
+module.exports.data = {
+  router: router,
+  emAlerta: function(caixas, n) {
+    return emAlerta(caixas, n);
+    },
+  filtrarPorSetor: function(setor, edificios){
+    return filtrarPorSetor(setor, edificios);
+  }
+
+}

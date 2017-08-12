@@ -42,6 +42,7 @@ angular.module('myApp')
 
             function getEstatisticas() {
                 var q = $q.defer();
+                if (!$scope.isCaixa){
                 var route = "/estatistica/edificio/" + $scope.edificio._id;
 
                 $http.get(route).then(function(info) {
@@ -50,6 +51,17 @@ angular.module('myApp')
                 }, function(info){
                     console.log('Rota errada')
                 });
+            }
+            else{
+                var route = "/estatistica/caixa/" + $scope.edificio._id;
+                $http.get(route).then(function(info) {
+                    q.resolve(info.data);
+                    self.estatisticas = info.data;
+                }, function(info){
+                    console.log('Rota errada')
+                });
+
+            };
 
                 return q.promise;
             }

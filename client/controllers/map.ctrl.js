@@ -14,11 +14,11 @@ angular.module('myApp')
                             url:'../lib/icons/marker_red.png'}
                   };
 
-    function addMarker(edificio, icon){
+    function addMarker(edificio, icon, caixe){
     		if (self.markers.hasOwnProperty(edificio._id)){
     			self.markers[edificio._id].setIcon(icon);
     			return;
-              		};
+        };
 
     	// sets the current location from the edificio data
         var location = {lat:parseFloat(edificio.geolocalizacao.latitude), lng: parseFloat(edificio.geolocalizacao.longitude) };
@@ -34,7 +34,9 @@ angular.module('myApp')
         // modal referring to the current building
         marker.addListener('click', function(ev) {
           $scope.edificio = edificio;
+          $scope.isCaixa = caixe;
           edificioService.setEdificioId(edificio._id);
+          edificioService.setCaixa(caixe);
 
           $mdDialog.show({
               templateUrl: '../views/modal.html',
@@ -63,7 +65,7 @@ $scope.loadData = function () {
               	// the following line checks if the json edificio object have the required params to be drawn
               	if (edificio.hasOwnProperty('geolocalizacao') 
               		&& edificio['geolocalizacao'].hasOwnProperty('latitude')){
-              		addMarker(edificio,icons[i]);
+              		addMarker(edificio,icons[i],false);
               	
 
               	};
@@ -90,7 +92,7 @@ $scope.loadCaixas = function(){
                 // the following line checks if the json edificio object have the required params to be drawn
                 if (edificio.hasOwnProperty('geolocalizacao') 
                   && edificio['geolocalizacao'].hasOwnProperty('latitude')){
-                  addMarker(edificio,icons[i]);
+                  addMarker(edificio,icons[i], true);
                 
 
                 };

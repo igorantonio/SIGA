@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var EstatisticaAPI = require('./estatisticaApi.js');
+var EdificioAPI = require('./edificioAPI.js');
 var User = require('../models/user.js');
 var CaixaDeAgua = require('../models/caixaDeAgua.js');
 
@@ -195,7 +196,7 @@ router.post('/caixa', function(req, res) {
 router.get('/caixa', function(req, res) {
     CaixaDeAgua.find(function(err, caixas) {
         if (req.query.setor != null) {
-            caixas = filtrarPorSetor(req.query.setor, caixas);
+            caixas = EdificioAPI.data.iltrarPorSetor(req.query.setor, caixas);
         }
         if (req.query.nivelAlerta != null) {
             nivelAlerta = req.query.nivelAlerta;
@@ -204,14 +205,14 @@ router.get('/caixa', function(req, res) {
             } else if (nivelAlerta == "1") {
                 margem = 0.3;
             };
-            var result = emAlerta(caixas, margem);
+            var result = EdificioAPI.emAlerta(caixas, margem);
             res.send(result);
             return;
         }
         if (req.query.withAlerta) {
             if (req.query.withAlerta == 'true') {
-                var result0 = emAlerta(caixas, 0.2);
-                var result1 = emAlerta(caixas, 0.3);
+                var result0 = EdificioAPI.data.emAlerta(caixas, 0.2);
+                var result1 = EdificioAPI.data.emAlerta(caixas, 0.3);
                 res.json({
                     todos: caixas,
                     alerta0: result0,

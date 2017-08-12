@@ -8,19 +8,19 @@ angular.module('myApp')
 	      y: 0,
 	    }, {
 	      x: 1,
-	      y: 1
+	      y: 0
 	    }, {
 	      x: 2,
-	      y: 4
+	      y: 0
 	    }, {
 	      x: 3,
-	      y: 9
+	      y: 0
 	    }, {
 	      x: 4,
-	      y: 16
+	      y: 0
 	    }, {
 	      x: 5,
-	      y: 25
+	      y: 0
 	    }],
 	    area: true
 	  }];
@@ -39,7 +39,18 @@ $scope.loadData = function () {
     var load = function(){
     	$scope.loadData();
     };
-    load();
+    if (!edificioService.isCaixa()){
+    	load();
+	}else{
+		 $http.get("/caixa/"+edificioService.getEdificioId()+"/consumo")
+        .then(function(response, ev){
+        	$scope.data = [{key: 'Data', values: response.data, area:true}];
+            
+        }, function() {
+            $scope.data = "error in fetching data"; //return if error on fetch
+        });
+
+	};
 
     }])
 

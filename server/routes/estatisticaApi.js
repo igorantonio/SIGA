@@ -5,6 +5,8 @@ var moment = require('moment');
 
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
+var CaixaDeAgua = require('../models/caixaDeAgua.js');
+
 
 // Estatisticas referentes a edificios
 router.get('/estatistica/edificio/:edificio_id', function(req,res){
@@ -35,11 +37,40 @@ router.get('/estatistica/edificio/:edificio_id', function(req,res){
   });
 });
 
+
+router.get('/estatistica/caixa/:caixa_id', function(req,res){
+  CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa){
+    if(error) res.send(caixa);
+    sum = 0.0;
+    max = -1.0;
+    min =  9999999;
+    
+    var consumos = caixa.historicoConsumo;
+    if (req.query.ano != null){
+      consumos = filtrarPorAno(consumos, req.query.ano);
+    };
+    if (req.query.mes != null){
+      if  (!verificarMes(req.query.mes)){
+        res.status(422);
+        return;
+      }
+      consumos = filtrarPorMes(consumos, req.query.mes);
+    };
+    if (req.query.dia != null){
+      consumos = filtrarPorDia(consumos, req.query.dia);
+    };
+    if (req.query.inicio != null && req.query.fim != null){
+      consumos = filtrarRange(consumos, req.query.inicio, req.query.fim);
+    };
+    res.json(calculaEstatisticas(consumos));
+  });
+});
+
 var verificarMes = function(mes){
   return mes >=1 && mes <= 12;
 };
 
-var verifica
+
 var calculaEstatisticas = function(consumos){
   var sum = 0.0;
   var max = -1;
