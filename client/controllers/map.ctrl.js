@@ -74,7 +74,36 @@ $scope.loadData = function () {
         }, function() {
             $scope.data = "error in fetching data"; //return if error on fetch
         });
+
     };
+
+$scope.loadCaixas = function(){
+
+   $http.get("/caixa", {params: {withAlerta: true}})
+        .then(function(response, ev){
+            $scope.data = response.data;
+                            console.log(response.data);
+
+            for (i in response.data){
+              for (j in response.data[i]) {
+                var edificio = response.data[i][j];
+                // the following line checks if the json edificio object have the required params to be drawn
+                if (edificio.hasOwnProperty('geolocalizacao') 
+                  && edificio['geolocalizacao'].hasOwnProperty('latitude')){
+                  addMarker(edificio,icons[i]);
+                
+
+                };
+              }
+            }
+             //return if uccess on fetch
+            
+        }, function() {
+            $scope.data = "error in fetching data"; //return if error on fetch
+        });
+
+
+};
 
 self.initMap = function(){
     //draws the base map calling the google api 
@@ -84,6 +113,7 @@ self.initMap = function(){
       }
     );
     $scope.loadData();
+    $scope.loadCaixas();
  self.map.setOptions({styles: styles['hide']}); 
 
 };
