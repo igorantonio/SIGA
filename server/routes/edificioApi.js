@@ -22,7 +22,7 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
     });
 });
 
-/// Obter os consumos de um edificio
+/// Show (Consumo)
 router.get('/edificio/:edificio_id/consumo', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
              if (error){ 
@@ -59,6 +59,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
     )
 });
 
+// Create (Consumo)
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
               res.status(400).json({err: error});
@@ -79,6 +80,57 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
                 res.json(edificio.historicoConsumo);
             }
         });
+    });
+});
+
+// Update (Consumo)
+router.put('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            consumosAtualizado = [];
+            edificio.historicoConsumo.forEach(function(consumo) {
+                if (consumo._id == req.params.consumo_id) {
+                    if (req.body.data) consumo.data     = new Date(req.body.data);
+                    if (req.body.consumo) consumo.consumo = req.body.consumo;
+                }
+                consumosAtualizado.push(consumo);
+            });
+            edificio.historicoConsumo = consumosAtualizado;
+            edificio.save(function(err) {
+                if (err) {
+                    res.status(400).json({err: error});
+                } else {
+                    res.status(200).json({message: 'Consumo atualizado.'});
+                }
+            });
+        }
+    });
+});
+
+// Delete (Consumo)
+router.delete('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            consumosFiltrados = [];
+            edificio.historicoConsumo.forEach(function(consumo) {
+                if (consumo._id != req.params.consumo_id) {
+                    consumosFiltrados.push(consumo);
+                }
+            });
+
+            edificio.historicoConsumo = consumosFiltrados;
+            edificio.save(function(err) {
+                if (err) {
+                    res.status(400).json({err: error});
+                } else {
+                    res.status(200).json({message: 'Consumo removido.'});
+                }
+            });
+        }
     });
 });
 
@@ -155,6 +207,7 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
     });
 });
 
+// Create
 router.post('/edificio', function(req, res) {
     var edificio = new Edificio();
     edificio.nome = req.body.nome;
@@ -178,6 +231,27 @@ router.post('/edificio', function(req, res) {
         else res.json(edificio);
     });
 
+});
+
+// Uṕdate
+router.put('/edificio/:edificio_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (req.body.nome) edificio.nome            = req.body.nome;
+        if (req.body.descricao) edificio.descricao  = req.body.descricao;
+        if (req.body.atividade) edificio.atividade  = req.body.atividade;
+        if (req.body.caracteristicasFisicas) edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
+        if (req.body.geolocalizacao) edificio.geolocalizacao        = req.body.geolocalizacao;
+        if (req.body.historicoConsumo) edificio.historicoConsumo    = req.body.historicoConsumo;
+        if (req.body.mediaEsperada) edificio.mediaEsperada          = req.body.mediaEsperada;
+        if (req.body.vazamentos) edificio.vazamentos                = req.body.vazamentos;
+        edificio.save(function(err) {
+            if (err) {
+                res.status(400).json({error: err});
+            } else {
+                res.status(200).json({message: 'Edificio atualizado.'});
+            }
+        });
+    });
 });
 
 var filtrarPorSetor = function(setor, edificios) {
@@ -224,6 +298,8 @@ var FindEdificio = function(edificio_id, res) {
     });
     return edificiores;
 };
+
+// Index
 router.get('/edificio', function(req, res) {
     Edificio.find(function(err, edificios) {
         if (req.query.setor != null) {
@@ -260,8 +336,7 @@ router.get('/edificio', function(req, res) {
     });
 });
 
-
-
+// Show
 router.get('/edificio/:edificio_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
         if (error) res.send(edificio);
@@ -286,6 +361,7 @@ router.post('/edificio/:edificio_id', function(req, res) {
     });
 });
 
+//Delete
 router.route('/edificio/:edificio_id')
     .delete(function(req, res) {
         Edificio.remove({
