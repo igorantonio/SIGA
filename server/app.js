@@ -32,6 +32,7 @@ var app = express();
 var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
+var caixaRouter = require('./routes/caixaDeAguaApi.js');
 var routes = require('./routes/api.js')
 // define middleware
 
@@ -62,7 +63,7 @@ app.use('/', routes);
 app.use('/', edificioRouter);
 app.use('/', userRouter);
 app.use('/', estatisticaRouter.data.router);
-
+app.use('/', caixaRouter);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));

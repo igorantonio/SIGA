@@ -108,7 +108,7 @@ router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, r
             if (vazamento._id != req.params.vazamento_id) {
                 vazamentosFiltrados.push(vazamento);
             }
-        })
+        });
         edificio.vazamentos = vazamentosFiltrados;
         edificio.save(function(error) {
             if (error){ 
@@ -117,7 +117,7 @@ router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, r
                 res.json(edificio.vazamentos);
             }
 
-        })
+        });
     });
 
 
@@ -260,7 +260,7 @@ router.get('/edificio', function(req, res) {
     });
 });
 
-
+// GENERAL
 
 router.get('/edificio/:edificio_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
