@@ -20,23 +20,25 @@
                             <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}}</p>
                             <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
                             <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
-
-                            <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
-                                       flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
-                            </md-button>
-                            <div id="info-detalhada" ng-if="showInfos">
-                                <p>Características</p>
-                                <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco
-                                    {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
-                                <p>Area: {{ctrl.pontoDeConsumo.caracteristicasFisicas.area}} m²</p>
-                                <p>Nº de pavimentos: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pavimentos}}</p>
-                                <p>Ocupação média: {{ctrl.pontoDeConsumo.caracteristicasFisicas.ocupacaoMedia}}</p>
-                                <p>Nº de bacias sanitárias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_baciasSanitarias}}</p>
-                                <p>Nº de torneiras: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_torneiras}}</p>
-                                <p>Nº de duchas: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_duchas}}</p>
-                                <p>Nº de chuveiros: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_chuveiros}}</p>
-                                <p>Nº de pias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pias}}</p>
-                                <p>Volume do reservatório: {{ctrl.pontoDeConsumo.caracteristicasFisicas.volumeReservatorio}}</p>
+                            
+                            <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
+                                <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
+                                        flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
+                                </md-button>
+                                <div id="info-detalhada" ng-if="showInfos">
+                                    <p>Características</p>
+                                    <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco
+                                        {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
+                                    <p>Area: {{ctrl.pontoDeConsumo.caracteristicasFisicas.area}} m²</p>
+                                    <p>Nº de pavimentos: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pavimentos}}</p>
+                                    <p>Ocupação média: {{ctrl.pontoDeConsumo.caracteristicasFisicas.ocupacaoMedia}}</p>
+                                    <p>Nº de bacias sanitárias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_baciasSanitarias}}</p>
+                                    <p>Nº de torneiras: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_torneiras}}</p>
+                                    <p>Nº de duchas: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_duchas}}</p>
+                                    <p>Nº de chuveiros: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_chuveiros}}</p>
+                                    <p>Nº de pias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pias}}</p>
+                                    <p>Volume do reservatório: {{ctrl.pontDeConsumo.caracteristicasFisicas.volumeReservatorio}}</p>
+                                </div>
                             </div>
 
                         </div>

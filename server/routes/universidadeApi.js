@@ -5,26 +5,16 @@ var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
-var sumObjectsByKey = function (a, b) {
-    return Array.from(arguments).reduce((a, b) => {
-        for (let k in b) {
-            if (b.hasOwnProperty(k)) {
-                
-                a[k] = (a[k] || 0) + b[k];
-            }
-        }
-        return a;
-    }, {});
-};
-
 router.get('/universidade', function (req, res) {
 
     var nome = "UFCG";
+    var atividade = "Minha atividade";
     var descricao = "Universidade Federal de Campina Grande. Aqui é a descrição.";
     var numeroPredios = 0;
     var localizacao;
     var area;
     var consumos = [];
+    var mediaEsperada = 40;
 
     Edificio.find({}, function (error, edificios) {
         
@@ -56,7 +46,14 @@ router.get('/universidade', function (req, res) {
 
         var consumoEstatisticas = EstatisticaAPI.data.calculaEstatisticas(consumos);
         
-        var jsonMe = {"estatisticas":consumoEstatisticas}
+        var jsonMe = {
+            "estatisticas": consumoEstatisticas,
+            "infos": {
+                "nome": nome,
+                "atividade": atividade,
+                "descricao": descricao
+            }
+        };
 
         res.json(jsonMe);
     })

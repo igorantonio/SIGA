@@ -77,8 +77,7 @@ angular.module('myApp')
                                 addMarker(edificio, icons[i]);
 
 
-                            }
-                            ;
+                            }                        
                         }
                     }
                     //return if uccess on fetch
@@ -187,13 +186,14 @@ angular.module('myApp')
                 function getEstatisticas() {
                     var q = $q.defer();
                     var route = "/universidade";
-                    
-                    self.pontoDeConsumo = {};
-                    self.pontoDeConsumo.nome = "TESTE"
 
+                    self.pontoDeConsumo = {};
+                    self.pontoDeConsumo.isUFCG = true;
+                    
                     $http.get(route).then(function(info) {
                         q.resolve(info.data);
                         self.estatisticas = info.data.estatisticas;
+                        self.pontoDeConsumo = info.data.infos;
                     }, function(info){
                         console.log('Rota errada')
                     });
@@ -203,7 +203,6 @@ angular.module('myApp')
 
                 var init = function () {
                     getEstatisticas();
-                    console.log($scope.edificio);
                 };
 
                 init();
