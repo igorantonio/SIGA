@@ -186,7 +186,10 @@ angular.module('myApp')
 
                 function getEstatisticas() {
                     var q = $q.defer();
-                    var route = "/universidade";        
+                    var route = "/universidade";
+                    
+                    self.pontoDeConsumo = {};
+                    self.pontoDeConsumo.nome = "TESTE"
 
                     $http.get(route).then(function(info) {
                         q.resolve(info.data);
@@ -200,7 +203,7 @@ angular.module('myApp')
 
                 var init = function () {
                     getEstatisticas();
-                    console.log(self.estatisticas);
+                    console.log($scope.edificio);
                 };
 
                 init();

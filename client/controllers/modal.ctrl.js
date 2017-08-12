@@ -43,6 +43,8 @@ angular.module('myApp')
             function getEstatisticas() {
                 var q = $q.defer();
                 var route = "/estatistica/edificio/" + $scope.edificio._id;
+                
+                self.pontoDeConsumo = $scope.edificio;
 
                 $http.get(route).then(function(info) {
                     q.resolve(info.data);
