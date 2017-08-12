@@ -32,6 +32,7 @@ var app = express();
 var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
+var universidadeRouter = require('./routes/universidadeApi.js')
 var routes = require('./routes/api.js')
 // define middleware
 
@@ -61,6 +62,7 @@ app.use('/', routes);
 app.use('/', routes);
 app.use('/', edificioRouter);
 app.use('/', userRouter);
+app.use('/', universidadeRouter);
 app.use('/', estatisticaRouter.data.router);
 
 

@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
@@ -23,7 +22,6 @@ router.post('/register', function(req, res) {
     res.status(401).json({status: 'Administrador não logado no sistema'});
   }
 });
-
 
 router.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
@@ -54,8 +52,6 @@ router.get('/logout', function(req, res) {
     status: 'Bye!'
   });
 });
-
-
 
 router.get('/status', function(req, res) {
   if (!req.isAuthenticated()) {
