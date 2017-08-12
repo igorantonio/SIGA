@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var EstatisticaAPI = require('./estatisticaApi.js');
-var EdificioAPI = require('./edificioAPI.js');
+var EdificioAPI = require('./edificioApi.js');
 var User = require('../models/user.js');
 var CaixaDeAgua = require('../models/caixaDeAgua.js');
 

@@ -140,7 +140,6 @@ if (cd.data.getTime() >= startDate.getTime() && cd.data.getTime() <= endDate.get
 
 };
 
-
 router.get('/estatistica/setor/:setor', function(req,res){
   Edificio.findBySetor(req.params.setor,  function(error, edificios){
     if(error) res.send(edificios);
@@ -164,7 +163,6 @@ router.get('/estatistica/setor/:setor', function(req,res){
     });
 
 });
-
 
 module.exports.data = {
   router: router,

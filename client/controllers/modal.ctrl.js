@@ -44,6 +44,9 @@ angular.module('myApp')
                 var q = $q.defer();
                 if (!$scope.isCaixa){
                 var route = "/estatistica/edificio/" + $scope.edificio._id;
+                
+                self.pontoDeConsumo = $scope.edificio;
+                self.pontoDeConsumo.isUFCG = false;
 
                 $http.get(route).then(function(info) {
                     q.resolve(info.data);

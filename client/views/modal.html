@@ -1,71 +1,85 @@
-<md-dialog class="popup" ng-controller="DialogController as ctrl" ng-cloak="" ng-app="app">
-  <form>
-    <md-dialog-content>
-      <md-tabs md-border-bottom>
-        <md-tab>
-          <md-tab-label>
-             <md-icon md-svg-icon="lib/icons/drop.svg"></md-icon>
-          </md-tab-label>
-         <md-tab-body>
+<md-dialog class="popup" ng-cloak="" ng-app="app">
+    <form>
+        <md-dialog-content>
+            <md-tabs md-border-bottom>
+
+                <!-- Informações gerais -->
+                <md-tab>
+                    <md-tab-label>
+                        <md-icon md-svg-icon="lib/icons/drop.svg"></md-icon>
+                    </md-tab-label>
+                    <md-tab-body>
                         <div class="content-tab1">
 
-                            <p class="ed-bloco">Bloco{{edificio.caracteristicasFisicas.localizacao.bloco}}</p>
-                            <p class="ed-name">{{edificio.nome}}</p>
-                            <p class="ed-atividade">Atividade: {{edificio.atividade}}</p>
-                            <p class="ed-descricao">{{edificio.descricao}}</p>
+                            <p class="ed-bloco">Bloco{{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
+                            <p class="ed-name">{{ctrl.pontoDeConsumo.nome}}</p>
+                            <p class="ed-atividade">Atividade: {{ctrl.pontoDeConsumo.atividade}}</p>
+                            <p class="ed-descricao">{{ctrl.pontoDeConsumo.descricao}}</p>
                             <p>Consumo total: {{ctrl.estatisticas.total}}</p>
                             <p>Consumo médio: {{ctrl.estatisticas.media}}</p>
-                            <p>Consumo médio esperado: {{edificio.mediaEsperada}}</p>
+                            <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}}</p>
                             <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
                             <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
-
-                            <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
-                                       flex="50" ng-click="showInfos = !showInfos">Informações detalhadas</md-button>
-                            <div id="info-detalhada" ng-if="showInfos">
-                                <p>Características</p>
-                                <p>Localização: Setor {{edificio.caracteristicasFisicas.localizacao.setor}}, Bloco {{edificio.caracteristicasFisicas.localizacao.bloco}}</p>
-                                <p>Area: {{edificio.caracteristicasFisicas.area}} m²</p>
-                                <p>Nº de pavimentos: {{edificio.caracteristicasFisicas.n_pavimentos}}</p>
-                                <p>Ocupação média: {{edificio.caracteristicasFisicas.ocupacaoMedia}}</p>
-                                <p>Nº de bacias sanitárias: {{edificio.caracteristicasFisicas.n_baciasSanitarias}}</p>
-                                <p>Nº de torneiras: {{edificio.caracteristicasFisicas.n_torneiras}}</p>
-                                <p>Nº de duchas: {{edificio.caracteristicasFisicas.n_duchas}}</p>
-                                <p>Nº de chuveiros: {{edificio.caracteristicasFisicas.n_chuveiros}}</p>
-                                <p>Nº de pias: {{edificio.caracteristicasFisicas.n_pias}}</p>
-                                <p>Volume do reservatório: {{edificio.caracteristicasFisicas.volumeReservatorio}}</p>
+                            
+                            <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
+                                <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
+                                        flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
+                                </md-button>
+                                <div id="info-detalhada" ng-if="showInfos">
+                                    <p>Características</p>
+                                    <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco
+                                        {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
+                                    <p>Area: {{ctrl.pontoDeConsumo.caracteristicasFisicas.area}} m²</p>
+                                    <p>Nº de pavimentos: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pavimentos}}</p>
+                                    <p>Ocupação média: {{ctrl.pontoDeConsumo.caracteristicasFisicas.ocupacaoMedia}}</p>
+                                    <p>Nº de bacias sanitárias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_baciasSanitarias}}</p>
+                                    <p>Nº de torneiras: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_torneiras}}</p>
+                                    <p>Nº de duchas: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_duchas}}</p>
+                                    <p>Nº de chuveiros: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_chuveiros}}</p>
+                                    <p>Nº de pias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pias}}</p>
+                                    <p>Volume do reservatório: {{ctrl.pontDeConsumo.caracteristicasFisicas.volumeReservatorio}}</p>
+                                </div>
                             </div>
 
                         </div>
-                        <img src="lib/icons/default.jpg" alt="" />
+                        <img src="lib/icons/default.jpg" alt=""/>
                     </md-tab-body>
-        </md-tab>
-        <md-tab>
-          <md-tab-label>
-             <md-icon md-svg-icon="lib/icons/graph.svg"></md-icon>
-          </md-tab-label>
-          <md-tab-body>
-            <div class="content-tab2">
-                <div ng-app="myApp" ng-controller="ChartController as main" ng-cloak="" ng-app="app">
-                  <h3 class="topic">Consumo {{type}}</h3>
-                  <h3 class="topic">{{edificioId}}</h3>
-                  <line-chart height="250px" data="data"></line-chart>
-                  
-                </div>
-            </div>
-          </md-tab-body>
-        </md-tab>
-        <md-tab>
-          <md-tab-label>
-             <md-icon md-svg-icon="lib/icons/clock.svg"></md-icon>
-          </md-tab-label>
-          <md-tab-body>
-            <div class="content">
-              <h1 class="md-display-2">Tab Three</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
-            </div>
-          </md-tab-body>
-        </md-tab>
-      </md-tabs>
+                </md-tab>
+
+                <!-- Gráficos -->
+                <md-tab>
+                    <md-tab-label>
+                       <md-icon md-svg-icon="lib/icons/graph.svg"></md-icon>
+                    </md-tab-label>
+                    <md-tab-body>
+                      <div class="content-tab2">
+                          <div ng-app="myApp" ng-controller="ChartController as main" ng-cloak="" ng-app="app">
+                            <h3 class="topic">Consumo {{type}}</h3>
+                            <h3 class="topic">{{edificioId}}</h3>
+                            <line-chart height="250px" data="data"></line-chart>
+                            
+                          </div>
+                      </div>
+                    </md-tab-body>
+                </md-tab>
+
+                <!-- Relatórios -->
+                <md-tab>
+                    <md-tab-label>
+                        <md-icon md-svg-icon="lib/icons/clock.svg"></md-icon>
+                    </md-tab-label>
+                    <md-tab-body>
+                        <div class="content">
+                            <h1 class="md-display-2">Tab Three</h1>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue.
+                                Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In
+                                sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec,
+                                feugiat ultricies mi.</p>
+                        </div>
+                    </md-tab-body>
+                </md-tab>
+      
+            </md-tabs>
     </md-dialog-content>
   </form>
 </md-dialog>

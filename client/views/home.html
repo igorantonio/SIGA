@@ -1,58 +1,63 @@
 <div id="content">
-    <div id="header">
     <toolbar></toolbar>
-</div>
-<div class="md-menu-demo" ng-controller="HomeController as ctrl" ng-cloak> </div>
 
-<div ng-controller="MapController as ctrl">
-    <div class="menu-demo-container" layout-align="center end" layout="column">
-        <md-menu>
-            <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
-                <md-icon>sort</md-icon>
-            </md-button>
-            <md-menu-content width="4">
-                <md-menu-item>
-                    <md-button ng-click="ctrl.redial($event)">
-                        <md-icon>check_box</md-icon>
-                        Todos os prédios
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.showEdificiosAlerta('0')">
-                        <md-icon>check_box_outline_blank</md-icon>
-                        Prédios em alerta 0
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.showEdificiosAlerta('1')">
-                        <md-icon>check_box_outline_blank</md-icon>
-                        Prédios em alerta 1
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.showOnlySetor('A');">
-                        <md-icon>check_box_outline_blank</md-icon>
-                        Setor A
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.showOnlySetor('B');">
-                        <md-icon>check_box_outline_blank</md-icon>
-                        Setor B
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.showOnlySetor('C');">
-                        <md-icon>check_box_outline_blank</md-icon>
-                        Setor C
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
+    <div ng-controller="MapController as ctrl">
+        <!-- Menu Toolbar-->
+        <div class="menu-demo-container" layout="row" layout-align="end center">
+            <div>
+                <md-icon class="md-ufcg-info-button" ng-click='ctrl.openGeneralInfoDialog($event)'>
+                    home
+                </md-icon>
+            </div>
+            <div>
+                <md-menu>
+                <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+                    <md-icon class="md-filtro-ed">sort</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.redial($event)">
+                            <md-icon>check_box</md-icon>
+                            Todos os prédios
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.showEdificiosAlerta('0')">
+                            <md-icon>check_box_outline_blank</md-icon>
+                            Prédios em alerta 0
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.showEdificiosAlerta('1')">
+                            <md-icon>check_box_outline_blank</md-icon>
+                            Prédios em alerta 1
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.showOnlySetor('A');">
+                            <md-icon>check_box_outline_blank</md-icon>
+                            Setor A
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.showOnlySetor('B');">
+                            <md-icon>check_box_outline_blank</md-icon>
+                            Setor B
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.showOnlySetor('C');">
+                            <md-icon>check_box_outline_blank</md-icon>
+                            Setor C
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            </div>
+        </div>
+
+        <div id="map"></div>
     </div>
 
-    <div id="map"></div>
-</div>
-
-<myfooter></myfooter>
+    <myfooter></myfooter>
 </div>
