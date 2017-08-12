@@ -24,7 +24,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var User = require('./models/user.js');
 var Edificio = require('./models/edificio.js');
 
-
 // create instance of express
 var app = express();
 
@@ -33,10 +32,8 @@ var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
 var caixaRouter = require('./routes/caixaDeAguaApi.js');
-var routes = require('./routes/api.js')
+
 // define middleware
-
-
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
