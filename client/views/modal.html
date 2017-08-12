@@ -49,17 +49,17 @@
                 <!-- Gráficos -->
                 <md-tab>
                     <md-tab-label>
-                        <md-icon md-svg-icon="lib/icons/graph.svg"></md-icon>
+                       <md-icon md-svg-icon="lib/icons/graph.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                        <div class="content-tab2">
-                            <div ng-app="myApp" ng-controller="ChartController as main">
-                                <h3 class="topic">Consumo {{type}}</h3>
-                                <h3 class="topic">{{edificioId}}</h3>
-                                <line-chart height="250px" data="main.data"></line-chart>
-
-                            </div>
-                        </div>
+                      <div class="content-tab2">
+                          <div ng-app="myApp" ng-controller="ChartController as main" ng-cloak="" ng-app="app">
+                            <h3 class="topic">Consumo {{type}}</h3>
+                            <h3 class="topic">{{edificioId}}</h3>
+                            <line-chart height="250px" data="data"></line-chart>
+                            
+                          </div>
+                      </div>
                     </md-tab-body>
                 </md-tab>
 
@@ -78,8 +78,9 @@
                         </div>
                     </md-tab-body>
                 </md-tab>
+      
             </md-tabs>
-        </md-dialog-content>
-    </form>
+    </md-dialog-content>
+  </form>
 </md-dialog>
               

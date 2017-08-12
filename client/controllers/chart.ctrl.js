@@ -1,30 +1,58 @@
 angular.module('myApp')
-    .controller('ChartController', ['$scope', function($scope) {
-     $scope.type = "diário";
-	  this.data = [{
+    .controller('ChartController', ['$scope', 'edificioService', '$http', function($scope, edificioService, $http) {
+     $scope.type = edificioService.getEdificioId();
+	 $scope.data = [{
 	    key: 'Data',
 	    values: [{
 	      x: 0,
 	      y: 0,
 	    }, {
 	      x: 1,
-	      y: 1
+	      y: 0
 	    }, {
 	      x: 2,
-	      y: 4
+	      y: 0
 	    }, {
 	      x: 3,
-	      y: 9
+	      y: 0
 	    }, {
 	      x: 4,
-	      y: 16
+	      y: 0
 	    }, {
 	      x: 5,
-	      y: 25
+	      y: 0
 	    }],
 	    area: true
 	  }];
-	}])
+	
+
+$scope.loadData = function () {
+
+    $http.get("/edificio/"+edificioService.getEdificioId()+"/consumo")
+        .then(function(response, ev){
+        	$scope.data = [{key: 'Data', values: response.data, area:true}];
+            
+        }, function() {
+            $scope.data = "error in fetching data"; //return if error on fetch
+        });
+    };
+    var load = function(){
+    	$scope.loadData();
+    };
+    if (!edificioService.isCaixa()){
+    	load();
+	}else{
+		 $http.get("/caixa/"+edificioService.getEdificioId()+"/consumo")
+        .then(function(response, ev){
+        	$scope.data = [{key: 'Data', values: response.data, area:true}];
+            
+        }, function() {
+            $scope.data = "error in fetching data"; //return if error on fetch
+        });
+
+	};
+
+    }])
 
 	.factory('d3', [function() {
 	  return d3;
@@ -66,10 +94,15 @@ angular.module('myApp')
 	          .showLegend(false)
 	          .showYAxis(true)
 	          .showXAxis(true);
+	         //chart.x(function(d){return new Date(d)});
+	         //chart.lines.xScale(d3.time.scale.utc());
+	         chart.xScale(d3.time.scale());
+
 
 	        chart.xAxis
-	          .axisLabel('x')
-	          .tickFormat(d3.format('.2f'));
+	          .axisLabel('data')
+	          .tickFormat(function(d) { return d3.time.format('%b %d %y')(new Date(d)); })
+	          .ticks(d3.time.dats,1);
 
 	        chart.yAxis
 	          .axisLabel('y')

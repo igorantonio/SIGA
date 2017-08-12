@@ -5,180 +5,387 @@ var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
-///Building's API
-router.post('/edificio/:edificio_id/geolocalizacao', function (req, res) {
-  Edificio.findById(req.params.edificio_id, function (error, edificio) {
-    if (error) res.send(edificio);
-    edificio.geolocalizacao.latitude = req.body.latitude;
-    edificio.geolocalizacao.longitude = req.body.longitude;
-    edificio.save(function (error) {
-      if (error) res.send(error);
-      res.json(edificio);
+///change the geolocalization of a building
+router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+        if (error) res.send(edificio);
+        edificio.geolocalizacao.latitude = req.body.latitude;
+        edificio.geolocalizacao.longitude = req.body.longitude;
+        edificio.save(function(error) {
+            if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(edificio);
+          }
+        });
     });
-  });
 });
 
-router.get('/edificio/:edificio_id/consumo', function (req, res) {
-  Edificio.findById(req.params.edificio_id, function (error, edificio) {
-    if (error) {
-      res.send(edificio);
-      return;
-    };
-    consumos = edificio.historicoConsumo;
-    if (req.query.ano != null) {
-      consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
-    };
-    if (req.query.mes != null) {
-      consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
-    };
-    if (req.query.dia != null) {
-      consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
-    };
-    if (req.query.inicio != null && req.query.fim != null) {
-      consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
-    };
+/// Show (Consumo)
+router.get('/edificio/:edificio_id/consumo', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+             if (error){ 
+              res.status(400).json({err: error});
+            };
+            consumos = edificio.historicoConsumo;
+            if (req.query.ano != null) {
+                consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
+            };
+            if (req.query.mes != null) {
+                consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
+            };
+            if (req.query.dia != null) {
+                consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
+            };
+            if (req.query.inicio != null && req.query.fim != null) {
+                consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
+            };
+            consumosFiltrados = [];
+            consumos.forEach(function(cd) {
+                var newConsumo = {
+                    x: cd.data.getTime(),
+                    y: cd.consumo
+                };
+                consumosFiltrados.push(newConsumo);
+            });
+            consumosFiltrados.sort(function(a, b) {
+              return a.x - b.x;
+             });
+            res.json(consumosFiltrados);
 
-    consumosFiltrados = [];
-    consumos.forEach(function (cd) {
-      var newConsumo = { data: cd.data, consumo: cd.consumo };
-      consumosFiltrados.push(newConsumo);
-    });
+        }
 
-    res.json(consumosFiltrados);
-  })
+    )
 });
 
-router.post('/edificio/:edificio_id/consumo/new', function (req, res) {
-  if (req.body.data == null) {
-    res.send('Deu ruim');
-    return;
-  };
-  Edificio.findById(req.params.edificio_id, function (error, edificio) {
-    if (error) res.send(edificio);
-    data = new Date(req.body.data);
-    novoConsumo = { data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000), consumo: req.body.consumo };
-    edificio.historicoConsumo.push(novoConsumo);
-    edificio.save(function (error) {
-      if (error) { res.send(error); }
-      else {
-        res.json(edificio.historicoConsumo);
-      }
+// Create (Consumo)
+router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
+    if (req.body.data == null) {
+              res.status(400).json({err: error});
+
+    };
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+        if (error) {res.send(edificio);}
+        data = new Date(req.body.data);
+        novoConsumo = {
+            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            consumo: req.body.consumo
+        };
+        edificio.historicoConsumo.push(novoConsumo);
+        edificio.save(function(error) {
+            if (error) {
+                res.send(error);
+            } else {
+                res.json(edificio.historicoConsumo);
+            }
+        });
     });
-  });
 });
 
-var filtrarPorSetor = function (setor, edificios) {
-  edificiosFiltrados = [];
-  edificios.forEach(function (edificio) {
-    if (edificio.caracteristicasFisicas.localizacao.setor == setor) {
-      edificiosFiltrados.push(edificio);
-    }
-  });
-  return edificiosFiltrados;
-}
+// Update (Consumo)
+router.put('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            consumosAtualizado = [];
+            edificio.historicoConsumo.forEach(function(consumo) {
+                if (consumo._id == req.params.consumo_id) {
+                    if (req.body.data) consumo.data     = new Date(req.body.data);
+                    if (req.body.consumo) consumo.consumo = req.body.consumo;
+                }
+                consumosAtualizado.push(consumo);
+            });
+            edificio.historicoConsumo = consumosAtualizado;
+            edificio.save(function(err) {
+                if (err) {
+                    res.status(400).json({err: error});
+                } else {
+                    res.status(200).json({message: 'Consumo atualizado.'});
+                }
+            });
+        }
+    });
+});
 
-router.post('/edificio', function (req, res) {
-  var edificio = new Edificio();
-  edificio.nome = req.body.nome;
-  edificio.descricao = req.body.descricao;
-  edificio.atividade = req.body.atividade;
-  edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
-  edificio.geolocalizacao = req.body.geolocalizacao;
-  edificio.historicoConsumo = req.body.historicoConsumo;
-  edificio.mediaEsperada = req.body.mediaEsperada;
-  if (req.body.historicoConsumo == null) {
-    edificio.historicoConsumo = [];
-  };
-  edificio.save(function (error) {
-    if (error) res.send(error);
-    else res.json(edificio);
-  });
+// Delete (Consumo)
+router.delete('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            consumosFiltrados = [];
+            edificio.historicoConsumo.forEach(function(consumo) {
+                if (consumo._id != req.params.consumo_id) {
+                    consumosFiltrados.push(consumo);
+                }
+            });
+
+            edificio.historicoConsumo = consumosFiltrados;
+            edificio.save(function(err) {
+                if (err) {
+                    res.status(400).json({err: error});
+                } else {
+                    res.status(200).json({message: 'Consumo removido.'});
+                }
+            });
+        }
+    });
+});
+
+router.get('/edificio/:edificio_id/vazamentos', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+         if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(edificio);
+          };
+        // Filtrar
+        //Checar com eles, se tiver dois vazamentos no mesmo dia. o que fazer? Juntar?
+        vazamentosFiltrados = edificio.vazamentos;
+        res.json(vazamentosFiltrados);
+
+    })
+});
+
+router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+         if (error){ 
+              res.status(400).json({err: error});
+          };
+        vazamentosFiltrados = [];
+        edificio.vazamentos.forEach(function(vazamento) {
+            if (vazamento._id != req.params.vazamento_id) {
+                vazamentosFiltrados.push(vazamento);
+            }
+        });
+        edificio.vazamentos = vazamentosFiltrados;
+        edificio.save(function(error) {
+            if (error){ 
+              res.status(400).json({err: error});
+            } else {
+                res.json(edificio.vazamentos);
+            }
+
+        });
+    });
+
 
 });
 
-var emAlerta = function (edificios, margem) {
-  edificiosFiltrados = [];
-  edificios.forEach(function (ed) {
-    total = 0.0;
-    ed.historicoConsumo.forEach(function (cd) {
-      if (cd.data.toDateString() == (new Date()).toDateString()) {
-        total += cd.consumo;
-      }
-    });
-    if (margem == 0.2) {
-      if (total >= ed.mediaEsperada + margem * ed.mediaEsperada && (total < (ed.mediaEsperada + 0.3 * ed.mediaEsperada))) {
-        edificiosFiltrados.push(ed);
-      };
-    }
-    else if (total >= ed.mediaEsperada + margem * ed.mediaEsperada) {
-      edificiosFiltrados.push(ed);
-    }
-  });
-  return edificiosFiltrados;
-}
 
-router.get('/edificio', function (req, res) {
-  Edificio.find(function (err, edificios) {
-    if (req.query.setor != null) {
-      edificios = filtrarPorSetor(req.query.setor, edificios);
-    }
-    if (req.query.nivelAlerta != null) {
-      nivelAlerta = req.query.nivelAlerta;
-      if (nivelAlerta == "0") {
-        margem = 0.2;
-      } else if (nivelAlerta == "1") {
-        margem = 0.3;
-      };
-      var result = emAlerta(edificios, margem);
-      res.send(result);
-      return;
-    }
-    if (req.query.withAlerta) {
-      if (req.query.withAlerta == 'true') {
-        var result0 = emAlerta(edificios, 0.2);
-        var result1 = emAlerta(edificios, 0.3);
-        res.json({ todos: edificios, alerta0: result0, alerta1: result1 });
+router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
+    if (req.body.data == null) {
+        res.status(400);
+        res.send("Body is empty");
         return;
-      }
-    }
-    if (err) {
-      res.send(err)
-    }
-    else { res.json(edificios); }
-  });
+    };
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+
+        if (error) {
+            res.status(400);
+            res.send(error.message);
+            return
+        };
+        data = new Date(req.body.data);
+        novoVazamento = {
+            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            volume: req.body.volume
+        };
+        edificio.vazamentos.push(novoVazamento);
+        edificio.save(function(error) {
+            if (error) {
+                res.status(422);
+                res.send(error.message);
+                return;
+            } else {
+                res.json(edificio.vazamentos);
+            }
+        });
+    });
 });
 
-router.get('/edificio/:edificio_id', function (req, res) {
-  Edificio.findById(req.params.edificio_id, function (error, edificio) {
-    if (error) res.send(edificio);
-    res.json(edificio);
-  });
-});
-
-router.post('/edificio/:edificio_id', function (req, res) {
-  Edificio.findById(req.params.edificio_id, function (error, edificio) {
-    if (error) res.send(edificio);
+// Create
+router.post('/edificio', function(req, res) {
+    var edificio = new Edificio();
     edificio.nome = req.body.nome;
     edificio.descricao = req.body.descricao;
     edificio.atividade = req.body.atividade;
-    edificio.geolocalizacao = req.body.geolocalizacao;
     edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
-    edificio.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
-    edificio.save(function (error) {
-      if (error) res.send(error);
-      res.json(edificio);
+    edificio.geolocalizacao = req.body.geolocalizacao;
+    edificio.historicoConsumo = req.body.historicoConsumo;
+    edificio.mediaEsperada = req.body.mediaEsperada;
+    edificio.vazamentos = req.body.vazamentos;
+    if (req.body.historicoConsumo == null) {
+        edificio.historicoConsumo = [];
+    };
+    if (req.body.vazamentos == null) {
+        edificio.vazamentos = [];
+    }
+    edificio.save(function(error) {
+        if (error){ 
+          res.status(400);
+          res.send(error.message);}
+        else res.json(edificio);
     });
-  });
+
 });
 
-router.route('/edificio/:edificio_id')
-  .delete(function (req, res) {
-    Edificio.remove({
-      _id: req.params.edificio_id
-    }, function (error) {
-      if (error) res.send(error);
-      res.json({ message: "Prédio removido!" });
+// Uṕdate
+router.put('/edificio/:edificio_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (req.body.nome) edificio.nome            = req.body.nome;
+        if (req.body.descricao) edificio.descricao  = req.body.descricao;
+        if (req.body.atividade) edificio.atividade  = req.body.atividade;
+        if (req.body.caracteristicasFisicas) edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
+        if (req.body.geolocalizacao) edificio.geolocalizacao        = req.body.geolocalizacao;
+        if (req.body.historicoConsumo) edificio.historicoConsumo    = req.body.historicoConsumo;
+        if (req.body.mediaEsperada) edificio.mediaEsperada          = req.body.mediaEsperada;
+        if (req.body.vazamentos) edificio.vazamentos                = req.body.vazamentos;
+        edificio.save(function(err) {
+            if (err) {
+                res.status(400).json({error: err});
+            } else {
+                res.status(200).json({message: 'Edificio atualizado.'});
+            }
+        });
     });
-  });
+});
+
+var filtrarPorSetor = function(setor, edificios) {
+    edificiosFiltrados = [];
+    edificios.forEach(function(edificio) {
+        if (edificio.caracteristicasFisicas.localizacao.setor == setor) {
+            edificiosFiltrados.push(edificio);
+        }
+    });
+    return edificiosFiltrados;
+}
+
+var emAlerta = function(edificios, margem) {
+    edificiosFiltrados = [];
+    edificios.forEach(function(ed) {
+        total = 0.0;
+        ed.historicoConsumo.forEach(function(cd) {
+            if (cd.data.toDateString() == (new Date()).toDateString()) {
+                total += cd.consumo;
+            }
+        });
+        if (margem == 0.2) {
+            if (total >= ed.mediaEsperada + margem * ed.mediaEsperada && (total < (ed.mediaEsperada + 0.3 * ed.mediaEsperada))) {
+                edificiosFiltrados.push(ed);
+            };
+        } else if (total >= ed.mediaEsperada + margem * ed.mediaEsperada) {
+            edificiosFiltrados.push(ed);
+        }
+    });
+    return edificiosFiltrados;
+}
+
+var FindEdificio = function(edificio_id, res) {
+    var edificiores;
+    Edificio.find(function(err, edificio) {
+        if (err) {
+            res.status(400);
+            res.send(err.message);
+            return null;
+        };
+        edificiores = edificio;
+
+
+    });
+    return edificiores;
+};
+
+// Index
+router.get('/edificio', function(req, res) {
+    Edificio.find(function(err, edificios) {
+        if (req.query.setor != null) {
+            edificios = filtrarPorSetor(req.query.setor, edificios);
+        }
+        if (req.query.nivelAlerta != null) {
+            nivelAlerta = req.query.nivelAlerta;
+            if (nivelAlerta == "0") {
+                margem = 0.2;
+            } else if (nivelAlerta == "1") {
+                margem = 0.3;
+            };
+            var result = emAlerta(edificios, margem);
+            res.send(result);
+            return;
+        }
+        if (req.query.withAlerta) {
+            if (req.query.withAlerta == 'true') {
+                var result0 = emAlerta(edificios, 0.2);
+                var result1 = emAlerta(edificios, 0.3);
+                res.json({
+                    todos: edificios,
+                    alerta0: result0,
+                    alerta1: result1
+                });
+                return;
+            }
+        }
+        if (err) {
+            res.send(err)
+        } else {
+            res.json(edificios);
+        }
+    });
+});
+
+// Show
+
+router.get('/edificio/:edificio_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+        if (error) res.send(edificio);
+        res.json(edificio);
+    });
+});
+
+router.post('/edificio/:edificio_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+        if (error) res.send(edificio);
+        edificio.nome = req.body.nome;
+        edificio.descricao = req.body.descricao;
+        edificio.atividade = req.body.atividade;
+        edificio.geolocalizacao = req.body.geolocalizacao;
+        edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
+        edificio.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
+        edificio.vazamentos = req.body.vazamentos;
+        edificio.save(function(error) {
+            if (error) res.send(error);
+            res.json(edificio);
+        });
+    });
+});
+
+//Delete
+router.route('/edificio/:edificio_id')
+    .delete(function(req, res) {
+        Edificio.remove({
+            _id: req.params.edificio_id
+        }, function(error) {
+            if (error) res.send(error);
+            res.json({
+                message: "Prédio removido!"
+            });
+        });
+    });
+
 
 module.exports = router;
+
+
+module.exports.data = {
+  router: router,
+  emAlerta: function(caixas, n) {
+    return emAlerta(caixas, n);
+    },
+  filtrarPorSetor: function(setor, edificios){
+    return filtrarPorSetor(setor, edificios);
+  }
+
+}
