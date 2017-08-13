@@ -3,9 +3,10 @@ angular.module('myApp')
         function ($scope, $location, AuthService, $mdDialog) {
 
             var self = this;
-            
+
 
             self.changeSessionState = function (ev) {
+
 
                 var isLogged = AuthService.isLoggedIn();
 
