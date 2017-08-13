@@ -62,7 +62,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 // Create (Consumo)
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
-              res.status(400).json({err: error});
+              res.status(400).json({err: 'Campo de data não informado.'});
 
     };
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
@@ -73,11 +73,11 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
             consumo: req.body.consumo
         };
         edificio.historicoConsumo.push(novoConsumo);
-        edificio.save(function(error) {
-            if (error) {
-                res.send(error);
+        edificio.save(function(err) {
+            if (err) {
+                res.status(400).json({error: err});
             } else {
-                res.json(edificio.historicoConsumo);
+                res.status(200).json(edificio.historicoConsumo);
             }
         });
     });
@@ -101,7 +101,7 @@ router.put('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
             edificio.historicoConsumo = consumosAtualizado;
             edificio.save(function(err) {
                 if (err) {
-                    res.status(400).json({err: error});
+                    res.status(400).json({error: err});
                 } else {
                     res.status(200).json({message: 'Consumo atualizado.'});
                 }
@@ -126,7 +126,7 @@ router.delete('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
             edificio.historicoConsumo = consumosFiltrados;
             edificio.save(function(err) {
                 if (err) {
-                    res.status(400).json({err: error});
+                    res.status(400).json({error: err});
                 } else {
                     res.status(200).json({message: 'Consumo removido.'});
                 }
@@ -137,9 +137,9 @@ router.delete('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
 
 // Index (Vazamento)
 router.get('/edificio/:edificio_id/vazamentos', function(req, res) {
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error){ 
-            res.status(400).json({err: error});
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err){ 
+            res.status(400).json({error: err});
         } else {
             res.json(edificio.vazamentos);
         };
@@ -198,9 +198,9 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
 
 // Delete (Vazamento)
 router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
-         if (error){ 
-              res.status(400).json({err: error});
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+         if (err){ 
+              res.status(400).json({error: err});
           };
         vazamentosFiltrados = [];
         edificio.vazamentos.forEach(function(vazamento) {
@@ -209,9 +209,9 @@ router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, r
             }
         });
         edificio.vazamentos = vazamentosFiltrados;
-        edificio.save(function(error) {
-            if (error){ 
-              res.status(400).json({err: error});
+        edificio.save(function(err) {
+            if (err){ 
+              res.status(400).json({error: err});
             } else {
                 res.json(edificio.vazamentos);
             }
@@ -256,7 +256,7 @@ router.post('/edificio/:edificio_id/alertas/new', function(req, res) {
         return;
     }
 
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
         if (err) {
             res.status(400).json({error: err});
             return
@@ -265,11 +265,11 @@ router.post('/edificio/:edificio_id/alertas/new', function(req, res) {
         data = new Date(req.body.data);
         novoAlerta = {
             data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
-            volume: req.body.checked
+            checked: req.body.checked
         };
 
         edificio.alertas.push(novoAlerta);
-        edificio.save(function(error) {
+        edificio.save(function(err) {
             if (err) {
                 res.status(422).json({error: err.message});
                 return;
@@ -287,7 +287,7 @@ router.put('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
             res.status(400).json({error: err});
         } else {
             alertasFiltrados = [];
-            edificio.vazamentos.forEach(function(alerta) {
+            edificio.alertas.forEach(function(alerta) {
                 if (alerta._id == req.params.alerta_id) {
                     if (req.body.data) alerta.data       = req.body.data;
                     if (req.body.checked) alerta.checked = req.body.checked;
@@ -473,83 +473,5 @@ var FindEdificio = function(edificio_id, res) {
     });
     return edificiores;
 };
-
-<<<<<<< HEAD
-=======
-// Index
-router.get('/edificio', function(req, res) {
-    Edificio.find(function(err, edificios) {
-        if (req.query.setor != null) {
-            edificios = filtrarPorSetor(req.query.setor, edificios);
-        }
-        if (req.query.nivelAlerta != null) {
-            nivelAlerta = req.query.nivelAlerta;
-            if (nivelAlerta == "0") {
-                margem = 0.2;
-            } else if (nivelAlerta == "1") {
-                margem = 0.3;
-            };
-            var result = emAlerta(edificios, margem);
-            res.send(result);
-            return;
-        }
-        if (req.query.withAlerta) {
-            if (req.query.withAlerta == 'true') {
-                var result0 = emAlerta(edificios, 0.2);
-                var result1 = emAlerta(edificios, 0.3);
-                res.json({
-                    todos: edificios,
-                    alerta0: result0,
-                    alerta1: result1
-                });
-                return;
-            }
-        }
-        if (err) {
-            res.send(err)
-        } else {
-            res.json(edificios);
-        }
-    });
-});
-
-// Show
-
-router.get('/edificio/:edificio_id', function(req, res) {
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) res.send(edificio);
-        res.json(edificio);
-    });
-});
-
-router.post('/edificio/:edificio_id', function(req, res) {
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) res.send(edificio);
-        edificio.nome = req.body.nome;
-        edificio.descricao = req.body.descricao;
-        edificio.atividade = req.body.atividade;
-        edificio.geolocalizacao = req.body.geolocalizacao;
-        edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
-        edificio.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
-        edificio.vazamentos = req.body.vazamentos;
-        edificio.save(function(error) {
-            if (error) res.send(error);
-            res.json(edificio);
-        });
-    });
-});
-
-//Delete
-router.route('/edificio/:edificio_id')
-    .delete(function(req, res) {
-        Edificio.remove({
-            _id: req.params.edificio_id
-        }, function(error) {
-            if (error) res.send(error);
-            res.json({
-                message: "Prédio removido!"
-            });
-        });
-    });
 
 module.exports = router;
