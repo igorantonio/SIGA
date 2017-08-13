@@ -62,34 +62,41 @@ router.get('/universidade', function (req, res) {
 
 router.get('/universidade/consumo', function (req, res) {
 
-    var consumos = [];
-
     Edificio.find({}, function (error, edificios) {
 
         if (error) {
             res.send("ERROR!")
             return;
         };
-
+        
+        var consumos = [];
         edificios.forEach(function (edificio) {
 
             edificio.historicoConsumo.forEach(function (c) {
 
                 temData = false;
                 consumos.forEach(function (ct) {
-                    if (ct.data.getTime() === c.data.getTime()) {
-                        ct.consumo = ct.consumo + c.consumo;
+                    if (ct.x === c.data.getTime()) {
+                        ct.y = ct.y + c.consumo;
                         temData = true;
                     }
                 });
 
                 if (!temData) {
-                    consumos.push(c);
+                    var newConsumo = {
+                        x: c.data.getTime(),
+                        y: c.consumo
+                    };
+                    consumos.push(newConsumo);
                 }
             });
         });
 
+        consumos.sort(function(a, b) {
+          return a.x - b.x;
+         });
         res.json(consumos);
+
     })
 });
 

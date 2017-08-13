@@ -175,7 +175,6 @@ router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, r
 
 });
 
-
 router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
     if (req.body.data == null) {
         res.status(400);

@@ -41,8 +41,6 @@ angular.module('myApp')
 			ROUTE = ED_ROUT;
 		};
 
-		console.log($scope.data);
-
 		$scope.loadData = function () {
 
 			$http.get(ROUTE)
