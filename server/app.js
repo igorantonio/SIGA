@@ -24,7 +24,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var User = require('./models/user.js');
 var Edificio = require('./models/edificio.js');
 
-
 // create instance of express
 var app = express();
 
@@ -32,10 +31,9 @@ var app = express();
 var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
-var routes = require('./routes/api.js')
+var caixaRouter = require('./routes/caixaDeAguaApi.js');
+
 // define middleware
-
-
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -56,13 +54,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // routes
-app.use('/', routes);
-app.use('/', routes);
-app.use('/', routes);
 app.use('/', edificioRouter);
 app.use('/', userRouter);
 app.use('/', estatisticaRouter.data.router);
-
+app.use('/', caixaRouter);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));
