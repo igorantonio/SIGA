@@ -474,4 +474,82 @@ var FindEdificio = function(edificio_id, res) {
     return edificiores;
 };
 
+<<<<<<< HEAD
+=======
+// Index
+router.get('/edificio', function(req, res) {
+    Edificio.find(function(err, edificios) {
+        if (req.query.setor != null) {
+            edificios = filtrarPorSetor(req.query.setor, edificios);
+        }
+        if (req.query.nivelAlerta != null) {
+            nivelAlerta = req.query.nivelAlerta;
+            if (nivelAlerta == "0") {
+                margem = 0.2;
+            } else if (nivelAlerta == "1") {
+                margem = 0.3;
+            };
+            var result = emAlerta(edificios, margem);
+            res.send(result);
+            return;
+        }
+        if (req.query.withAlerta) {
+            if (req.query.withAlerta == 'true') {
+                var result0 = emAlerta(edificios, 0.2);
+                var result1 = emAlerta(edificios, 0.3);
+                res.json({
+                    todos: edificios,
+                    alerta0: result0,
+                    alerta1: result1
+                });
+                return;
+            }
+        }
+        if (err) {
+            res.send(err)
+        } else {
+            res.json(edificios);
+        }
+    });
+});
+
+// Show
+
+router.get('/edificio/:edificio_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+        if (error) res.send(edificio);
+        res.json(edificio);
+    });
+});
+
+router.post('/edificio/:edificio_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+        if (error) res.send(edificio);
+        edificio.nome = req.body.nome;
+        edificio.descricao = req.body.descricao;
+        edificio.atividade = req.body.atividade;
+        edificio.geolocalizacao = req.body.geolocalizacao;
+        edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
+        edificio.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
+        edificio.vazamentos = req.body.vazamentos;
+        edificio.save(function(error) {
+            if (error) res.send(error);
+            res.json(edificio);
+        });
+    });
+});
+
+//Delete
+router.route('/edificio/:edificio_id')
+    .delete(function(req, res) {
+        Edificio.remove({
+            _id: req.params.edificio_id
+        }, function(error) {
+            if (error) res.send(error);
+            res.json({
+                message: "Prédio removido!"
+            });
+        });
+    });
+
 module.exports = router;
