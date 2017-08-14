@@ -30,7 +30,6 @@ angular.module('myApp')
                         self.disabled = false;
                         self.registerForm = {};
                     });
-
             };
 
         }]);

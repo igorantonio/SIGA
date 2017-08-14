@@ -1,0 +1,41 @@
+<div ng-controller="RegisterEdificioController as ctrl" ng-cloak="">
+
+    <md-dialog id="register-ed-dialog" aria-label="RegisterEdificio" ng-cloak>
+
+        <form name="form" ng-submit="ctrl.registerEdificio()">
+
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Registrar edifício</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="ctrl.close()">
+                        <md-icon aria-label="Close dialog">close</md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <md-input-container class="md-block">
+                        <label>Nome</label>
+                        <input name="nome" ng-model="ctrl.nome" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Descrição</label>
+                        <input name="descricao" ng-model="ctrl.descricao" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Atividade</label>
+                        <input name="atividade" ng-model="ctrl.atividade" md-autofocus required />
+                    </md-input-container>
+                </div>
+            </md-dialog-content>
+
+            <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
+
+            <md-dialog-actions layout="row">
+                <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary" md-autofocus>Registrar</md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</div>

@@ -1,10 +1,10 @@
 #register-dialog md-dialog-content {
-    height: 170px;
+    height: 70%;
 }
 
 #register-dialog {
     max-width: 90%;
-    width: 500px;
+    width: 60%;
 }
 
 #register-dialog > form > md-toolbar > div {
