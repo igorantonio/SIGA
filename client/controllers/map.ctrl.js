@@ -62,7 +62,6 @@ angular.module('myApp')
         self.markers[edificio._id] = marker;
     };
 
-
     // request the edificios' data from the api and send it to the addMarker method to be drawn
     $scope.loadData = function () {
 
@@ -186,6 +185,10 @@ angular.module('myApp')
     };
 
     self.openGeneralInfoDialog = function (ev) {
+        
+        var UFCG_ID = 0;
+        edificioService.setEdificioId(UFCG_ID);
+
         $mdDialog.show({
             templateUrl: '../views/modal.html',
             parent: angular.element(document.body),
@@ -210,11 +213,11 @@ angular.module('myApp')
             };
             function getEstatisticas() {
                 var q = $q.defer();
-                var route = "/estatistica/edificio/" + $scope.edificio._id;
-                // Quando houver rota para UFCG, alterar aqui.
+                var route = "/universidade";
+                
                 $http.get(route).then(function (info) {
                     q.resolve(info.data);
-                    self.estatisticas = info.data;
+                    self.estatisticas = info.data.estatisticas;
                 }, function (info) {
                     console.log('Rota errada')
                 });
