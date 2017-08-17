@@ -1,20 +1,16 @@
-#register-dialog md-dialog-content {
-    height: 70%;
+#register-ed-dialog {
+    height: 90vh;
+    width: 120vh;
 }
 
-#register-dialog {
-    max-width: 90%;
-    width: 60%;
-}
-
-#register-dialog > form > md-toolbar > div {
+#register-ed-dialog > form > md-toolbar > div {
     background-color: #5e7ed2;
 }
 
-#register-dialog > form > md-dialog-actions > button:disabled {
+#register-ed-dialog > form > md-dialog-actions > button:disabled {
     background-color: #e6e6e6;
 }
 
-#register-dialog > form > md-dialog-actions > button:not([disabled]) {
+#register-ed-dialog > form > md-dialog-actions > button:not([disabled]) {
     background-color: #5e7ed2;
 }

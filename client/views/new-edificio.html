@@ -1,4 +1,4 @@
-<div ng-controller="RegisterEdificioController as ctrl" ng-cloak="">
+<div ng-controller="RegisterEdificioController as ctrl">
 
     <md-dialog id="register-ed-dialog" aria-label="RegisterEdificio" ng-cloak>
 
@@ -16,18 +16,92 @@
 
             <md-dialog-content>
                 <div class="md-dialog-content">
-                    <md-input-container class="md-block">
+                  <p>Informações gerais:</p>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
                         <label>Nome</label>
                         <input name="nome" ng-model="ctrl.nome" md-autofocus required />
                     </md-input-container>
-                    <md-input-container class="md-block">
-                        <label>Descrição</label>
-                        <input name="descricao" ng-model="ctrl.descricao" md-autofocus required />
-                    </md-input-container>
-                    <md-input-container class="md-block">
+                    <md-input-container class="md-block" flex-gt-sm>
                         <label>Atividade</label>
                         <input name="atividade" ng-model="ctrl.atividade" md-autofocus required />
                     </md-input-container>
+                  </div>
+                  <md-input-container class="md-block">
+                      <label>Descrição</label>
+                      <textarea name="descricao" ng-model="ctrl.descricao" md-autofocus required />
+                  </md-input-container>
+                  <p>Características físicas:</p>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Setor</label>
+                        <input name="setor" ng-model="ctrl.setor" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Bloco</label>
+                        <input name="bloco" ng-model="ctrl.bloco" md-autofocus required />
+                    </md-input-container>
+                  </div>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Área</label>
+                        <input name="area" ng-model="ctrl.area" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Latitude</label>
+                        <input name="latitude" ng-model="ctrl.latitude" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Longitude</label>
+                        <input name="longitude" ng-model="ctrl.longitude" md-autofocus required />
+                    </md-input-container>
+                  </div>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Ocupação média</label>
+                        <input name="ocupacaoMedia" ng-model="ctrl.ocupacaoMedia" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Volume do reservatório</label>
+                        <input name="volumeReservatorio" ng-model="ctrl.volumeReservatorio" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Média esperada</label>
+                        <input name="mediaEsperada" ng-model="ctrl.mediaEsperada" md-autofocus required />
+                    </md-input-container>
+                  </div>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Número de pavimentos</label>
+                        <input name="n_pavimentos" ng-model="ctrl.n_pavimentos" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Número de torneiras</label>
+                        <input name="n_torneiras" ng-model="ctrl.n_torneiras" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Número de dúchas</label>
+                        <input name="n_duchas" ng-model="ctrl.n_duchas" md-autofocus required />
+                    </md-input-container>
+                  </div>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Número de bacias sanitárias</label>
+                        <input name="n_baciasSanitarias" ng-model="ctrl.n_baciasSanitarias" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Número de chuveiros</label>
+                        <input name="n_chuveiros" ng-model="ctrl.n_chuveiros" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Número de pias</label>
+                        <input name="n_pias" ng-model="ctrl.n_pias" md-autofocus required />
+                    </md-input-container>
+                  </div>
+                  <md-input-container>
+                    <p>Botão para fazer upload da imagem TODO</p>
+                    <input ng-model="image" type="image" />
+                  </md-input-container>
                 </div>
             </md-dialog-content>
 

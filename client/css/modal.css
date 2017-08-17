@@ -18,7 +18,7 @@ md-tab-body {
 	width: 100%;
 }
 
-md-dialog-content {
+.popup md-dialog-content {
 	height: 80vh;
 }
 

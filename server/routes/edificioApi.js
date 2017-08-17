@@ -209,6 +209,7 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
 
 // Create
 router.post('/edificio', function(req, res) {
+    console.log('post edificio');
     var edificio = new Edificio();
     edificio.nome = req.body.nome;
     edificio.descricao = req.body.descricao;
