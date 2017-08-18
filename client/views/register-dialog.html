@@ -1,4 +1,4 @@
-<div ng-controller="RegisterDialogController as ctrl" ng-cloak="" ng-app="app">
+<div ng-cloak="" ng-app="app">
 
     <md-dialog id="session-dialog" aria-label="Register" ng-cloak>
 
@@ -23,6 +23,10 @@
                     <md-input-container class="md-block">
                         <label>Senha</label>
                         <input type="password" name="password" ng-model="ctrl.password" required />
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Confirme senha</label>
+                        <input type="password" name="password" ng-model="ctrl.confirm_pass" required />
                     </md-input-container>
                 </div>
             </md-dialog-content>

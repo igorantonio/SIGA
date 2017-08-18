@@ -94,28 +94,29 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
 
         }
 
-        function register(username, password) {
+        function register(username, password, confirm_pass) {
 
             // create a new instance of deferred
             var deferred = $q.defer();
 
-            // send a post request to the server
-            $http.post('/register',
-                {username: username, password: password})
-            // handle success
-                .success(function (data, status) {
-                    if (status === 200 && data.status) {
-                        deferred.resolve();
-                    } else {
-                        deferred.reject();
-                    }
-                })
-                // handle error
-                .error(function (data) {
-                    deferred.reject();
-                });
+            if (password === confirm_pass) {
 
-            // return promise object
+                $http.post('/register',
+                    {username: username, password: password})
+                    .success(function (data, status) {
+                        if (status === 200 && data.status) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject();
+                        }
+                    })
+                    .error(function (data) {
+                        deferred.reject();
+                    });
+            } else {
+                deferred.reject();
+            }      
+            
             return deferred.promise;
         }
 

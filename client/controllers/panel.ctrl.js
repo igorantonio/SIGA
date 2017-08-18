@@ -68,13 +68,15 @@ angular.module('myApp')
           });
         };
 
-        self.newUser = function(ev) {
+        self.newUserDialog = function(ev) {
             $mdDialog.show({
                templateUrl: '../views/register-dialog.html',
                parent: angular.element(document.body),
                targetEvent: ev,
                clickOutsideToClose: true,
-               fullscreen: $scope.customFullscreen
+               fullscreen: $scope.customFullscreen,
+               controller: "RegisterDialogController",
+               controllerAs: 'ctrl'
            });
          };
 }]);
