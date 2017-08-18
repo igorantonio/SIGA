@@ -1,20 +1,21 @@
 .toolbar {
-    background-color: #3498db;
+    background-color: #18355b;
     top:0;
     left:0;
     right:0;
-
+    position: relative;
 }
 
 .toolbar p {
-    text-align: center;
-    font-size: 23px;
+    /*text-align: center;*/
+    font-size: 12px;
     font-weight: 800;
-    color: #ecf0f1;
-    margin: 12px 0;
+    color: rgb(240, 244, 244);
+    margin: 2px 0;
     position: relative;
-    width: auto;
+    /*width: auto;*/
 }
+
 
 .toolbar h2{
     color: #ecf0f1;
@@ -25,8 +26,9 @@
 
 .title {
     width: 100%;
-    text-align: center;
+    text-align: left;
     color: white;
+    padding-left: 30px;
 }
 
 .session {
@@ -34,10 +36,11 @@
     vertical-align: middle;
 }
 
+
 /* Rules for styling session icon. */
 .material-icons.md-session {
     font-size: 24px;
-    color: rgb(249, 249, 249);
+    color: rgb(240, 244, 244);
     margin: 0 20px;
     vertical-align: middle;
 }
@@ -49,7 +52,10 @@
 #name {
     font-weight: bold;
     margin-top: 0px;
-    color: #ecf0f1;
+    color: rgb(240, 244, 244);
+    font-family: 'Lato';
+    font-size: 42px;
+    margin-top: 18px;
 }
 
 #eye {
