@@ -7,22 +7,24 @@ angular.module('myApp')
 	 	self.showUser = false;
 	 	self.data = [];
 
-    self.loadEdificios = function(ev) {
-    	self.showUser = false;
-    	self.showEdificio = true;
+        self.loadEdificios = function(ev) {
+            self.showUser = false;
+            self.showEdificio = true;
 
-    	$http.get("/edificio")
-        .then(function(response, ev){
-        	self.data = response.data;		            
-        }, function() {
-        	self.data = "error in fetching data"; //return if error on fetch
-    });
-    };        
+            $http.get("/edificio")
+            .then(function(response, ev) {
+                self.data = response.data;		            
+            }, function() {
+                self.data = "error in fetching data"; //return if error on fetch
+            });
+        };        
 
-    self.loadUsers = function(ev) {
-    	var user = AuthService.getUser();
-    	console.log(user);
-    };
+        self.loadUsers = function(ev) {
+            self.showUser = true;
+            self.showEdificio = false;
+
+            var user = AuthService.getUser();
+        };
 
 		self.logout = function (ev) {
 			self.showEdificio = false;
@@ -65,4 +67,14 @@ angular.module('myApp')
               fullscreen: $scope.customFullscreen
           });
         };
+
+        self.newUser = function(ev) {
+            $mdDialog.show({
+               templateUrl: '../views/register-dialog.html',
+               parent: angular.element(document.body),
+               targetEvent: ev,
+               clickOutsideToClose: true,
+               fullscreen: $scope.customFullscreen
+           });
+         };
 }]);

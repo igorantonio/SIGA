@@ -1,37 +1,38 @@
 <div ng-controller="LoginDialogController as ctrl" ng-cloak="" ng-app="app">
 
-<md-dialog id="login-dialog" aria-label="Login" ng-cloak>
+    <md-dialog id="session-dialog" aria-label="Login" ng-cloak>
 
-    <form name="loginForm" ng-submit="ctrl.login()">
+        <form name="loginForm" ng-submit="ctrl.login()">
 
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>Log In</h2>
-                <span flex></span>
-                <md-button class="md-icon-button" ng-click="ctrl.close()">
-                    <md-icon aria-label="Close dialog">close</md-icon>
-                </md-button>
-            </div>
-        </md-toolbar>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Log In</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="ctrl.close()">
+                        <md-icon aria-label="Close dialog">close</md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
 
-        <md-dialog-content>
-            <div class="md-dialog-content">
-                <md-input-container class="md-block">
-                    <label>E-mail</label>
-                    <input name="username" ng-model="ctrl.username" md-autofocus required />
-                </md-input-container>
-                <md-input-container class="md-block">
-                    <label>Senha</label>
-                    <input type="password" name="password" ng-model="ctrl.password" required />
-                </md-input-container>
-            </div>
-        </md-dialog-content>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <md-input-container class="md-block">
+                        <label>E-mail</label>
+                        <input name="username" ng-model="ctrl.username" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Senha</label>
+                        <input type="password" name="password" ng-model="ctrl.password" required />
+                    </md-input-container>
+                </div>
+            </md-dialog-content>
 
-        <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
+            <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
 
-        <md-dialog-actions layout="row">
-            <md-button type="submit" ng-disabled="loginForm.$invalid" class="md-raised md-primary" md-autofocus>Login</md-button>
-        </md-dialog-actions>
-    </form>
-</md-dialog>
+            <md-dialog-actions layout="row">
+                <md-button type="submit" ng-disabled="loginForm.$invalid" class="md-raised md-primary" md-autofocus>Login</md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+    
 </div>

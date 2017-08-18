@@ -5,16 +5,16 @@ angular.module('myApp')
             var self = this;
 
             self.changeSessionState = function (ev) {
-                //var isLogged = AuthService.isLoggedIn();
+                var isLogged = AuthService.isLoggedIn();
 
-                //if (isLogged) {
-                    self.panel(ev);
-                //} else {
-                  //  self.login(ev);
-                //}
+                if (isLogged) {
+                    self.goToPanel(ev);
+                } else {
+                    self.login(ev);
+                }
             };
 
-            self.panel = function (ev){
+            self.goToPanel = function (ev){
                 $location.path('/panel');
             };
 
