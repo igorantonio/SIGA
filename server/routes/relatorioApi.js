@@ -98,20 +98,48 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     var filePath = edificio.nome + '.pdf';
     doc.pipe(fs.createWriteStream(filePath)); 
                   
-    doc.fontSize(18);                    
-    doc.text(edificio.nome, {
+    doc.fontSize(20);                    
+    doc.text('Edificação: ' + edificio.nome, {
         align: 'center'
     });
 
     doc.moveDown();
-    doc.fontSize(10);
-    doc.text(edificio.descricao);
-    doc.text(edificio.atividade);
+    doc.fontSize(16);
+    doc.text('Descrição Suscinta: ' + edificio.descricao);
 
     doc.moveDown();
-    var route = "/estatistica/edificio/:edificio_id";
-    var stats = $http.get(route);
-    doc.text(stats);
+    doc.text('Atividade Preponderante: ' + edificio.atividade);
+
+    doc.moveDown();
+    doc.text('Características Físicas:');
+    doc.fontSize(14);
+    doc.text('Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco);
+    doc.text('Área = ' + edificio.caracteristicasFisicas.area + 'm²');
+    doc.text('Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos);
+    doc.text('Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia);
+    doc.text('Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias);
+    doc.text('Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras);
+    doc.text('Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas);
+    doc.text('Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros);
+    doc.text('Nº Pias = ' + edificio.caracteristicasFisicas.n_pias);
+    doc.text('Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³');
+
+    doc.moveDown();
+    doc.fontSize(16);
+    doc.text('Consumo de Água:');
+    doc.fontSize(14);
+    doc.text('Por Dia:');
+    doc.text('Por Mês:');
+
+    doc.moveDown();
+    doc.fontSize(16);
+    doc.text('Estatísticas do Consumo de Água:');
+    doc.fontSize(14);
+    doc.text('Consumo Total:');
+    doc.text('Consumo Médio:');
+    doc.text('Consumo Médio Esperado:');
+    doc.text('Consumo Máximo:');
+    doc.text('Consumo Mínimo:');
 
     doc.end();
     res.json(edificio);
