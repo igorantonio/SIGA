@@ -168,6 +168,36 @@ router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
     });
 });
 
+
+// Update (Vazamento)
+router.put('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(err, caixa) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            vazamentosAtualizado = [];
+            caixa.vazamentos.forEach(function(vazamento) {
+                if (vazamento._id == req.params.vazamento_id) {
+                    data = new Date(req.body.data);
+                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.volume) vazamento.volume = req.body.volume;
+                }
+                vazamentosAtualizado.push(vazamento);
+            });
+            caixa.vazamentos = vazamentosAtualizado;
+            caixa.save(function(err) {
+                if (err) {
+                    res.status(400).json({error: err});
+                } else {
+                    res.status(200).json({message: 'Vazamento atualizado.'});
+                }
+            });
+        }
+    });
+});
+
+
+
 // DELETE
 router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
     CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
@@ -254,6 +284,34 @@ router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
                 res.json(caixa.historicoConsumo);
             }
         });
+    });
+});
+
+
+// Update (Consumo)
+router.put('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(err, caixa) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            consumosAtualizado = [];
+            caixa.historicoConsumo.forEach(function(consumo) {
+                if (consumo._id == req.params.consumo_id) {
+                    data = new Date(req.body.data);
+                    if (req.body.data) consumo.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.consumo) consumo.consumo = req.body.consumo;
+                }
+                consumosAtualizado.push(consumo);
+            });
+            caixa.historicoConsumo = consumosAtualizado;
+            caixa.save(function(err) {
+                if (err) {
+                    res.status(400).json({error: err});
+                } else {
+                    res.status(200).json({message: 'Consumo atualizado.'});
+                }
+            });
+        }
     });
 });
 

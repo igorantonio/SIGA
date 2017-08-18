@@ -196,6 +196,37 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
     });
 });
 
+
+
+// Update (Consumo)
+router.put('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            vazamentosAtualizado = [];
+            edificio.vazamentos.forEach(function(vazamento) {
+                if (vazamento._id == req.params.vazamento_id) {
+                    data = new Date(req.body.data);
+                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.volume) vazamento.volume = req.body.volume;
+                }
+                vazamentosAtualizado.push(vazamento);
+            });
+            edificio.vazamentos = vazamentosAtualizado;
+            edificio.save(function(err) {
+                if (err) {
+                    res.status(400).json({error: err});
+                } else {
+                    res.status(200).json({message: 'Vazamento atualizado.'});
+                }
+            });
+        }
+    });
+});
+
+
+
 // Delete (Vazamento)
 router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
