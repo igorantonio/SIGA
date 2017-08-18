@@ -37,6 +37,7 @@ angular.module('myApp')
             position: location,
             icon: icon,
             map: self.map,
+            optimized: false,
             edificio: edificio._id
         });
 
@@ -47,9 +48,16 @@ angular.module('myApp')
             $scope.isCaixa = caixe;
             edificioService.setEdificioId(edificio._id);
             edificioService.setCaixa(caixe);
+            var template;
+            if (caixe){
+              template = '../views/caixa.html'
+            }else{
+              template = '../views/modal.html'
+
+            };
 
             $mdDialog.show({
-                templateUrl: '../views/modal.html',
+                templateUrl: template,
                 parent: angular.element(document.body),
                 scope: $scope.$new(),
                 targetEvent: ev,
@@ -68,7 +76,6 @@ angular.module('myApp')
         $http.get("/edificio", { params: { withAlerta: true } })
             .then(function (response, ev) {
                 $scope.data = response.data;
-                console.log(response.data);
 
                 for (i in response.data) {
                     for (j in response.data[i]) {
@@ -77,8 +84,6 @@ angular.module('myApp')
                         if (edificio.hasOwnProperty('geolocalizacao')
                             && edificio['geolocalizacao'].hasOwnProperty('latitude')) {
                             addMarker(edificio, icons[i], false);
-
-
                         };
                     }
                 }
@@ -104,8 +109,6 @@ angular.module('myApp')
                         if (edificio.hasOwnProperty('geolocalizacao')
                             && edificio['geolocalizacao'].hasOwnProperty('latitude')) {
                             addMarker(edificio, icons[i], true);
-
-
                         };
                     }
                 }
@@ -114,8 +117,6 @@ angular.module('myApp')
             }, function () {
                 $scope.data = "error in fetching data"; //return if error on fetch
             });
-
-
     };
 
     self.initMap = function () {
@@ -188,6 +189,7 @@ angular.module('myApp')
         
         var UFCG_ID = 0;
         edificioService.setEdificioId(UFCG_ID);
+        edificioService.setCaixa(false);
 
         $mdDialog.show({
             templateUrl: '../views/modal.html',

@@ -21,8 +21,8 @@ angular.module('myApp')
 
 
 angular.module('myApp')
-    .controller('DialogController', ['$scope','$mdDialog', '$q', '$http',
-        function ($scope, $mdDialog, $q, $http) {
+    .controller('DialogController', ['$scope','$mdDialog', '$q', '$http', 'edificioService',
+        function ($scope, $mdDialog, $q, $http, edificioService,) {
 
             var self = this;
 
@@ -41,8 +41,10 @@ angular.module('myApp')
             };
 
             function getEstatisticas() {
+                console.log(edificioService.isCaixa());
                 var q = $q.defer();
-                if (!$scope.isCaixa){
+                if (!edificioService.isCaixa()){
+                    console.log("Falsas");
                 var route = "/estatistica/edificio/" + $scope.edificio._id;
                 
                 self.pontoDeConsumo = $scope.edificio;
@@ -56,6 +58,7 @@ angular.module('myApp')
                 });
             }
             else{
+                console.log('Entrei aqui');
                 var route = "/estatistica/caixa/" + $scope.edificio._id;
                 $http.get(route).then(function(info) {
                     q.resolve(info.data);

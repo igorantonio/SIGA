@@ -9,8 +9,8 @@ md-tabs {
 }
 
 md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
-    color: #5E7ED2 !important;
-    background-color: #5E7ED2 !important;
+    color: #18355b !important;
+    background-color: #18355b !important;
 }
 
 md-tab-body {
@@ -21,10 +21,16 @@ md-tab-body {
 md-dialog-content {
 	height: 80vh;
 }
+md-icon{
+	color: rgba(88, 98, 113, 0.8);
+}
 
+md-tabs .md-tab.md-active md-icon{
+	color: #18355b;
+}
 .content-tab1 {
 	margin: 3%;
-	color: #5E7ED2;
+	color: #192332;
 	width: 60%;
 	height: 80%;
 	float: left;
@@ -33,6 +39,7 @@ md-dialog-content {
 
 
 .content-tab1 > p {
+	font-family: 'Roboto';
 	text-align: justify;
 	line-break: strict;
 	display: block;
@@ -48,7 +55,8 @@ md-dialog-content {
 
 .content-tab1 .ed-bloco {
 	margin: 0 0;
-	font-size: 24px;
+	font-size: 22px;
+	color: #18355b;
 	font-weight: 700;
 }
 
@@ -64,6 +72,8 @@ md-dialog-content {
 
 .content-tab1 .ed-descricao {
 	margin-bottom: 12px;
+	color: rgba(88, 98, 113, 0.8);
+
 }
 
 .content-tab1 button {
@@ -73,7 +83,7 @@ md-dialog-content {
 
 .content-tab1 .md-raised {
 	background-color: #fefefe;
-	color: #5E7ED2;
+	color: #18355b;
 }
 
 .content-tab1 .md-raised:hover {
@@ -86,8 +96,9 @@ md-dialog-content {
 	color: #5E7ED2;
 }
 .content-tab2 {
+	font-family: :'Roboto';
 	margin: 3%;
-	color: #5E7ED2;
+	color: #18355b;
 	height: 80%;
 }
 
@@ -98,6 +109,7 @@ md-dialog-content {
 }
 
 .topic {
+	font-family: 'Roboto'
 	font-weight: bold;
 	margin: 0px;
 	display: inline;

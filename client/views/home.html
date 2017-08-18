@@ -4,6 +4,7 @@
     <div ng-controller="MapController as ctrl">
         <!-- Menu Toolbar-->
         <div class="menu-demo-container" layout="row" layout-align="end center">
+
             <div>
                 <md-icon class="md-ufcg-info-button" ng-click='ctrl.openGeneralInfoDialog($event)'>
                     home
@@ -14,26 +15,43 @@
                 <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
                     <md-icon class="md-filtro-ed">sort</md-icon>
                 </md-button>
-                <md-menu-content width="4">
+
+                <md-menu-content>
                     <md-menu-item>
                         <md-button ng-click="ctrl.redial($event)">
                             <md-icon>check_box</md-icon>
                             Todos os prédios
                         </md-button>
+
                     </md-menu-item>
+<md-menu-item>
+          <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+           Filtrar por consumo
+                </md-button>
+            </md-menu-item>
+                                        <md-menu-divider></md-menu-divider>
+
                     <md-menu-item>
                         <md-button ng-click="ctrl.showEdificiosAlerta('0')">
                             <md-icon>check_box_outline_blank</md-icon>
-                            Prédios em alerta 0
+                            Um pouco acima da média
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ng-click="ctrl.showEdificiosAlerta('1')">
                             <md-icon>check_box_outline_blank</md-icon>
-                            Prédios em alerta 1
+                            Muito acima da média
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
+          <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+           Filtrar por setor
+                </md-button>
+            </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+
+                    <md-menu-item>
+
                         <md-button ng-click="ctrl.showOnlySetor('A');">
                             <md-icon>check_box_outline_blank</md-icon>
                             Setor A
@@ -53,6 +71,7 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
+
             </div>
         </div>
 

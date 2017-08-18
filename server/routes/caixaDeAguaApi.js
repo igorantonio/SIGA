@@ -7,164 +7,6 @@ var User = require('../models/user.js');
 var CaixaDeAgua = require('../models/caixaDeAgua.js');
 
 
-//VAZAMENTO
-//SHOW
-router.get('/caixa/:caixa_id/vazamentos', function(req, res) {
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-         if (error){ 
-              res.status(400).json({err: error});
-            }
-              else{
-            res.json(caixa);
-          };
-        // Filtrar
-        //Checar com eles, se tiver dois vazamentos no mesmo dia. o que fazer? Juntar?
-        vazamentosFiltrados = caixa.vazamentos;
-        res.json(vazamentosFiltrados);
-    })
-});
-
-// DELETE
-router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-         if (error){ 
-              res.status(400).json({err: error});
-          };
-        vazamentosFiltrados = [];
-        caixa.vazamentos.forEach(function(vazamento) {
-            if (vazamento._id != req.params.vazamento_id) {
-                vazamentosFiltrados.push(vazamento);
-            }
-        })
-        caixa.vazamentos = vazamentosFiltrados;
-        caixa.save(function(error) {
-            if (error){ 
-              res.status(400).json({err: error});
-            } else {
-                res.json(caixa.vazamentos);
-            }
-
-        })
-    });
-
-
-});
-
-// CREATE
-router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
-    if (req.body.data == null) {
-        res.status(400);
-        res.send("Body is empty");
-        return;
-    };
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-        if (error) {
-            res.status(400);
-            res.send(error.message);
-            return
-        };
-        data = new Date(req.body.data);
-        novoVazamento = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
-            volume: req.body.volume
-        };
-        caixa.vazamentos.push(novoVazamento);
-        caixa.save(function(error) {
-            if (error) {
-                res.status(422);
-                res.send(error.message);
-                return;
-            } else {
-                res.json(caixa.vazamentos);
-            }
-        });
-    });
-});
-
-//CONSUMO
-//SHOW
-router.get('/caixa/:caixa_id/consumo', function(req, res) {
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-             if (error){ 
-              res.status(400).json({err: error});
-            };
-            consumos = caixa.historicoConsumo;
-            if (req.query.ano != null) {
-                consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
-            };
-            if (req.query.mes != null) {
-                consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
-            };
-            if (req.query.dia != null) {
-                consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
-            };
-            if (req.query.inicio != null && req.query.fim != null) {
-                consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
-            };
-            consumosFiltrados = [];
-            consumos.forEach(function(cd) {
-                var newConsumo = {
-                    x: cd.data.getTime(),
-                    y: cd.consumo
-                };
-                consumosFiltrados.push(newConsumo);
-            });
-            consumosFiltrados.sort(function(a, b) {
-              return a.x - b.x;
-             });
-            res.json(consumosFiltrados);
-
-        }
-
-    )
-});
-
-//CREATE
-router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
-    if (req.body.data == null) {
-              res.status(400).json({err: error});
-
-    };
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-        if (error) res.send(caixa);
-        data = new Date(req.body.data);
-        novoConsumo = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
-            consumo: req.body.consumo
-        };
-        caixa.historicoConsumo.push(novoConsumo);
-        caixa.save(function(error) {
-            if (error) {
-                res.send(error);
-            } else {
-                res.json(caixa.historicoConsumo);
-            }
-        });
-    });
-});
-
-
-//GEOLOCALIZAÇÃO
-// UPDATE
-router.post('/caixa/:caixa_id/geolocalizacao', function(req, res) {
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-        if (error) res.send(caixa);
-        caixa.geolocalizacao.latitude = req.body.latitude;
-        caixa.geolocalizacao.longitude = req.body.longitude;
-        caixa.save(function(error) {
-            if (error){ 
-              res.status(400).json({err: error});
-            }
-              else{
-            res.json(caixa);
-          }
-        });
-    });
-});
-
-
-
-// create, update, show, delete
 
 //CREATE
 router.post('/caixa', function(req, res) {
@@ -275,5 +117,169 @@ router.route('/caixa/:caixa_id')
             });
         });
     });
+
+
+//VAZAMENTO
+//SHOW
+router.get('/caixa/:caixa_id/vazamentos', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+         if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(caixa);
+          };
+        // Filtrar
+        //Checar com eles, se tiver dois vazamentos no mesmo dia. o que fazer? Juntar?
+        vazamentosFiltrados = caixa.vazamentos;
+        res.json(vazamentosFiltrados);
+    })
+});
+
+
+// CREATE
+router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
+    if (req.body.data == null) {
+        res.status(400);
+        res.send("Body is empty");
+        return;
+    };
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+        if (error) {
+            res.status(400);
+            res.send(error.message);
+            return
+        };
+        data = new Date(req.body.data);
+        novoVazamento = {
+            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            volume: req.body.volume
+        };
+        caixa.vazamentos.push(novoVazamento);
+        caixa.save(function(error) {
+            if (error) {
+                res.status(422);
+                res.send(error.message);
+                return;
+            } else {
+                res.json(caixa.vazamentos);
+            }
+        });
+    });
+});
+
+// DELETE
+router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+         if (error){ 
+              res.status(400).json({err: error});
+          };
+        vazamentosFiltrados = [];
+        caixa.vazamentos.forEach(function(vazamento) {
+            if (vazamento._id != req.params.vazamento_id) {
+                vazamentosFiltrados.push(vazamento);
+            }
+        })
+        caixa.vazamentos = vazamentosFiltrados;
+        caixa.save(function(error) {
+            if (error){ 
+              res.status(400).json({err: error});
+            } else {
+                res.json(caixa.vazamentos);
+            }
+
+        })
+    });
+
+
+});
+
+
+//CONSUMO
+//SHOW
+router.get('/caixa/:caixa_id/consumo', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+             if (error){ 
+              res.status(400).json({err: error});
+            };
+            consumos = caixa.historicoConsumo;
+            if (req.query.ano != null) {
+                consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
+            };
+            if (req.query.mes != null) {
+                consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
+            };
+            if (req.query.dia != null) {
+                consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
+            };
+            if (req.query.inicio != null && req.query.fim != null) {
+                consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
+            };
+            consumosFiltrados = [];
+            consumos.forEach(function(cd) {
+                var newConsumo = {
+                    x: cd.data.getTime(),
+                    y: cd.consumo
+                };
+                consumosFiltrados.push(newConsumo);
+            });
+            consumosFiltrados.sort(function(a, b) {
+              return a.x - b.x;
+             });
+            res.json(consumosFiltrados);
+
+        }
+
+    )
+});
+
+//CREATE
+router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
+    if (req.body.data == null) {
+              res.status(400).json({err: error});
+
+    };
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+        if (error) res.send(caixa);
+        data = new Date(req.body.data);
+        novoConsumo = {
+            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            consumo: req.body.consumo
+        };
+        caixa.historicoConsumo.push(novoConsumo);
+        caixa.save(function(error) {
+            if (error) {
+                res.send(error);
+            } else {
+                res.json(caixa.historicoConsumo);
+            }
+        });
+    });
+});
+
+
+//GEOLOCALIZAÇÃO
+// UPDATE
+router.post('/caixa/:caixa_id/geolocalizacao', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+        if (error) res.send(caixa);
+        caixa.geolocalizacao.latitude = req.body.latitude;
+        caixa.geolocalizacao.longitude = req.body.longitude;
+        caixa.save(function(error) {
+            if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(caixa);
+          }
+        });
+    });
+});
+
+
+
+// create, update, show, delete
+
+
 
 module.exports = router;

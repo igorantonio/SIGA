@@ -1,7 +1,7 @@
 angular.module('myApp')
 	.controller('ChartController', ['$scope', 'edificioService', '$http', function ($scope, edificioService, $http) {
 		
-		$scope.type = edificioService.getEdificioId();
+		$scope.type = 'detalhado';
 		$scope.data = [{
 			key: 'Data',
 			values: [{
@@ -31,17 +31,20 @@ angular.module('myApp')
 		var UFCG_ROUT = "/universidade/consumo";
 		var ROUTE;
 
-		if (edificioService.isCaixa()) {
-			ROUTE = CAIXA_ROUT;
-
-		} if (edificioService.isUFCG()) {
-			ROUTE = UFCG_ROUT;
-
-		}	else {
-			ROUTE = ED_ROUT;
-		};
+		
 
 		$scope.loadData = function () {
+			console.log('aqui',edificioService.isCaixa());
+			if (edificioService.isCaixa()) {
+			ROUTE = CAIXA_ROUT;
+
+			} 
+			else if (edificioService.isUFCG()) {
+			ROUTE = UFCG_ROUT;
+
+			}	else {
+			ROUTE = ED_ROUT;
+			};
 
 			$http.get(ROUTE)
 				.then(function (response, ev) {

@@ -13,6 +13,8 @@
 body{
 	margin: 0;
 	padding:0;
+    font-family: 'Karla';
+
 }
 
 #content{
@@ -32,19 +34,18 @@ body{
 
 .menu-demo-container {
     display:table-cell;
-    background-color: #ecf0f1;
+    background-color:#ecf0f1;
 }
 
 .menudemoBasicUsage .md-menu-demo {
-	background-color: #ecf0f1;
     padding: 24px;
 }
 
 .menudemoBasicUsage .menu-demo-container {
-	background-color: #ecf0f1;
     min-height: 200px;
 }
 
+md-menu-content { max-height: 90vh; }
 #register-button {
     color: #5b6ec0;
     font-size: 11px;
@@ -62,10 +63,18 @@ body{
     color: #424784;
 }
 
+.material-icons.md-ufcg-info-button{
+    color: #18355b;
+
+}
 .material-icons.md-ufcg-info-button:hover {
     color: #5e7ed2;
 }
 
+.material-icons.md-filtro-ed{
+    color: #18355b;
+
+}
 .material-icons.md-filtro-ed:hover {
     color: #5e7ed2;
 }
