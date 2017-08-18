@@ -3,7 +3,9 @@
   "scripts": {
     "start": "node server/server.js",
     "serve": "nodemon server/server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "doc": "jsdoc server/routes/edificioApi.js"
+
   },
   "dependencies": {
     "angular-openlayers-directive": "^1.19.3",

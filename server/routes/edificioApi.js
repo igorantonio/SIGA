@@ -6,6 +6,7 @@ var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
 ///change the geolocalization of a building
+
 router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
         if (error) res.send(edificio);
@@ -198,7 +199,7 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
 
 
 
-// Update (Consumo)
+// Update (Vazamento)
 router.put('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
         if (err) {
@@ -462,6 +463,12 @@ router.delete('/edificio/:edificio_id', function(req, res) {
     });
 });
 
+/**
+* Represents a book.
+ * @constructor
+ * @param {string} title - The title of the book.
+ * @param {string} author - The author of the book.
+ */
 var filtrarPorSetor = function(setor, edificios) {
     edificiosFiltrados = [];
     edificios.forEach(function(edificio) {
