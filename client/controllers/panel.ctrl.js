@@ -5,7 +5,7 @@ angular.module('myApp')
             var self = this;
             self.showEdificio = false;
             self.showUser = false;
-            self.showEditPass = false;
+
             self.data = [];
 
             var user = AuthService.getUser();
@@ -72,28 +72,42 @@ angular.module('myApp')
 
             self.updatePassword = function () {
 
-                $scope.error = false;
+                self.error = false;
+                self.success = false;
+                self.successMessage = "";
+                self.errorMessage = "";
                 $scope.disabled = true;
-                var deferred = $q.defer();
+                var q = $q.defer();
 
                 if (self.password === self.confirm_pass) {
-                    $http.post('/userPassword',
+                    $http.put('/userPassword',
                         { email: self.user_email , password: self.password })
                         .success(function (data, status) {
-                            if (status === 200 && data.status) {
-                                deferred.resolve();
+                            if (status == 200) {
+                                self.successMessage = "Senha Atualizada!";
+                                self.success = true;                    
+                                self.showEditPass = false;
+                                self.password = "";
+                                self.confirm_pass = "";
+                                q.resolve();
                             } else {
-                                deferred.reject();
+                                self.error = true;
+                                self.errorMessage = "Tente novamente!"
+                                q.reject();
                             }
                         })
                         .error(function (data) {
-                            deferred.reject();
+                            self.error = true;
+                            self.errorMessage = "Tente novamente!"
+                            q.reject();
                         });
                 } else {
-                    deferred.reject();
+                    self.error = true;
+                    self.errorMessage = "Senhas não coincidem!"
+                    q.reject();
                 }
 
-                return deferred.promise;
+                return q.promise;
             };
 
             self.newUserDialog = function (ev) {
