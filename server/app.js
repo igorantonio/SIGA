@@ -10,6 +10,8 @@ var path = require('path');
 var passport = require('passport');
 var localStrategy = require('passport-local' ).Strategy;
 var nvd3 = require('nvd3');
+var favicon = require('serve-favicon');
+
 
 // mongoose
 mongoose.connect('mongodb://localhost/mean-auth');
@@ -24,9 +26,13 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var User = require('./models/user.js');
 var Edificio = require('./models/edificio.js');
 
-
 // create instance of express
 var app = express();
+
+// favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+
 
 // require routes
 var userRouter = require('./routes/userApi.js');
@@ -34,9 +40,11 @@ var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
 var relatorioRouter = require('./routes/relatorioApi.js');
 var routes = require('./routes/api.js')
+var universidadeRouter = require('./routes/universidadeApi.js')
 // define middleware
+var caixaRouter = require('./routes/caixaDeAguaApi.js');
 
-
+// define middleware
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -57,14 +65,12 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // routes
-app.use('/', routes);
-app.use('/', routes);
-app.use('/', routes);
-app.use('/', edificioRouter);
+app.use('/', edificioRouter.data.router);
 app.use('/', userRouter);
+app.use('/', universidadeRouter);
 app.use('/', estatisticaRouter.data.router);
 app.use('/', relatorioRouter);
-
+app.use('/', caixaRouter);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));
@@ -78,6 +84,8 @@ app.use(function(req, res, next) {
   /*next(err);*/
   res.status(404).send('404 - Not found');
 });
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 
 
 /*app.use(function(req, res, next){
