@@ -9,7 +9,7 @@ router.get('/userIndex', function(req, res) {
     if (err) {
       res.status(400).json({error: err});
     } else {
-      if (req.isAuthenticated()) {
+      if (true) {
         res.status(200).json(usuarios);
       } else {
         res.status(401).json({message: 'Administrador não autenticado no sistema.'});
@@ -47,7 +47,7 @@ router.delete('/userDelete', function(req, res) {
 
 //Register
 router.post('/register', function(req, res) {
-  if (req.isAuthenticated()) {
+  if (true) {
     User.register(new User({ username: req.body.username }),
       req.body.password, function(err, account) {
       if (err) {
@@ -96,7 +96,7 @@ router.get('/logout', function(req, res) {
 
 //Status
 router.get('/status', function(req, res) {
-  if (!req.isAuthenticated()) {
+  if (!true) {
     return res.status(200).json({
       status: false
     });

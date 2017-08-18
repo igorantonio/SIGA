@@ -1,6 +1,6 @@
 angular.module('myApp')
-    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', '$q',
-        function ($scope, AuthService, $mdDialog, $location, $http, $q) {
+    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', '$q',
+        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, $q) {
 
             var self = this;
             self.showEdificio = false;
@@ -49,27 +49,6 @@ angular.module('myApp')
                 });
             };
 
-            self.editEdificio = function (event) {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .title('Secondary Action')
-                        .textContent('Secondary actions can be used for one click actions')
-                        .ariaLabel('Secondary click demo')
-                        .ok('Neat!')
-                        .targetEvent(event)
-                );
-            };
-
-            self.newEdificio = function (ev) {
-                $mdDialog.show({
-                    templateUrl: '../views/new-edificio.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen
-                });
-            };
-
             self.updatePassword = function () {
 
                 self.error = false;
@@ -81,11 +60,11 @@ angular.module('myApp')
 
                 if (self.password === self.confirm_pass) {
                     $http.put('/userPassword',
-                        { email: self.user_email , password: self.password })
+                        { email: self.user_email, password: self.password })
                         .success(function (data, status) {
                             if (status == 200) {
                                 self.successMessage = "Senha Atualizada!";
-                                self.success = true;                    
+                                self.success = true;
                                 self.showEditPass = false;
                                 self.password = "";
                                 self.confirm_pass = "";
@@ -112,6 +91,7 @@ angular.module('myApp')
 
             self.newUserDialog = function (ev) {
                 self.loadUsers();
+
                 $mdDialog.show({
                     templateUrl: '../views/register-dialog.html',
                     parent: angular.element(document.body),
@@ -120,6 +100,46 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen,
                     controller: "RegisterDialogController",
                     controllerAs: 'ctrl'
+                });
+            };
+
+            self.editEdificio = function (ev, edificio) {
+                edificioService.setEdificio(edificio);
+                edificioService.setNew(false);
+
+                $mdDialog.show({
+                    templateUrl: '../views/manage-edificio.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            };
+
+            self.newEdificio = function (ev) {
+                var edInicial = {
+                    nome: "", descricao: "", atividade: "",
+                    caracteristicasFisicas: {
+                        localizacao: { setor: "", bloco: "" },
+                        area: 0, n_pavimentos: 0, ocupacaoMedia: 0,
+                        n_baciasSanitarias: 0, n_torneiras: 0,
+                        n_duchas: 0, n_chuveiros: 0, n_pias: 0,
+                        volumeReservatorio: 0
+                    }, geolocalizacao: {
+                        latitude: 0,
+                        longitude: 0
+                    }, mediaEsperada: 0
+                };
+
+                edificioService.setEdificio(edInicial);
+                edificioService.setNew(true);
+
+                $mdDialog.show({
+                    templateUrl: '../views/manage-edificio.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
                 });
             };
         }]);
