@@ -31,6 +31,8 @@ var app = express();
 var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
+var universidadeRouter = require('./routes/universidadeApi.js')
+// define middleware
 var caixaRouter = require('./routes/caixaDeAguaApi.js');
 
 // define middleware
@@ -54,8 +56,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // routes
-app.use('/', edificioRouter);
+app.use('/', edificioRouter.data.router);
 app.use('/', userRouter);
+app.use('/', universidadeRouter);
 app.use('/', estatisticaRouter.data.router);
 app.use('/', caixaRouter);
 

@@ -2,8 +2,121 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var EstatisticaAPI = require('./estatisticaApi.js');
+var EdificioAPI = require('./edificioApi.js');
 var User = require('../models/user.js');
 var CaixaDeAgua = require('../models/caixaDeAgua.js');
+
+
+
+//CREATE
+router.post('/caixa', function(req, res) {
+    var caixa = new CaixaDeAgua();
+    caixa.nome = req.body.nome;
+    caixa.descricao = req.body.descricao;
+    caixa.caracteristicasFisicas = req.body.caracteristicasFisicas;
+    caixa.geolocalizacao = req.body.geolocalizacao;
+    caixa.historicoConsumo = req.body.historicoConsumo;
+    caixa.mediaEsperada = req.body.mediaEsperada;
+    caixa.vazamentos = req.body.vazamentos;
+    if (req.body.historicoConsumo == null) {
+        caixa.historicoConsumo = [];
+    };
+    if (req.body.vazamentos == null) {
+        caixa.vazamentos = [];
+    }
+    caixa.save(function(error) {
+        if (error){ 
+	 res.status(400).json({err: error});      
+	}
+        else res.json(caixa);
+    });
+
+});
+
+//INDEX
+router.get('/caixa', function(req, res) {
+    CaixaDeAgua.find(function(err, caixas) {
+        if (req.query.setor != null) {
+            caixas = EdificioAPI.data.iltrarPorSetor(req.query.setor, caixas);
+        }
+        if (req.query.nivelAlerta != null) {
+            nivelAlerta = req.query.nivelAlerta;
+            if (nivelAlerta == "0") {
+                margem = 0.2;
+            } else if (nivelAlerta == "1") {
+                margem = 0.3;
+            };
+            var result = EdificioAPI.emAlerta(caixas, margem);
+            res.send(result);
+            return;
+        }
+        if (req.query.withAlerta) {
+            if (req.query.withAlerta == 'true') {
+                var result0 = EdificioAPI.data.emAlerta(caixas, 0.2);
+                var result1 = EdificioAPI.data.emAlerta(caixas, 0.3);
+                res.json({
+                    todos: caixas,
+                    alerta0: result0,
+                    alerta1: result1
+                });
+                return;
+            }
+        }
+        if (err) {
+             res.status(400).json({err: err});
+        } else {
+            res.json(caixas);
+        }
+    });
+});
+
+//SHOW
+router.get('/caixa/:caixa_id', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+        if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(caixa);
+          }
+    });
+});
+
+//UPDATE
+router.post('/caixa/:caixa_id', function(req, res) {
+   	CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+        if (error) res.send(caixa);
+        caixa.nome = req.body.nome;
+        caixa.descricao = req.body.descricao;
+        caixa.geolocalizacao = req.body.geolocalizacao;
+        caixa.caracteristicasFisicas = req.body.caracteristicasFisicas;
+        caixa.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
+        caixa.vazamentos = req.body.vazamentos;
+        caixa.save(function(error) {
+            if (error){ 
+              res.status(400).json({err: error});
+            }
+              else{
+            res.json(caixa);
+          }
+        });
+    });
+});
+
+//DELETE
+router.route('/caixa/:caixa_id')
+    .delete(function(req, res) {
+        CaixaDeAgua.remove({
+            _id: req.params.caixa_id
+        }, function(error) {
+            if (error) {
+            	 res.status(400).json({err: error});
+            }
+            res.json({
+                message: "Prédio removido!"
+            });
+        });
+    });
 
 
 //VAZAMENTO
@@ -20,35 +133,9 @@ router.get('/caixa/:caixa_id/vazamentos', function(req, res) {
         //Checar com eles, se tiver dois vazamentos no mesmo dia. o que fazer? Juntar?
         vazamentosFiltrados = caixa.vazamentos;
         res.json(vazamentosFiltrados);
-
     })
 });
 
-// DELETE
-router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-         if (error){ 
-              res.status(400).json({err: error});
-          };
-        vazamentosFiltrados = [];
-        caixa.vazamentos.forEach(function(vazamento) {
-            if (vazamento._id != req.params.vazamento_id) {
-                vazamentosFiltrados.push(vazamento);
-            }
-        })
-        caixa.vazamentos = vazamentosFiltrados;
-        caixa.save(function(error) {
-            if (error){ 
-              res.status(400).json({err: error});
-            } else {
-                res.json(caixa.vazamentos);
-            }
-
-        })
-    });
-
-
-});
 
 // CREATE
 router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
@@ -80,6 +167,33 @@ router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
         });
     });
 });
+
+// DELETE
+router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
+         if (error){ 
+              res.status(400).json({err: error});
+          };
+        vazamentosFiltrados = [];
+        caixa.vazamentos.forEach(function(vazamento) {
+            if (vazamento._id != req.params.vazamento_id) {
+                vazamentosFiltrados.push(vazamento);
+            }
+        })
+        caixa.vazamentos = vazamentosFiltrados;
+        caixa.save(function(error) {
+            if (error){ 
+              res.status(400).json({err: error});
+            } else {
+                res.json(caixa.vazamentos);
+            }
+
+        })
+    });
+
+
+});
+
 
 //CONSUMO
 //SHOW
@@ -166,114 +280,6 @@ router.post('/caixa/:caixa_id/geolocalizacao', function(req, res) {
 
 // create, update, show, delete
 
-//CREATE
-router.post('/caixa', function(req, res) {
-    var caixa = new CaixaDeAgua();
-    caixa.nome = req.body.nome;
-    caixa.descricao = req.body.descricao;
-    caixa.caracteristicasFisicas = req.body.caracteristicasFisicas;
-    caixa.geolocalizacao = req.body.geolocalizacao;
-    caixa.historicoConsumo = req.body.historicoConsumo;
-    caixa.mediaEsperada = req.body.mediaEsperada;
-    caixa.vazamentos = req.body.vazamentos;
-    if (req.body.historicoConsumo == null) {
-        caixa.historicoConsumo = [];
-    };
-    if (req.body.vazamentos == null) {
-        caixa.vazamentos = [];
-    }
-    caixa.save(function(error) {
-        if (error){ 
-	 res.status(400).json({err: error});      
-	}
-        else res.json(caixa);
-    });
 
-});
-
-//INDEX
-router.get('/caixa', function(req, res) {
-    CaixaDeAgua.find(function(err, caixas) {
-        if (req.query.setor != null) {
-            caixas = filtrarPorSetor(req.query.setor, caixas);
-        }
-        if (req.query.nivelAlerta != null) {
-            nivelAlerta = req.query.nivelAlerta;
-            if (nivelAlerta == "0") {
-                margem = 0.2;
-            } else if (nivelAlerta == "1") {
-                margem = 0.3;
-            };
-            var result = emAlerta(caixas, margem);
-            res.send(result);
-            return;
-        }
-        if (req.query.withAlerta) {
-            if (req.query.withAlerta == 'true') {
-                var result0 = emAlerta(caixas, 0.2);
-                var result1 = emAlerta(caixas, 0.3);
-                res.json({
-                    todos: caixas,
-                    alerta0: result0,
-                    alerta1: result1
-                });
-                return;
-            }
-        }
-        if (err) {
-             res.status(400).json({err: err});
-        } else {
-            res.json(caixas);
-        }
-    });
-});
-
-//SHOW
-router.get('/caixa/:caixa_id', function(req, res) {
-    CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-        if (error){ 
-              res.status(400).json({err: error});
-            }
-              else{
-            res.json(caixa);
-          }
-    });
-});
-
-//UPDATE
-router.post('/caixa/:caixa_id', function(req, res) {
-   	CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
-        if (error) res.send(caixa);
-        caixa.nome = req.body.nome;
-        caixa.descricao = req.body.descricao;
-        caixa.geolocalizacao = req.body.geolocalizacao;
-        caixa.caracteristicasFisicas = req.body.caracteristicasFisicas;
-        caixa.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
-        caixa.vazamentos = req.body.vazamentos;
-        caixa.save(function(error) {
-            if (error){ 
-              res.status(400).json({err: error});
-            }
-              else{
-            res.json(caixa);
-          }
-        });
-    });
-});
-
-//DELETE
-router.route('/caixa/:caixa_id')
-    .delete(function(req, res) {
-        CaixaDeAgua.remove({
-            _id: req.params.caixa_id
-        }, function(error) {
-            if (error) {
-            	 res.status(400).json({err: error});
-            }
-            res.json({
-                message: "Prédio removido!"
-            });
-        });
-    });
 
 module.exports = router;
