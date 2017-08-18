@@ -22,7 +22,7 @@
             <md-subheader class="md-no-sticky">Edifícios cadastrados</md-subheader>
             <md-list-item class="secondary-button-padding" ng-repeat="d in ctrl.data">
               <p> {{d.nome}}</p>
-              <md-button class="md-secondary" ng-click="ctrl.editEdificio($event)">Editar</md-button>
+              <md-button class="md-secondary" ng-click="ctrl.editEdificio($event,d)">Editar</md-button>
             </md-list-item>
           </md-list>
 

@@ -1,6 +1,6 @@
 angular.module('myApp')
-	.controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http',
-	 function($scope, AuthService, $mdDialog, $location, $http) {
+	.controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService',
+	 function($scope, AuthService, $mdDialog, $location, $http, edificioService) {
 
 	 	var self = this;
 	 	self.showEdificio = false;
@@ -45,24 +45,37 @@ angular.module('myApp')
             });
         };
 
-        self.editEdificio = function(event) {
-		    $mdDialog.show(
-		      $mdDialog.alert()
-		        .title('Secondary Action')
-		        .textContent('Secondary actions can be used for one click actions')
-		        .ariaLabel('Secondary click demo')
-		        .ok('Neat!')
-		        .targetEvent(event)
-		  );
-		};
+        self.editEdificio = function(ev, edificio) {
+            edificioService.setEdificio(edificio);
+            edificioService.setNew(false);
 
-        self.newEdificio = function(ev) {
-           $mdDialog.show({
-              templateUrl: '../views/new-edificio.html',
+		    $mdDialog.show({
+              templateUrl: '../views/manage-edificio.html',
               parent: angular.element(document.body),
               targetEvent: ev,
               clickOutsideToClose: true,
               fullscreen: $scope.customFullscreen
           });
+		};
+
+        self.newEdificio = function(ev) {
+            var edInicial = {nome: "", descricao: "", atividade: "",
+                    caracteristicasFisicas: {localizacao: {setor: "", bloco: ""}, 
+                    area: 0, n_pavimentos: 0, ocupacaoMedia: 0,
+                    n_baciasSanitarias: 0, n_torneiras: 0, 
+                    n_duchas: 0, n_chuveiros: 0, n_pias: 0, 
+                    volumeReservatorio: 0}, geolocalizacao: {latitude: 0, 
+                    longitude: 0}, mediaEsperada: 0};
+
+            edificioService.setEdificio(edInicial);
+            edificioService.setNew(true);
+
+            $mdDialog.show({
+              templateUrl: '../views/manage-edificio.html',
+              parent: angular.element(document.body),
+              targetEvent: ev,
+              clickOutsideToClose: true,
+              fullscreen: $scope.customFullscreen
+            });
         };
 }]);
