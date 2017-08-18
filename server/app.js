@@ -38,6 +38,8 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
+var relatorioRouter = require('./routes/relatorioApi.js');
+var routes = require('./routes/api.js')
 var universidadeRouter = require('./routes/universidadeApi.js')
 // define middleware
 var caixaRouter = require('./routes/caixaDeAguaApi.js');
@@ -67,6 +69,7 @@ app.use('/', edificioRouter.data.router);
 app.use('/', userRouter);
 app.use('/', universidadeRouter);
 app.use('/', estatisticaRouter.data.router);
+app.use('/', relatorioRouter);
 app.use('/', caixaRouter);
 
 app.get('/', function(req, res) {
