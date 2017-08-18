@@ -119,8 +119,6 @@ angular.module('myApp')
         $http.get("/caixa", { params: { withAlerta: true } })
             .then(function (response, ev) {
                 $scope.data = response.data;
-                console.log(response.data);
-
                 for (i in response.data) {
                     for (j in response.data[i]) {
                         var edificio = response.data[i][j];
