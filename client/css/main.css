@@ -32,9 +32,19 @@ body{
     overflow: hidden;
 }
 
+#header{
+    top:0;
+    left:0;
+    right:0;
+    height: 75px;
+    position: absolute;
+
+}
+
 .menu-demo-container {
     display:table-cell;
     background-color:#ecf0f1;
+
 }
 
 .menudemoBasicUsage .md-menu-demo {

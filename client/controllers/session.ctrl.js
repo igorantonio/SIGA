@@ -6,37 +6,20 @@ angular.module('myApp')
 
 
             self.changeSessionState = function (ev) {
-
-
                 var isLogged = AuthService.isLoggedIn();
 
                 if (isLogged) {
-                    self.logout(ev);
+                    self.goToPanel(ev);
                 } else {
                     self.login(ev);
                 }
             };
 
-            self.logout = function (ev) {
-                var user = AuthService.getUser();
-
-                var confirm = $mdDialog.confirm()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
-                    .clickOutsideToClose(true)
-                    .title(user.username + ' você está logado. Deseja deslogar?')
-                    .targetEvent(ev)
-                    .ok('Deslogar');
-
-                $mdDialog.show(confirm).then(function () {
-                    AuthService.logout()
-                        .then(function () {
-                            $location.path('/');
-                        });
-                });
+            self.goToPanel = function (ev){
+                $location.path('/panel');
             };
 
             self.login = function (ev) {
-
                 $mdDialog.show({
                     templateUrl: '../views/login-dialog.html',
                     parent: angular.element(document.body),

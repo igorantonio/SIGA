@@ -18,7 +18,7 @@ md-tab-body {
 	width: 100%;
 }
 
-md-dialog-content {
+.popup md-dialog-content {
 	height: 80vh;
 }
 md-icon{
@@ -113,5 +113,22 @@ md-tabs .md-tab.md-active md-icon{
 	font-weight: bold;
 	margin: 0px;
 	display: inline;
+}
+
+#register-ed-dialog {
+    height: 90vh;
+    width: 120vh;
+}
+
+#register-ed-dialog > form > md-toolbar > div {
+    background-color: #5e7ed2;
+}
+
+#register-ed-dialog > form > md-dialog-actions > button:disabled {
+    background-color: #e6e6e6;
+}
+
+#register-ed-dialog > form > md-dialog-actions > button:not([disabled]) {
+    background-color: #5e7ed2;
 }
 

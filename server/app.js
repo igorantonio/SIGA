@@ -42,6 +42,7 @@ var universidadeRouter = require('./routes/universidadeApi.js')
 // define middleware
 var caixaRouter = require('./routes/caixaDeAguaApi.js');
 
+
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
@@ -67,7 +68,6 @@ app.use('/', edificioRouter.data.router);
 app.use('/', userRouter);
 app.use('/', universidadeRouter);
 app.use('/', estatisticaRouter.data.router);
-app.use('/', caixaRouter);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));

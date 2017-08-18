@@ -16,6 +16,11 @@ myApp.config(function ($routeProvider) {
       controller: 'registerController',
       access: {restricted: true}
     })
+    .when('/panel', {
+      templateUrl: 'views/panel.html',
+      controller: 'PanelController as ctrl',
+      access: {restricted: true}
+    })
     .otherwise({
       redirectTo: '/'
     });
