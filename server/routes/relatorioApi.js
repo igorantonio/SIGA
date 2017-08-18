@@ -2,10 +2,11 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var json2csv = require('json2csv');
+var PDFDocument = require('pdfkit');
 var fs = require('fs');
 var Edificio = require('../models/edificio.js');
 
-router.get('/relatorio/edificio/:edificio_id', function(req, res) {
+router.get('/relatorio/edificio/:edificio_id/csv', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
     if (error) res.send(edificio);
 
@@ -88,5 +89,33 @@ router.get('/relatorio/edificio/:edificio_id', function(req, res) {
     res.json(edificio);
     });
 }); 
+
+router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(error, edificio) {
+    if (error) res.send(edificio);
+
+    var doc = new PDFDocument;
+    var filePath = edificio.nome + '.pdf';
+    doc.pipe(fs.createWriteStream(filePath)); 
+                  
+    doc.fontSize(18);                    
+    doc.text(edificio.nome, {
+        align: 'center'
+    });
+
+    doc.moveDown();
+    doc.fontSize(10);
+    doc.text(edificio.descricao);
+    doc.text(edificio.atividade);
+
+    doc.moveDown();
+    var route = "/estatistica/edificio/:edificio_id";
+    var stats = $http.get(route);
+    doc.text(stats);
+
+    doc.end();
+    res.json(edificio);
+    });
+});
 
 module.exports = router;
