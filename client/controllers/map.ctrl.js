@@ -21,6 +21,25 @@ angular.module('myApp')
         }
     };
 
+    var tanks ={
+        todos: {
+            size: new google.maps.Size(30, 30),
+            scaledSize: new google.maps.Size(30, 30),
+            url: '../lib/icons/tank_blue.png'
+        },
+        alerta0: {
+            size: new google.maps.Size(30, 30),
+            scaledSize: new google.maps.Size(30, 30),
+            url: '../lib/icons/tank_yellow.png'
+        },
+        alerta1: {
+            size: new google.maps.Size(30, 30),
+            scaledSize: new google.maps.Size(30, 30),
+            url: '../lib/icons/tank_red.png'
+        }
+
+    };
+
     function addMarker(edificio, icon, caixe) {
         if (self.markers.hasOwnProperty(edificio._id)) {
             self.markers[edificio._id].setIcon(icon);
@@ -31,7 +50,7 @@ angular.module('myApp')
         var location = { 
             lat: parseFloat(edificio.geolocalizacao.latitude), 
             lng: parseFloat(edificio.geolocalizacao.longitude) 
-        };
+        }
 
         var marker = new google.maps.Marker({
             position: location,
@@ -108,7 +127,7 @@ angular.module('myApp')
                         // the following line checks if the json edificio object have the required params to be drawn
                         if (edificio.hasOwnProperty('geolocalizacao')
                             && edificio['geolocalizacao'].hasOwnProperty('latitude')) {
-                            addMarker(edificio, icons[i], true);
+                            addMarker(edificio, tanks[i], true);
                         };
                     }
                 }

@@ -86,12 +86,12 @@ router.get('/caixa/:caixa_id', function(req, res) {
 router.post('/caixa/:caixa_id', function(req, res) {
    	CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
         if (error) res.send(caixa);
-        caixa.nome = req.body.nome;
-        caixa.descricao = req.body.descricao;
-        caixa.geolocalizacao = req.body.geolocalizacao;
-        caixa.caracteristicasFisicas = req.body.caracteristicasFisicas;
-        caixa.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
-        caixa.vazamentos = req.body.vazamentos;
+        if (req.body.nome) caixa.nome = req.body.nome;
+        if (req.body.descricao) caixa.descricao = req.body.descricao;
+        if (req.body.geolocalizacao) caixa.geolocalizacao = req.body.geolocalizacao;
+        if (req.body.caracteristicasFisicas) caixa.caracteristicasFisicas = req.body.caracteristicasFisicas;
+        if (req.body.historicoConsumo) caixa.historicoConsumo = req.body.historicoConsumo; // Pessoalmente eu acho melhor que essa linha não exista;
+        if (req.body.vazamentos) caixa.vazamentos = req.body.vazamentos;
         caixa.save(function(error) {
             if (error){ 
               res.status(400).json({err: error});
@@ -254,6 +254,31 @@ router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
                 res.json(caixa.historicoConsumo);
             }
         });
+    });
+});
+
+// Delete (Consumo)
+router.delete('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
+    CaixaDeAgua.findById(req.params.caixa_id, function(err, caixa) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            consumosFiltrados = [];
+            caixa.historicoConsumo.forEach(function(consumo) {
+                if (consumo._id != req.params.consumo_id) {
+                    consumosFiltrados.push(consumo);
+                }
+            });
+
+            caixa.historicoConsumo = consumosFiltrados;
+            caixa.save(function(err) {
+                if (err) {
+                    res.status(400).json({error: err});
+                } else {
+                    res.status(200).json({message: 'Consumo removido.'});
+                }
+            });
+        }
     });
 });
 

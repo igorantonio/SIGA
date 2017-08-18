@@ -10,6 +10,8 @@ var path = require('path');
 var passport = require('passport');
 var localStrategy = require('passport-local' ).Strategy;
 var nvd3 = require('nvd3');
+var favicon = require('serve-favicon');
+
 
 // mongoose
 mongoose.connect('mongodb://localhost/mean-auth');
@@ -26,6 +28,11 @@ var Edificio = require('./models/edificio.js');
 
 // create instance of express
 var app = express();
+
+// favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+
 
 // require routes
 var userRouter = require('./routes/userApi.js');
@@ -74,6 +81,8 @@ app.use(function(req, res, next) {
   /*next(err);*/
   res.status(404).send('404 - Not found');
 });
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 
 
 /*app.use(function(req, res, next){
