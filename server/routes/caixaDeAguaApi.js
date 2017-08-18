@@ -83,7 +83,7 @@ router.get('/caixa/:caixa_id', function(req, res) {
 });
 
 //UPDATE
-router.post('/caixa/:caixa_id', function(req, res) {
+router.put('/caixa/:caixa_id', function(req, res) {
    	CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
         if (error) res.send(caixa);
         if (req.body.nome) caixa.nome = req.body.nome;
