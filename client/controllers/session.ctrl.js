@@ -8,13 +8,13 @@ angular.module('myApp')
                 var isLogged = AuthService.isLoggedIn();
 
                 if (isLogged) {
-                    self.panel(ev);
+                    self.goToPanel(ev);
                 } else {
-                  self.login(ev);
+                    self.login(ev);
                 }
             };
 
-            self.panel = function (ev){
+            self.goToPanel = function (ev){
                 $location.path('/panel');
             };
 
