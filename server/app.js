@@ -39,7 +39,7 @@ var userRouter = require('./routes/userApi.js');
 var edificioRouter = require('./routes/edificioApi.js');
 var estatisticaRouter = require('./routes/estatisticaApi.js');
 var relatorioRouter = require('./routes/relatorioApi.js');
-var routes = require('./routes/api.js')
+//var routes = require('./routes/api.js')
 var universidadeRouter = require('./routes/universidadeApi.js')
 // define middleware
 var caixaRouter = require('./routes/caixaDeAguaApi.js');
