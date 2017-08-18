@@ -1,9 +1,19 @@
 angular.module('myApp')
   .service('edificioService', function() {
+<<<<<<< HEAD
     
     var edificioId = {};
     var isCaixa = false;
     var UFCG_ID = 0;
+  	var isNew = false;
+  	var edificio = {};
+
+    this.getEdificio = function(){
+      return edificio;
+    };
+    this.setEdificio = function(ed){
+      edificio = ed;
+    }
 
     this.getEdificioId = function(){
       return edificioId;
@@ -28,5 +38,13 @@ angular.module('myApp')
     this.isUFCG = function() {
       return edificioId == UFCG_ID;
     };
+
+    }
+    this.isNew = function(){
+    	return isNew;
+    }
+    this.setNew = function(bool){
+    	isNew = bool;
+    }
 
 });

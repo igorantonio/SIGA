@@ -89,6 +89,7 @@ angular.module('myApp')
         self.markers[edificio._id] = marker;
     };
 
+
     // request the edificios' data from the api and send it to the addMarker method to be drawn
     $scope.loadData = function () {
 
@@ -111,7 +112,6 @@ angular.module('myApp')
             }, function () {
                 $scope.data = "error in fetching data"; //return if error on fetch
             });
-
     };
 
     $scope.loadCaixas = function () {

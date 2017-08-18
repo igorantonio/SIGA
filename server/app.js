@@ -44,6 +44,7 @@ var universidadeRouter = require('./routes/universidadeApi.js')
 // define middleware
 var caixaRouter = require('./routes/caixaDeAguaApi.js');
 
+
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));

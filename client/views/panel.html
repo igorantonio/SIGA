@@ -1,0 +1,35 @@
+<div id="content">
+  <div id="header">
+  <toolbar></toolbar>
+
+  <div class="menu-container" layout-align="center end" layout="column">
+  </div>
+  <div id="divs">
+      <div id="menu">
+          <ul>
+              <li><a href ng-click="ctrl.loadEdificios($event)">Prédios</a></li>
+              <li><a href ng-click="ctrl.loadUsers($event)">Usuários</a></li>
+              <li><a href ng-click="ctrl.logout($event)">Sair</a></li>
+          </ul> 
+      </div>
+      <div id="panel">
+        <div ng-if="ctrl.showEdificio">
+          <md-button class="md-icon-button md-accent pull-right" ng-click="ctrl.newEdificio($event)">
+            <md-icon md-svg-icon="../lib/icons/plus.svg"></md-icon>
+          </md-button>
+          <br>
+          <md-list id="panel-list">
+            <md-subheader class="md-no-sticky">Edifícios cadastrados</md-subheader>
+            <md-list-item class="secondary-button-padding" ng-repeat="d in ctrl.data">
+              <p> {{d.nome}}</p>
+              <md-button class="md-secondary" ng-click="ctrl.editEdificio($event,d)">Editar</md-button>
+            </md-list-item>
+          </md-list>          
+        </div>
+
+        <div ng-if='ctrl.showUser'>
+          <div ng-include="'views/panel-signup.html'"></div>
+        </div>
+      </div>
+  </div>
+</div>

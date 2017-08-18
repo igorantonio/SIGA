@@ -15,10 +15,9 @@ angular.module('myApp')
                 $scope.disabled = true;
 
                 // call register from service
-                AuthService.register(self.username, self.password)
+                AuthService.register(self.username, self.password, self.confirm_pass)
                 // handle success
                     .then(function () {
-                        $location.path('/');
                         self.disabled = false;
                         self.registerForm = {};
                         self.close();
@@ -30,7 +29,6 @@ angular.module('myApp')
                         self.disabled = false;
                         self.registerForm = {};
                     });
-
             };
 
         }]);

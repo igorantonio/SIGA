@@ -1,0 +1,45 @@
+#row {
+	display: grid;
+}
+
+#menu {
+	width: 30%;
+	float: left;
+}
+
+#menu ul {
+	margin: 30%;
+}
+
+#menu ul li {
+	margin: 0px;
+	padding: 0px;
+	border-bottom: 1px solid #CCC;
+	text-align: left;
+	list-style-type: none;
+}
+
+#panel {
+	margin-top: 5%;
+	width: 70%; 
+	float: right;
+}
+
+#divs {
+	overflow:auto;
+	width: 80%;
+  	display: inline-block;
+ }
+
+.menu-container {
+	height: 4vh;
+	width: 100%;
+	background-color: #ecf0f1;
+}
+
+#panel-list {
+	margin-top: 3vh;
+}
+
+
+
