@@ -100,21 +100,21 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
         content: [
             {text: 'Edificação: ' + edificio.nome, fontSize: 20 },
             {text: [
-                { text: 'Descrição Suscinta: ' + edificio.descricao, style: title },
-                { text: 'Atividade Preponderante: ' + edificio.atividade, style:title },
-                { text: 'Características Físicas:', style:title },
-                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco, style:body },
-                { text: 'Área = ' + edificio.caracteristicasFisicas.area + 'm²', style:body },
-                { text: 'Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos, style:body },
-                { text: 'Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia, style:body },
-                { text: 'Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias, style:body },
-                { text: 'Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras, style:body },
-                { text: 'Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas, style:body },
-                { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros, style:body },
-                { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias, style:body },
-                { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³', style:body },
-                { text: 'Consumo de Água', style: title },
-                { text: 'Por Dia:', style: body }] 
+                { text: 'Descrição Suscinta: ' + edificio.descricao, style: 'title' },
+                { text: 'Atividade Preponderante: ' + edificio.atividade, style:'title' },
+                { text: 'Características Físicas:', style:'title' },
+                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco, style:'body' },
+                { text: 'Área = ' + edificio.caracteristicasFisicas.area + 'm²', style:'body' },
+                { text: 'Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos, style:'body' },
+                { text: 'Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia, style:'body' },
+                { text: 'Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias, style:'body' },
+                { text: 'Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras, style:'body' },
+                { text: 'Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas, style:'body' },
+                { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros, style:'body' },
+                { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias, style:'body' },
+                { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³', style:'body' },
+                { text: 'Consumo de Água', style: 'title' },
+                { text: 'Por Dia:', style: 'body' }] 
             },
             {table: {
                 headerRows: 1,
@@ -157,7 +157,7 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     doc.text('Consumo Máximo:');
     doc.text('Consumo Mínimo:');*/
     res.send(docDefinition);
-    res.json(edificio);
+    //res.json(edificio);
     });
 });
 

@@ -34,7 +34,6 @@ angular.module('myApp')
 		
 
 		$scope.loadData = function () {
-			console.log('aqui',edificioService.isCaixa());
 			if (edificioService.isCaixa()) {
 			ROUTE = CAIXA_ROUT;
 
