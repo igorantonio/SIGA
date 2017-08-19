@@ -93,6 +93,11 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
     if (error) res.send(edificio);
 
+    var consumos = [];
+    for (var i = 0; i < edificio.historicoConsumo.length; i++) {
+        consumos[i, 0] = edificio.historicoConsumo[i].data.getDate() + '/' + edificio.historicoConsumo[i].data.getMonth() + '/' + edificio.historicoConsumo[i].data.getFullYear();
+        consumos[i, 1] = edificio.historicoConsumo[i].consumo.toString();
+    };
 
     var filePath = edificio.nome + '.pdf';
     var style= {
@@ -105,38 +110,49 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
             }
         };
 
-    
-
     var docDefinition = {
         content: [
-            {text: 'Edificação: ' + edificio.nome, fontSize: 20 },
+            {text: 'Edificação: ' + edificio.nome + '\n', fontSize: 20 },
             {text: [
-                { text: 'Descrição Suscinta: ' + edificio.descricao, style: style['title'] },
-                { text: 'Atividade Preponderante: ' + edificio.atividade, style:'title' },
-                { text: 'Características Físicas:', style:'title' },
-                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco, style: style['body'] },
-                { text: 'Área = ' + edificio.caracteristicasFisicas.area + 'm²', style:'body' },
-                { text: 'Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos, style:'body' },
-                { text: 'Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia, style:'body' },
-                { text: 'Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias, style:'body' },
-                { text: 'Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras, style:'body' },
-                { text: 'Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas, style:'body' },
-                { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros, style:'body' },
-                { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias, style:'body' },
-                { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³', style:'body' },
-                { text: 'Consumo de Água', style: 'title' },
-                { text: 'Por Dia:', style: 'body' }] 
+                { text: 'Descrição Suscinta: ', style: style['title'] }, { text: edificio.descricao + '\n', fontSize: 16},
+                { text: 'Atividade Preponderante: ', style: style['title'] }, { text: edificio.atividade + '\n', fontSize:16},
+                { text: 'Características Físicas:' + '\n', style: style['title'] },
+                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco + '\n', style: style['body'] },
+                { text: 'Área = ' + edificio.caracteristicasFisicas.area + 'm²' + '\n', style: style['body'] },
+                { text: 'Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos + '\n', style: style['body'] },
+                { text: 'Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia + '\n', style: style['body'] },
+                { text: 'Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias + '\n', style: style['body'] },
+                { text: 'Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras + '\n', style: style['body'] },
+                { text: 'Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas + '\n', style: style['body'] },
+                { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros + '\n', style: style['body'] },
+                { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias + '\n', style: style['body'] },
+                { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³' + '\n' + '\n', style: style['body'] },
+                { text: 'Consumo de Água' + '\n', style: style['title'] },
+                { text: 'Por Dia:' + '\n', style: style['body'] }] 
             },
             {table: {
                 headerRows: 1,
 
                 body: [
-                    [ 'First', 'Second', 'Third', 'The last one' ],
-                    [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                    [ { text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4' ]
+                    ['DIA', 'CONSUMO (m³)'],
+                    consumos
                     ]
                 }
-            }
+            },
+            { text: 'Por Mês:' + '\n', style: style['body'] },
+            {table: {
+                headerRows: 1,
+
+                body: [
+                    [ 'MÊS', 'CONSUMO (m³)']
+                    ]
+                }
+            },
+            {text: [
+                { text: '\n'},
+                { text: 'Média: ' + '\n', style: style['body'] },
+                { text: 'Maior Consumo: ' + '\n', style: style['body'] },
+                { text: 'Menor Consumo: ' + '\n', style: style['body'] }]}
         ],
         
     };

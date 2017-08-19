@@ -83,7 +83,7 @@ angular.module('myApp')
                 return q.promise;
             }
             $scope.pdf = function(){
-                pdfMake.createPdf($scope.docDefinition).open();
+                pdfMake.createPdf($scope.docDefinition).download();
             };
 
             var init = function () {
