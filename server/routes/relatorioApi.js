@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var json2csv = require('json2csv');
-var PDFDocument = require('pdfkit');
 var fs = require('fs');
 var Edificio = require('../models/edificio.js');
 
@@ -94,35 +93,52 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
     if (error) res.send(edificio);
 
-    var doc = new PDFDocument;
+
     var filePath = edificio.nome + '.pdf';
-    doc.pipe(fs.createWriteStream(filePath)); 
-                  
-    doc.fontSize(20);                    
-    doc.text('Edificação: ' + edificio.nome, {
-        align: 'center'
-    });
 
-    doc.moveDown();
-    doc.fontSize(16);
-    doc.text('Descrição Suscinta: ' + edificio.descricao);
+    var docDefinition = {
+        content: [
+            {text: 'Edificação: ' + edificio.nome, fontSize: 20 },
+            {text: [
+                { text: 'Descrição Suscinta: ' + edificio.descricao, style: title },
+                { text: 'Atividade Preponderante: ' + edificio.atividade, style:title },
+                { text: 'Características Físicas:', style:title },
+                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco, style:body },
+                { text: 'Área = ' + edificio.caracteristicasFisicas.area + 'm²', style:body },
+                { text: 'Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos, style:body },
+                { text: 'Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia, style:body },
+                { text: 'Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias, style:body },
+                { text: 'Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras, style:body },
+                { text: 'Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas, style:body },
+                { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros, style:body },
+                { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias, style:body },
+                { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³', style:body },
+                { text: 'Consumo de Água', style: title },
+                { text: 'Por Dia:', style: body }] 
+            },
+            {table: {
+                headerRows: 1,
 
-    doc.moveDown();
-    doc.text('Atividade Preponderante: ' + edificio.atividade);
+                body: [
+                    [ 'First', 'Second', 'Third', 'The last one' ],
+                    [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
+                    [ { text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4' ]
+                    ]
+                }
+            }
+        ],
+        style: {
+            title: {
+                fontSize: 16,
+                bold: true
+            },
+            body: {
+                fontSize: 14
+            }
+        }
+    };
 
-    doc.moveDown();
-    doc.text('Características Físicas:');
-    doc.fontSize(14);
-    doc.text('Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco);
-    doc.text('Área = ' + edificio.caracteristicasFisicas.area + 'm²');
-    doc.text('Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos);
-    doc.text('Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia);
-    doc.text('Nº Bacias Sanitárias = ' + edificio.caracteristicasFisicas.n_baciasSanitarias);
-    doc.text('Nº Torneiras = ' + edificio.caracteristicasFisicas.n_torneiras);
-    doc.text('Nº Duchas = ' + edificio.caracteristicasFisicas.n_duchas);
-    doc.text('Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros);
-    doc.text('Nº Pias = ' + edificio.caracteristicasFisicas.n_pias);
-    doc.text('Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³');
+/*
 
     doc.moveDown();
     doc.fontSize(16);
@@ -139,9 +155,8 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     doc.text('Consumo Médio:');
     doc.text('Consumo Médio Esperado:');
     doc.text('Consumo Máximo:');
-    doc.text('Consumo Mínimo:');
-
-    doc.end();
+    doc.text('Consumo Mínimo:');*/
+    res.send(docDefinition);
     res.json(edificio);
     });
 });
