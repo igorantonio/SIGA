@@ -53,4 +53,19 @@ angular.module('myApp')
                         console.log('muito ruim');
                     });
             };
+
+            self.deleteEdificio = function(){
+                // initial values
+                $scope.error = false;
+                $scope.disabled = true;
+
+                $http.delete('/edificio/' + self.edificio._id)
+                    .success(function(){
+                        self.close();
+                        console.log('muito bom');
+                    })
+                    .error(function(){
+                        console.log('muito ruim');
+                    });
+            };
 }]);

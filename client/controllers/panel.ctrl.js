@@ -28,25 +28,32 @@ angular.module('myApp')
                 self.showEdificio = false;
             };
 
-            self.logout = function (ev) {
+            self.logoutDialog = function (ev) {
                 self.showEdificio = false;
                 self.showUser = true;
 
                 var user = AuthService.getUser();
 
-                var confirm = $mdDialog.confirm()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
-                    .clickOutsideToClose(true)
-                    .title(user.username + ', você está logado. Deseja deslogar?')
-                    .targetEvent(ev)
-                    .ok('Deslogar');
-
-                $mdDialog.show(confirm).then(function () {
-                    AuthService.logout()
-                        .then(function () {
-                            $location.path('/');
-                        });
+                $mdDialog.show({
+                    templateUrl: '../views/logout.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
                 });
+            };
+
+            self.logout = function() {
+                AuthService.logout()
+                    .then(function () {
+                        $location.path('/');
+                    });
+
+                self.close();
+            };
+
+            self.close = function(){
+                $mdDialog.cancel();
             };
 
             self.updatePassword = function () {
@@ -103,6 +110,36 @@ angular.module('myApp')
                 });
             };
 
+            self.deleteEdificio = function(ev, user) {
+                self.delUser = user;
+
+                console.log(self.delUser);
+
+                $mdDialog.show({
+                    templateUrl: '../views/del-user.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            }
+
+            self.deleteUser = function() {
+
+                // initial values
+                $scope.error = false;
+                $scope.disabled = true;
+
+                $http.delete("/userDelete", {username: self.user_email})
+                    .success(function(){
+                        self.close();
+                        console.log('muito bom');
+                    })
+                    .error(function(){
+                        console.log('muito ruim');
+                    });
+            };
+
             self.editEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
@@ -115,6 +152,19 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+            self.deleteEdificio = function(ev, edificio) {
+                edificioService.setEdificio(edificio);
+                edificioService.setNew(false);
+
+                $mdDialog.show({
+                    templateUrl: '../views/del-edificio.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            }
 
             self.newEdificio = function (ev) {
                 var edInicial = {

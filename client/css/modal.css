@@ -18,9 +18,10 @@ md-tab-body {
 	width: 100%;
 }
 
-.popup md-dialog-content {
+md-dialog-content {
 	height: 80vh;
 }
+
 md-icon{
 	color: rgba(88, 98, 113, 0.8);
 }
@@ -28,6 +29,7 @@ md-icon{
 md-tabs .md-tab.md-active md-icon{
 	color: #18355b;
 }
+
 .content-tab1 {
 	margin: 3%;
 	color: #192332;
@@ -95,6 +97,7 @@ md-tabs .md-tab.md-active md-icon{
 	background-color: #d3d6d1;
 	color: #5E7ED2;
 }
+
 .content-tab2 {
 	font-family: :'Roboto';
 	margin: 3%;
@@ -116,19 +119,22 @@ md-tabs .md-tab.md-active md-icon{
 }
 
 #register-ed-dialog {
-    height: 90vh;
+	height: 100%;
     width: 120vh;
+    margin: 3%;
+	color: #192332;
 }
 
-#register-ed-dialog > form > md-toolbar > div {
-    background-color: #5e7ed2;
+.blue {
+	background-color: #192332 !important;
 }
 
-#register-ed-dialog > form > md-dialog-actions > button:disabled {
-    background-color: #e6e6e6;
+md-divider {
+	margin-top: 3vh !important;
+	margin-bottom: 3vh !important; 
 }
 
-#register-ed-dialog > form > md-dialog-actions > button:not([disabled]) {
-    background-color: #5e7ed2;
+h2 {
+	color: #192332;
+	font-weight: 500;
 }
-
