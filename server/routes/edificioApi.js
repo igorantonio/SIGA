@@ -88,7 +88,6 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         consumo = req.body.consumo;
         for (var i = 1; i <= qDias; i++) {
             data = new Date(datas[i-1]);
-            console.log(data);
             novoConsumo = {
                 data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
                 consumo: consumo/qDias
@@ -432,7 +431,6 @@ router.get('/edificio/:edificio_id', function(req, res) {
 
 // Create (Edificio)
 router.post('/edificio', function(req, res) {
-    console.log('post edificio');
     var edificio = new Edificio();
     edificio.nome = req.body.nome;
     edificio.descricao = req.body.descricao;
