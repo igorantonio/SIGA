@@ -95,15 +95,26 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
 
 
     var filePath = edificio.nome + '.pdf';
+    var style= {
+            title: {
+                fontSize: 16,
+                bold: true
+            },
+            body: {
+                fontSize: 14
+            }
+        };
+
+    
 
     var docDefinition = {
         content: [
             {text: 'Edificação: ' + edificio.nome, fontSize: 20 },
             {text: [
-                { text: 'Descrição Suscinta: ' + edificio.descricao, style: 'title' },
+                { text: 'Descrição Suscinta: ' + edificio.descricao, style: style['title'] },
                 { text: 'Atividade Preponderante: ' + edificio.atividade, style:'title' },
                 { text: 'Características Físicas:', style:'title' },
-                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco, style:'body' },
+                { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco, style: style['body'] },
                 { text: 'Área = ' + edificio.caracteristicasFisicas.area + 'm²', style:'body' },
                 { text: 'Nº de Pavimentos = ' + edificio.caracteristicasFisicas.n_pavimentos, style:'body' },
                 { text: 'Ocupação Média = ' + edificio.caracteristicasFisicas.ocupacaoMedia, style:'body' },
@@ -127,15 +138,7 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
                 }
             }
         ],
-        style: {
-            title: {
-                fontSize: 16,
-                bold: true
-            },
-            body: {
-                fontSize: 14
-            }
-        }
+        
     };
 
 /*
