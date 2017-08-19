@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var moment = require('moment');
 var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
@@ -64,16 +65,37 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
               res.status(400).json({err: 'Campo de data não informado.'});
-
     };
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) {res.send(edificio);}
-        data = new Date(req.body.data);
-        novoConsumo = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
-            consumo: req.body.consumo
+
+    var qDias = 1;
+    if (req.body.qDias && req.body.qDias >= 1) {
+        qDias = req.body.qDias;
+    }
+
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        }
+
+        dataFinal = moment(req.body.data);
+        dataInicial = dataFinal.subtract(qDias, 'days');
+        var datas = []
+        for(var i = 1; i <= qDias; i++){
+            mData = dataInicial.add(1, 'days');
+            data = new Date(mData);
+            datas.push(data);
         };
-        edificio.historicoConsumo.push(novoConsumo);
+        consumo = req.body.consumo;
+        for (var i = 1; i <= qDias; i++) {
+            data = new Date(datas[i-1]);
+            console.log(data);
+            novoConsumo = {
+                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                consumo: consumo/qDias
+            };
+            edificio.historicoConsumo.push(novoConsumo);
+        };
+
         edificio.save(function(err) {
             if (err) {
                 res.status(400).json({error: err});
