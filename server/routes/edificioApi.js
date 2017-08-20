@@ -43,14 +43,22 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
             if (req.query.inicio != null && req.query.fim != null) {
                 consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
             };
+
+            
+            if(req.query.granularidade != null){
+                consumos = granularidade(consumos,req.query.granularidade);
+            }else{
+                consumos = granularidade(consumos,'day');
+            }
+
             consumosFiltrados = [];
-            consumos.forEach(function(cd) {
+            for (key in consumos){
                 var newConsumo = {
-                    x: cd.data.getTime(),
-                    y: cd.consumo
+                    x: new Date(key).getTime(),
+                    y: consumos[key]
                 };
                 consumosFiltrados.push(newConsumo);
-            });
+            };
             consumosFiltrados.sort(function(a, b) {
               return a.x - b.x;
              });
@@ -60,6 +68,25 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 
     )
 });
+
+var granularidade = function(historicoConsumo, granularidade){
+    novosConsumos = {};
+    historicoConsumo.forEach(function(consumo){
+        auxmoment = moment(consumo.data);
+        auxmoment = auxmoment.startOf(granularidade);
+        novaData = new Date(auxmoment);
+        consumo.data = novaData;
+        if (novosConsumos[novaData]==null){
+            novosConsumos[novaData] =  consumo.consumo;
+        }else{
+            novosConsumos[novaData] = novosConsumos[novaData] +consumo.consumo;
+        };
+       
+    });
+    
+
+    return novosConsumos;
+};
 
 // Create (Consumo)
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
