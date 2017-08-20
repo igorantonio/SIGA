@@ -125,6 +125,7 @@ angular.module('myApp')
                     clickOutsideToClose: true,
                     fullscreen: $scope.customFullscreen
                 });
+
             };
 
             self.editEdificio = function (ev, edificio) {
