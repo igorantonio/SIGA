@@ -136,8 +136,8 @@ router.get('/relatorio/edificio/:edificio_id/csv', function(req, res) {
 
 router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
-    if (err) {
-        res.status(400).json({error: err});
+    if (error) {
+        res.status(400).json({error: error});
     }
 
     consumos    = edificio.historicoConsumo;

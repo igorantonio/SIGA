@@ -8,6 +8,12 @@ angular.module('myApp')
   	var edificio = {};
     var granularidade = 'day';
 
+
+    this.setGranularidade = function(granularidade){
+      granularidade = granularidade;
+
+    };
+
     this.getGranularidade = function(){
       return granularidade;
     };
