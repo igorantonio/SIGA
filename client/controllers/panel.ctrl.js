@@ -110,20 +110,6 @@ angular.module('myApp')
                 });
             };
 
-            self.deleteEdificio = function(ev, user) {
-                self.delUser = user;
-
-                console.log(self.delUser);
-
-                $mdDialog.show({
-                    templateUrl: '../views/del-user.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen
-                });
-            }
-
             self.deleteUser = function() {
 
                 // initial values
