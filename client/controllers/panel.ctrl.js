@@ -26,6 +26,13 @@ angular.module('myApp')
             self.loadUsers = function (ev) {
                 self.showUser = true;
                 self.showEdificio = false;
+
+                $http.get("/userIndex")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
             };
 
             self.logout = function (ev) {
@@ -114,6 +121,10 @@ angular.module('myApp')
                     clickOutsideToClose: true,
                     fullscreen: $scope.customFullscreen
                 });
+            };
+
+            self.deleteUser = function (ev, user) {
+                
             };
 
             self.newEdificio = function (ev) {
