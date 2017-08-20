@@ -1,7 +1,8 @@
 angular.module('myApp')
-	.controller('ChartController', ['$scope', 'edificioService', '$http', function ($scope, edificioService, $http) {
+	.controller('ChartController', ['$scope', 'edificioService', '$http', 'd3', function ($scope, edificioService, $http, d3) {
 		
-		$scope.type = 'detalhado';
+		$scope.type = 'year';
+		$scope.gran = edificioService.getGranularidade();
 		$scope.data = [{
 			key: 'Data',
 			values: [{
@@ -23,7 +24,8 @@ angular.module('myApp')
 				x: 5,
 				y: 0
 			}],
-			area: true
+			area: true,
+			gran: 'year',
 		}];
 
 		var ED_ROUT = "/edificio/" + edificioService.getEdificioId() + "/consumo";
@@ -34,7 +36,6 @@ angular.module('myApp')
 		
 
 		$scope.loadData = function () {
-			console.log('aqui',edificioService.isCaixa());
 			if (edificioService.isCaixa()) {
 			ROUTE = CAIXA_ROUT;
 
@@ -46,9 +47,9 @@ angular.module('myApp')
 			ROUTE = ED_ROUT;
 			};
 
-			$http.get(ROUTE)
+			$http.get(ROUTE, {params: {granularidade: $scope.gran}})
 				.then(function (response, ev) {
-					$scope.data = [{ key: 'Data', values: response.data, area: true }];
+					$scope.data = [{ key: 'Data', values: response.data, area: true, gran: $scope.gran, ticks: getTicks(response.data, $scope.gran) }];
 
 				}, function () {
 					$scope.data = "error in fetching data"; //return if error on fetch
@@ -57,6 +58,29 @@ angular.module('myApp')
 
 		var load = function () {
 			$scope.loadData();
+		};
+
+		var diasDaSemana = ['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sábado'];
+		var getTicks = function(xy,granularidade){
+			ticks = [];
+			if (granularidade == "year"){
+				xy.forEach(function(x,y){
+					ano = moment(x).year();
+					if (ticks.indexOf(ano)==-1){
+						ticks.push(ano);
+					}
+				});
+			}else if (granularidade == "day"){
+				xy.forEach(function(x){
+					dia = x.x;
+					if (ticks.indexOf(dia)==-1){
+						ticks.push(dia);
+					}
+				})
+
+			};
+
+			return ticks;
 		};
 
 		load();
@@ -75,12 +99,14 @@ angular.module('myApp')
 		return {
 			restrict: 'E',
 			scope: {
+				gran: '=',
 				data: '=',
 				height: '@',
-				width: '@'
+				width: '@',
 			},
 			template: '<svg ng-attr-height="{{ height }}" ng-attr-width="{{ width }}"></svg>',
-			link: function (scope, element) {
+			link: function (scope, element, ) {
+
 				var svg = element.find('svg'),
 					chart;
 
@@ -96,6 +122,7 @@ angular.module('myApp')
 					}
 				});
 
+
 				scope.$on('chartloaded', update);
 
 				nv.addGraph(function () {
@@ -106,15 +133,32 @@ angular.module('myApp')
 					//chart.x(function(d){return new Date(d)});
 					//chart.lines.xScale(d3.time.scale.utc());
 					chart.xScale(d3.time.scale());
+					if (scope.data[0]['gran'] == 'year'){
+						chart.xAxis
+						.axisLabel('Período')
+						.tickFormat(function (d) { return d3.time.format('%Y')(new Date(d)); })
+						.ticks(d3.time.dats, 1)
+						.tickValues(scope.data[0]['ticks']);
 
-
-					chart.xAxis
-						.axisLabel('data')
+					}else if(scope.data[0]['gran'] == 'day'){
+						chart.xAxis
+						.axisLabel('Período')
+						.tickFormat(function (d) { return d3.time.format('%b %d')(new Date(d)); })
+						.ticks(d3.time.dats, 1)
+						.tickValues(scope.data[0]['ticks']);
+					}
+					else{
+						chart.xAxis
+						.axisLabel('Período')
 						.tickFormat(function (d) { return d3.time.format('%b %d %y')(new Date(d)); })
 						.ticks(d3.time.dats, 1);
 
+					};
+					
+
+					
 					chart.yAxis
-						.axisLabel('y')
+						.axisLabel('Consumo')
 						.tickFormat(d3.format('.2f'));
 
 					nv.utils.windowResize(function () {

@@ -154,6 +154,7 @@ angular.module('myApp')
                 });
             }
 
+
             self.newEdificio = function (ev) {
                 var edInicial = {
                     nome: "", descricao: "", atividade: "",

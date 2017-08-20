@@ -6,6 +6,11 @@ angular.module('myApp')
     var UFCG_ID = 0;
   	var isNew = false;
   	var edificio = {};
+    var granularidade = 'day';
+
+    this.getGranularidade = function(){
+      return granularidade;
+    };
 
     this.getEdificio = function(){
       return edificio;

@@ -3,7 +3,9 @@
   "scripts": {
     "start": "node server/server.js",
     "serve": "nodemon server/server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "doc": "jsdoc server/routes/edificioApi.js"
+
   },
   "dependencies": {
     "angular-openlayers-directive": "^1.19.3",
@@ -25,6 +27,9 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "pdfkit" : "0.8.3",
+    "serve-favicon" : "2.1.5",
+    "apidoc": "0.17.6"
   }
 }
