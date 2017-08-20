@@ -30,5 +30,4 @@ angular.module('myApp')
                         self.registerForm = {};
                     });
             };
-
         }]);

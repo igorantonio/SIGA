@@ -4,18 +4,10 @@
 
         <form name="form" ng-submit="ctrl.operation()">
 
-            <md-toolbar>
-                <div class="md-toolbar-tools">
-                    <h2>{{ctrl.message()}}</h2>
-                    <span flex></span>
-                    <md-button class="md-icon-button" ng-click="ctrl.close()">
-                        <md-icon aria-label="Close dialog">close</md-icon>
-                    </md-button>
-                </div>
-            </md-toolbar>
-
             <md-dialog-content>
                 <div class="md-dialog-content">
+                  <h2>{{ctrl.message()}}</h2>
+                  <md-divider></md-divider>
                   <p>Informações gerais:</p>
                   <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
@@ -108,7 +100,8 @@
             <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
 
             <md-dialog-actions layout="row">
-                <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary" md-autofocus>Concluído!</md-button>
+                <md-button ng-click="ctrl.close()" class="md-raised">Cancelar</md-button>
+                <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary blue" md-autofocus>Concluído</md-button>
             </md-dialog-actions>
         </form>
     </md-dialog>

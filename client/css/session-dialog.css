@@ -6,15 +6,3 @@
     max-width: 90%;
     width: 500px;
 }
-
-#session-dialog > form > md-toolbar > div {
-    background-color: #5e7ed2;
-}
-
-#session-dialog > form > md-dialog-actions > button:disabled {
-    background-color: #e6e6e6;
-}
-
-#session-dialog > form > md-dialog-actions > button:not([disabled]) {
-    background-color: #5e7ed2;
-}

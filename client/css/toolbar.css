@@ -3,7 +3,6 @@
     top:0;
     left:0;
     right:0;
-    position: relative;
 }
 
 .toolbar p {
@@ -11,7 +10,6 @@
     font-size: 12px;
     font-weight: 800;
     color: rgb(240, 244, 244);
-    margin: 2px 0;
     position: relative;
     /*width: auto;*/
 }
@@ -56,6 +54,7 @@
     font-family: 'Lato';
     font-size: 42px;
     margin-top: 18px;
+    margin-bottom: 0px;
 }
 
 #eye {
