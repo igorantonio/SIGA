@@ -1,0 +1,16 @@
+<div ng-controller="ManagerUserController as ctrl" ng-cloak="" ng-app="app">
+
+    <md-dialog id="session-dialog" aria-label="Logout" ng-cloak>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <h2>Deletar usuário</h2>
+                    <md-divider></md-divider>
+                    <p>Deseja deletar {{ctrl.delUser.username}}?</p>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button ng-click="ctrl.close()" class="md-raised">Cancelar</md-button>
+                <md-button type="submit" ng-click="ctrl.deleteUser()" class="md-raised md-primary blue" md-autofocus>Deletar</md-button>
+            </md-dialog-actions>
+    </md-dialog>    
+</div>
