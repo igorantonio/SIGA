@@ -1,6 +1,6 @@
-<div ng-controller="PanelController as ctrl" ng-cloak="" ng-app="app">
+<div ng-controller="ManageEdificioController as ctrl" ng-cloak="" ng-app="app">
 
-    <md-dialog id="session-dialog" aria-label="Logout" ng-cloak>
+    <md-dialog id="session-dialog" aria-label="delEdificio" ng-cloak>
             <md-dialog-content>
                 <div class="md-dialog-content">
                     <h2>Deletar edifício</h2>
@@ -10,7 +10,7 @@
             </md-dialog-content>
             <md-dialog-actions layout="row">
                 <md-button ng-click="ctrl.close()" class="md-raised">Cancelar</md-button>
-                <md-button type="submit" ng-click="ctrl.deleteUser()" class="md-raised md-primary blue" md-autofocus>Deletar</md-button>
+                <md-button type="submit" ng-click="ctrl.deleteEdificio()" class="md-raised md-primary blue" md-autofocus>Deletar</md-button>
             </md-dialog-actions>
     </md-dialog>    
 </div>
