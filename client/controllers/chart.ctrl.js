@@ -158,7 +158,6 @@ angular.module('myApp')
 		};
 
 		$scope.setYear = function(){
-			console.log("YEHOUW");
 			edificioService.setGranularidade('year');
 			$scope.data[0]['gran'] = $scope.gran;
 			$scope.data = $scope.data;

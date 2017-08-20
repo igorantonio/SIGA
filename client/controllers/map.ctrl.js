@@ -179,7 +179,6 @@ angular.module('myApp')
             .then(function (response, ev) {
                 for (var i in response.data) {
                     var edificio = response.data[i];
-                    console.log(edificio);
                     if (nivelAlerta == '1') {
                         self.markers[edificio._id].setIcon(icons.alerta1);
                         self.markers[edificio._id].setVisible(true);
@@ -239,7 +238,6 @@ angular.module('myApp')
                     q.resolve(info.data);
                     self.estatisticas = info.data.estatisticas;
                 }, function (info) {
-                    console.log('Rota errada')
                 });
                 return q.promise;
             }
