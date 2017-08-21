@@ -122,6 +122,20 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
             edificio.historicoConsumo.push(novoConsumo);
         };
 
+        alerta = false;
+        aux = [];
+        aux = emAlerta([edificio], 0.3);
+        if (Object.keys(aux).length > 0) alerta = true;
+
+        if (alerta) {
+            data = new Date(req.body.data);
+            novoAlerta = {
+                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                checked: true
+            };
+            edificio.alertas.push(novoAlerta);
+        }
+
         edificio.save(function(err) {
             if (err) {
                 res.status(400).json({error: err});
