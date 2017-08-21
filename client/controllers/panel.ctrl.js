@@ -1,6 +1,6 @@
 angular.module('myApp')
-    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', '$q',
-        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, $q) {
+    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
+        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
 
             var self = this;
             self.showEdificio = false;
@@ -118,6 +118,9 @@ angular.module('myApp')
             };
 
             self.deleteUser = function(ev, user1) {
+                userService.setUser(user1);
+                userService.setNew(false);
+
                 $mdDialog.show({
                     templateUrl: '../views/del-user.html',
                     parent: angular.element(document.body),
