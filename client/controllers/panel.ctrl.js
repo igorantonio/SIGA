@@ -26,6 +26,13 @@ angular.module('myApp')
             self.loadUsers = function (ev) {
                 self.showUser = true;
                 self.showEdificio = false;
+
+                $http.get("/userIndex")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
             };
 
             self.logoutDialog = function (ev) {
@@ -110,10 +117,8 @@ angular.module('myApp')
                 });
             };
 
-            self.deleteEdificio = function(ev, user) {
-                self.delUser = user;
-
-                console.log(self.delUser);
+            self.deleteUserDialog = function(ev, user) {
+                AuthService.setDelUser(user);
 
                 $mdDialog.show({
                     templateUrl: '../views/del-user.html',
@@ -123,22 +128,6 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             }
-
-            self.deleteUser = function() {
-
-                // initial values
-                $scope.error = false;
-                $scope.disabled = true;
-
-                $http.delete("/userDelete", {username: self.user_email})
-                    .success(function(){
-                        self.close();
-                        console.log('muito bom');
-                    })
-                    .error(function(){
-                        console.log('muito ruim');
-                    });
-            };
 
             self.editEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
