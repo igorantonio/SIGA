@@ -1,6 +1,6 @@
 angular.module('myApp')
-    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', '$q',
-        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, $q) {
+    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
+        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
 
             var self = this;
             self.showEdificio = false;
@@ -117,8 +117,8 @@ angular.module('myApp')
                 });
             };
 
-            self.deleteUserDialog = function(ev, user) {
-                AuthService.setDelUser(user);
+            self.deleteUser = function(ev, user) {
+                userService.setUser(user);
 
                 $mdDialog.show({
                     templateUrl: '../views/del-user.html',
@@ -127,7 +127,7 @@ angular.module('myApp')
                     clickOutsideToClose: true,
                     fullscreen: $scope.customFullscreen
                 });
-            }
+            };
 
             self.editEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
@@ -154,6 +154,7 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             }
+
 
             self.newEdificio = function (ev) {
                 var edInicial = {

@@ -36,15 +36,6 @@
 
         <div ng-if='ctrl.showUser'>
           <div ng-include="'views/panel-signup.html'"></div>
-          <md-list id="panel-list">
-            <md-subheader class="md-no-sticky">Usuários cadastrados</md-subheader>
-            <md-list-item class="secondary-button-padding" ng-repeat="u in ctrl.data">
-              <p> {{u.username}}</p>
-              <md-button class="md-icon-button md-accent" ng-click="ctrl.deleteUserDialog($event,u)">
-                <md-icon md-svg-icon="../lib/icons/erase.svg"></md-icon>
-              </md-button>
-            </md-list-item>
-          </md-list> 
         </div>
       </div>
   </div>

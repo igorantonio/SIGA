@@ -3,7 +3,6 @@ angular.module('myApp')
         function ($scope, $location, AuthService, $mdDialog, $http) {
 
             var self = this;
-            self.user = AuthService.getDelUser();
 
             self.close = function () {
                 $mdDialog.cancel();
@@ -29,21 +28,6 @@ angular.module('myApp')
                         self.errorMessage = "Something went wrong!";
                         self.disabled = false;
                         self.registerForm = {};
-                    });
-            };
-
-            self.deleteUser = function() {
-                // initial values
-                $scope.error = false;
-                $scope.disabled = true;
-
-                $http.delete("/userDelete", {email: self.user.username})
-                    .success(function(){
-                        self.close();
-                        console.log('muito bom');
-                    })
-                    .error(function(){
-                        console.log('muito ruim');
                     });
             };
         }]);

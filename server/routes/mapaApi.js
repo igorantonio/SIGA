@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-
+/*
+*
+*/
 router.get('/map', function(req,res){
 	var map;
       function initMap() {

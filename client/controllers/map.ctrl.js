@@ -150,7 +150,8 @@ angular.module('myApp')
     };
 
     self.initMap();
-    // removes the non necessary info from the map
+
+
 
     self.showOnlySetor = function (setor) {
         for (key in self.markers) {

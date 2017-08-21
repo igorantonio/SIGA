@@ -3,12 +3,9 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
 
         // create user variable
         var user = null;
-        var delUser = null;
 
         // return available functions for use in the controllers
         return ({
-            getDelUser: getDelUser,
-            setDelUser: setDelUser,
             isLoggedIn: isLoggedIn,
             getUserStatus: getUserStatus,
             login: login,
@@ -16,15 +13,7 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             register: register,
             getUser: getUser
         });
-
-        function getDelUser() {
-            return delUser;
-        }
-
-        function setDelUser(us) {
-            delUser = us;
-        }
-
+        
         function isLoggedIn() {
             if (user.status) {
                 return true;

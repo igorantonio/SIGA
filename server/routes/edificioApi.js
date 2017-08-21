@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var moment = require('moment');
 var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 
 ///change the geolocalization of a building
+
 router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
         if (error) res.send(edificio);
@@ -41,14 +43,22 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
             if (req.query.inicio != null && req.query.fim != null) {
                 consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
             };
+
+            
+            if(req.query.granularidade != null){
+                consumos = granularidade(consumos,req.query.granularidade);
+            }else{
+                consumos = granularidade(consumos,'day');
+            }
+
             consumosFiltrados = [];
-            consumos.forEach(function(cd) {
+            for (key in consumos){
                 var newConsumo = {
-                    x: cd.data.getTime(),
-                    y: cd.consumo
+                    x: new Date(key).getTime(),
+                    y: consumos[key]
                 };
                 consumosFiltrados.push(newConsumo);
-            });
+            };
             consumosFiltrados.sort(function(a, b) {
               return a.x - b.x;
              });
@@ -59,20 +69,59 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
     )
 });
 
+var granularidade = function(historicoConsumo, granularidade){
+    novosConsumos = {};
+    historicoConsumo.forEach(function(consumo){
+        auxmoment = moment(consumo.data);
+        auxmoment = auxmoment.startOf(granularidade);
+        novaData = new Date(auxmoment);
+        consumo.data = novaData;
+        if (novosConsumos[novaData]==null){
+            novosConsumos[novaData] =  consumo.consumo;
+        }else{
+            novosConsumos[novaData] = novosConsumos[novaData] +consumo.consumo;
+        };
+       
+    });
+    
+
+    return novosConsumos;
+};
+
 // Create (Consumo)
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
               res.status(400).json({err: 'Campo de data não informado.'});
-
     };
-    Edificio.findById(req.params.edificio_id, function(error, edificio) {
-        if (error) {res.send(edificio);}
-        data = new Date(req.body.data);
-        novoConsumo = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
-            consumo: req.body.consumo
+
+    var qDias = 1;
+    if (req.body.qDias && req.body.qDias >= 1) {
+        qDias = req.body.qDias;
+    }
+
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        }
+
+        dataFinal = moment(req.body.data);
+        dataInicial = dataFinal.subtract(qDias, 'days');
+        var datas = []
+        for(var i = 1; i <= qDias; i++){
+            mData = dataInicial.add(1, 'days');
+            data = new Date(mData);
+            datas.push(data);
         };
-        edificio.historicoConsumo.push(novoConsumo);
+        consumo = req.body.consumo;
+        for (var i = 1; i <= qDias; i++) {
+            data = new Date(datas[i-1]);
+            novoConsumo = {
+                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                consumo: consumo/qDias
+            };
+            edificio.historicoConsumo.push(novoConsumo);
+        };
+
         edificio.save(function(err) {
             if (err) {
                 res.status(400).json({error: err});
@@ -195,6 +244,37 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
         });
     });
 });
+
+
+
+// Update (Vazamento)
+router.put('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            vazamentosAtualizado = [];
+            edificio.vazamentos.forEach(function(vazamento) {
+                if (vazamento._id == req.params.vazamento_id) {
+                    data = new Date(req.body.data);
+                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.volume) vazamento.volume = req.body.volume;
+                }
+                vazamentosAtualizado.push(vazamento);
+            });
+            edificio.vazamentos = vazamentosAtualizado;
+            edificio.save(function(err) {
+                if (err) {
+                    res.status(400).json({error: err});
+                } else {
+                    res.status(200).json({message: 'Vazamento atualizado.'});
+                }
+            });
+        }
+    });
+});
+
+
 
 // Delete (Vazamento)
 router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res) {
@@ -378,7 +458,6 @@ router.get('/edificio/:edificio_id', function(req, res) {
 
 // Create (Edificio)
 router.post('/edificio', function(req, res) {
-    console.log('post edificio');
     var edificio = new Edificio();
     edificio.nome = req.body.nome;
     edificio.descricao = req.body.descricao;
@@ -431,6 +510,12 @@ router.delete('/edificio/:edificio_id', function(req, res) {
     });
 });
 
+/**
+* Represents a book.
+ * @constructor
+ * @param {string} title - The title of the book.
+ * @param {string} author - The author of the book.
+ */
 var filtrarPorSetor = function(setor, edificios) {
     edificiosFiltrados = [];
     edificios.forEach(function(edificio) {
