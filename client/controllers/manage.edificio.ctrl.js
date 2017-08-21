@@ -20,6 +20,9 @@ angular.module('myApp')
 
             self.close = function () {
                 $mdDialog.cancel();
+                $scope.$emit('closeEdificioEvent', "oi");
+                $scope.$emit('someEvent', [1,2,3]);
+                $scope.$broadcast('someEvent', [1,2,3]);
             };
 
             self.registerEdificio = function() {

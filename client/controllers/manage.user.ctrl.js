@@ -7,15 +7,15 @@ angular.module('myApp')
 
             self.close = function () {
                 $mdDialog.cancel();
+                $scope.$emit('closeUserEvent');
             };
 
             self.deleteUser = function(){
                 // initial values
                 $scope.error = false;
                 $scope.disabled = true;
-                console.log(self.user.username);
 
-                $http.delete('/userDelete', {email: self.user.username})
+                $http.delete('/userDelete/' + self.user.username)
                     .success(function(){
                         self.close();
                         console.log('muito bom');

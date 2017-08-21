@@ -11,6 +11,16 @@ angular.module('myApp')
             var user = AuthService.getUser();
             self.user_email = user.username;
 
+            $scope.$on('closeEdificioEvent', function(event, args) {
+                self.loadEdificios();
+                console.log("closeEd");
+            });
+
+            $scope.$on('closeUserEvent', function(event, args) {
+                self.loadUsers();
+                console.log("closeUs");
+            });
+
             self.loadEdificios = function (ev) {
                 self.showUser = false;
                 self.showEdificio = true;
