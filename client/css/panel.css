@@ -55,3 +55,7 @@
 #panel-list {
 	margin-top: 3vh;
 }
+
+md-list-item {
+	padding-left: 3vh;
+}
