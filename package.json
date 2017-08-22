@@ -4,7 +4,8 @@
     "start": "node server/server.js",
     "serve": "nodemon server/server.js",
     "test": "mocha",
-    "doc": "jsdoc server/routes/edificioApi.js"
+    "doc": "jsdoc server/routes/edificioApi.js",
+    "apidoc": "apidoc -i server/routes"
 
   },
   "dependencies": {

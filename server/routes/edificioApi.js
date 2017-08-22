@@ -24,6 +24,14 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
     });
 });
 
+/**
+ * @api {get} /edificio/:id/consumo Obter informações de consumo de um edificio
+ * @apiName GetUser
+ * @apiGroup Edificio
+ * @apiParam {Number} id Identificador unico para o edificio.
+* @apiParam {String/Date} [ano] Valor para filtrar os consumos do ano referente.
+ *
+ */
 /// Show/Index (Consumo)
 router.get('/edificio/:edificio_id/consumo', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
