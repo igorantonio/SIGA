@@ -1,0 +1,31 @@
+<div ng-controller="ManageEdificioController as ctrl">
+
+    <md-dialog id="add-vazamento-dialog" aria-label="AddVazamento" ng-cloak>
+
+        <form name="form" ng-submit="ctrl.addVazamento()">
+
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                  <h2>Adicionar vazamento</h2>
+                  <md-divider></md-divider>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Volume</label>
+                        <input name="volume" ng-model="ctrl.volume" md-autofocus required />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Data</label>
+                        <input name="data" ng-model="ctrl.data" md-autofocus required />
+                    </md-input-container>
+                  </div>
+            </md-dialog-content>
+
+            <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
+
+            <md-dialog-actions layout="row">
+                <md-button ng-click="ctrl.close()" class="md-raised">Cancelar</md-button>
+                <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary blue" md-autofocus>Concluído</md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</div>

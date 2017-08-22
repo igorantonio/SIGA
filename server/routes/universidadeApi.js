@@ -4,6 +4,7 @@ var passport = require('passport');
 var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
+var Conta = require('../models/contaDeAgua');
 
 router.get('/universidade', function (req, res) {
 
@@ -98,6 +99,96 @@ router.get('/universidade/consumo', function (req, res) {
         res.json(consumos);
 
     })
+});
+
+// Index(ContaDeAgua)
+router.get('/universidade/contaDeAgua', function(req, res) {
+    Conta.find({}, function(err, contas) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            res.status(200).json(contas);
+        }
+    });
+});
+
+// Show(ContaDeAgua)
+router.get('/universidade/contaDeAgua/:conta_id', function(req, res) {
+    Conta.findById(req.params.conta_id, function(err, conta) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            res.status(200).json(conta);
+        }
+    });
+});
+
+// Create(ContaDeAgua)
+router.post('/universidade/contaDeAgua', function(req, res) {
+    var conta = new Conta();
+    if (req.body.valor < 0) {
+        res.status(400).send("Valor deve ser positivo.");
+    }
+    conta.valor = req.body.valor;
+
+    if (!(req.body.mes >=1 && req.body.mes <= 12)) {
+        res.status(400).send("Mês invalido.");
+    }
+    conta.mes = req.body.mes;
+
+    if (req.body.dataDePagamento) conta.dataDePagamento = req.body.dataDePagamento;
+
+    conta.save(function(err) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            res.status(200).json(conta);
+        }
+    });
+});
+
+// Update(ContaDeAgua)
+router.put('/universidade/contaDeAgua/:conta_id', function(req, res) {
+    Conta.findById(req.params.conta_id, function(err, conta) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            if (req.body.valor) {
+                if (req.body.valor < 0) {
+                    res.status(400).send("Valor deve ser positivo.");
+                }
+                conta.valor = req.body.valor;
+            }
+
+            if (req.body.mes) {
+                if (!(req.body.mes >=1 && req.body.mes <= 12)) {
+                    res.status(400).send("Mês invalido.");
+                }
+                conta.mes = req.body.mes;
+            }
+
+            if (req.body.dataDePagamento) conta.dataDePagamento = req.body.dataDePagamento;
+
+            conta.save(function(err) {
+                if (err) {
+                    res.status(400).json({error: err});
+                } else {
+                    res.status(200).json(conta);
+                }
+            });
+        }
+    });
+});
+
+// Delete(ContaDeAgua)
+router.delete('/universidade/contaDeAgua/:conta_id', function(req, res) {
+    Conta.remove(req.params.conta_id, function(err) {
+        if (err) {
+            res.status(400).json({error: err});
+        } else {
+            res.status(200).send("Conta de água removida.");
+        }
+    });
 });
 
 module.exports = router;

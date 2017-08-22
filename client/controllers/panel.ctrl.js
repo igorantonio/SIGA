@@ -1,19 +1,31 @@
 angular.module('myApp')
-    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', '$q',
-        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, $q) {
+    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
+        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
 
             var self = this;
             self.showEdificio = false;
             self.showUser = false;
+            self.showVazamento = false;
 
             self.data = [];
 
             var user = AuthService.getUser();
             self.user_email = user.username;
 
+            $scope.$on('closeEdificioEvent', function(event, args) {
+                self.loadEdificios();
+                console.log("closeEd");
+            });
+
+            $scope.$on('closeUserEvent', function(event, args) {
+                self.loadUsers();
+                console.log("closeUs");
+            });
+
             self.loadEdificios = function (ev) {
                 self.showUser = false;
                 self.showEdificio = true;
+                self.showVazamento = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -26,8 +38,22 @@ angular.module('myApp')
             self.loadUsers = function (ev) {
                 self.showUser = true;
                 self.showEdificio = false;
+                self.showVazamento = false;
 
                 $http.get("/userIndex")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
+            };
+
+            self.loadVazamentos = function (ev) {
+                self.showUser = false;
+                self.showEdificio = false;
+                self.showVazamento = true;
+
+                $http.get("/edificio")
                     .then(function (response, ev) {
                         self.data = response.data;
                     }, function () {
@@ -38,6 +64,7 @@ angular.module('myApp')
             self.logoutDialog = function (ev) {
                 self.showEdificio = false;
                 self.showUser = true;
+                self.showVazamento = false;
 
                 var user = AuthService.getUser();
 
@@ -117,7 +144,9 @@ angular.module('myApp')
                 });
             };
 
-            self.deleteUser = function(ev, user1) {
+            self.deleteUser = function(ev, user) {
+                userService.setUser(user);
+
                 $mdDialog.show({
                     templateUrl: '../views/del-user.html',
                     parent: angular.element(document.body),
@@ -125,7 +154,6 @@ angular.module('myApp')
                     clickOutsideToClose: true,
                     fullscreen: $scope.customFullscreen
                 });
-
             };
 
             self.editEdificio = function (ev, edificio) {
@@ -181,4 +209,18 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+            self.addVazamento = function(ev, edificio) {
+                edificioService.setEdificio(edificio);
+                edificioService.setNew(false);
+
+                $mdDialog.show({
+                    templateUrl: '../views/add-vazamento.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            };
+
         }]);
