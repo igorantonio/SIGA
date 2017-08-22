@@ -9,6 +9,7 @@
           <ul>
               <li><a id="option" href ng-click="ctrl.loadEdificios($event)">Prédios</a></li>
               <li><a id="option" href ng-click="ctrl.loadUsers($event)">Usuários</a></li>
+              <li><a id="option" href ng-click="ctrl.loadVazamentos($event)">Vazamentos</a></li>
               <li><a id="option" href ng-click="ctrl.logoutDialog($event)">Sair</a></li>
           </ul> 
       </div>
@@ -36,6 +37,9 @@
 
         <div ng-if='ctrl.showUser'>
           <div ng-include="'views/panel-signup.html'"></div>
+        </div>
+        <div ng-if='ctrl.showVazamento'>
+          <div ng-include="'views/panel-vazamento.html'"></div>
         </div>
       </div>
   </div>
