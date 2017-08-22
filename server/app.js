@@ -67,7 +67,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // routes
 app.use('/', edificioRouter.data.router);
-app.use('/', userRouter);
+app.use('/', userRouter.data.router);
 app.use('/', universidadeRouter);
 app.use('/', estatisticaRouter.data.router);
 app.use('/', relatorioRouter);
