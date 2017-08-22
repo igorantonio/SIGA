@@ -20,6 +20,9 @@ angular.module('myApp')
 
             self.close = function () {
                 $mdDialog.cancel();
+                $scope.$emit('closeEdificioEvent', "oi");
+                $scope.$emit('someEvent', [1,2,3]);
+                $scope.$broadcast('someEvent', [1,2,3]);
             };
 
             self.registerEdificio = function() {
@@ -60,6 +63,22 @@ angular.module('myApp')
                 $scope.disabled = true;
 
                 $http.delete('/edificio/' + self.edificio._id)
+                    .success(function(){
+                        self.close();
+                        console.log('muito bom');
+                    })
+                    .error(function(){
+                        console.log('muito ruim');
+                    });
+            };
+
+            self.addVazamento = function() {
+
+                // initial values
+                $scope.error = false;
+                $scope.disabled = true;
+
+                $http.post('/edificio/' + self.edificio._id + '/vazamentos/new', {volume: self.volume, data: self.data})
                     .success(function(){
                         self.close();
                         console.log('muito bom');

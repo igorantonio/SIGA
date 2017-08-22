@@ -35,10 +35,10 @@ router.put('/userPassword', function(req, res) {
 });
 
 //Delete
-router.delete('/userDelete', function(req, res) {
-  User.remove(req.body.email, function(err, usuario) {
+router.delete('/userDelete/:email', function(req, res) {
+  User.remove({username: req.params.email}, function(err) {
     if (err) {
-      res.status(400).json({error: err});
+      res.status(400).json(err);
     } else {
       res.status(200).json({status: 'Administrador removido do sistema.'});
     }

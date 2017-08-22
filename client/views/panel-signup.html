@@ -14,12 +14,15 @@
     <md-button ng-style="{color: '#E91E63', 'font-size':'10px', height:'16px'}"
     ng-click="ctrl.showEditPass = !ctrl.showEditPass">Atualizar senha</md-button>
   </md-list-item>
-  <md-subheader class="md-no-sticky">Usuários cadastrados</md-subheader>
-  <md-list-item class="secondary-button-padding" ng-repeat="d in ctrl.data">
-      <p> {{d.username}}</p>
-      <md-button class="md-secondary" ng-click="ctrl.deleteUser($event,d)">Remover</md-button>
-  </md-list-item>
-
+  <md-list id="panel-list">
+    <md-subheader class="md-no-sticky">Usuários cadastrados</md-subheader>
+    <md-list-item class="secondary-button-padding" ng-repeat="u in ctrl.data">
+      <p> {{u.username}}</p>
+      <md-button class="md-icon-button md-accent" ng-click="ctrl.deleteUser($event,u)">
+        <md-icon md-svg-icon="../lib/icons/erase.svg"></md-icon>
+      </md-button>
+    </md-list-item>
+  </md-list> 
 </md-list>
 
 <div ng-if="ctrl.showEditPass">
