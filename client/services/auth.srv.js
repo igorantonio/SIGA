@@ -13,7 +13,7 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http',
             register: register,
             getUser: getUser
         });
-
+        
         function isLoggedIn() {
             if (user.status) {
                 return true;

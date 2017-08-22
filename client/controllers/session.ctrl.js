@@ -28,5 +28,4 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 })
             };
-
     }]);
