@@ -5,7 +5,7 @@ var moment = require('moment');
 var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
-var Email = require('../email.js');
+var users = require('./userApi.js');
 
 ///change the geolocalization of a building
 
@@ -129,7 +129,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         if (Object.keys(aux).length > 0) alerta = true;
 
         if (alerta) {
-            Email.sendEmail(edificio);
+            users.data.sendEmail(edificio);
 
             data = new Date(req.body.data);
             novoAlerta = {

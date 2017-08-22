@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var User = require('../models/user.js');
+var Email = require('../email.js');
 
 //Index
 router.get('/userIndex', function(req, res) {
@@ -115,4 +116,22 @@ router.get('/status', function(req, res) {
   }
 });
 
+var sendEmail = function(ed) {
+  User.find({}, function(err, usuarios) {
+    usuarios.forEach(function(user){
+      Email.send(ed, user.username);
+    })
+  });
+}
+
 module.exports = router;
+
+module.exports.data = {
+  router: router,
+  sendEmail: function(ed) {
+    return sendEmail(ed);
+    }
+}
+
+
+
