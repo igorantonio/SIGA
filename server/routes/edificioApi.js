@@ -134,7 +134,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
             data = new Date(req.body.data);
             novoAlerta = {
                 data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
-                checked: true
+                checked: false
             };
             edificio.alertas.push(novoAlerta);
         }
