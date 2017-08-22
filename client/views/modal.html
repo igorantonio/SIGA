@@ -21,11 +21,11 @@
                             </div>
                             <p class="ed-atividade">Atividade: {{ctrl.pontoDeConsumo.atividade}}</p>
                             <p class="ed-descricao">{{ctrl.pontoDeConsumo.descricao}}</p>
-                            <p>Consumo total: {{ctrl.estatisticas.total}}</p>
-                            <p>Consumo médio: {{ctrl.estatisticas.media}}</p>
-                            <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}}</p>
-                            <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
-                            <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
+                            <p>Consumo total: {{ctrl.estatisticas.total}} m³</p>
+                            <p>Consumo médio: {{ctrl.estatisticas.media}} m³</p>
+                            <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}} m³</p>
+                            <p>Consumo máximo: {{ctrl.estatisticas.maximo}} m³</p>
+                            <p>Consumo mínimo: {{ctrl.estatisticas.minimo}} m³</p>
                             
                             <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
                                 <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
@@ -43,7 +43,7 @@
                                     <p>Nº de duchas: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_duchas}}</p>
                                     <p>Nº de chuveiros: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_chuveiros}}</p>
                                     <p>Nº de pias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pias}}</p>
-                                    <p>Volume do reservatório: {{ctrl.pontDeConsumo.caracteristicasFisicas.volumeReservatorio}}</p>
+                                    <p>Volume do reservatório: {{ctrl.pontoDeConsumo.caracteristicasFisicas.volumeReservatorio}} m³</p>
                                 </div>
                             </div>
 

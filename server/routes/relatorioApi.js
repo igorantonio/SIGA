@@ -46,23 +46,6 @@ router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
         }
     };
 
-    var historicoConsumo = [];
-    for (var i = consumos.length - 1; i >= 0; i--) {
-        historicoConsumo[i] = consumos[i].consumo.toString();
-    };
-
-    var historicoDatas = [];
-    for (var i = consumos.length - 1; i >= 0; i--) {
-        historicoDatas[i] = consumos[i].data.toString();
-    };
-
-    var myData = [
-      {
-        'consumo': historicoConsumo,
-        'data': historicoDatas
-      }
-    ];
-
     var fields = [
     {
         label: 'Consumo',
@@ -81,7 +64,7 @@ router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
     };
 
     var csv = json2csv(opts);
-    var filePath = 'Consumos' + edificio.nome + '.csv';
+    var filePath = 'Consumos ' + edificio.nome + '.csv';
  
     fs.writeFile(filePath, csv, function(err) {
         if (err) throw err;
@@ -127,23 +110,6 @@ router.get('/relatorio/edificio/:edificio_id/csv/vazamentos', function(req, res)
             }
         }
     };
-
-    var historicoVazamento = [];
-    for (var i = vazamentos.length - 1; i >= 0; i--) {
-        historicoVazamento[i] = vazamentos[i].volume.toString();
-    };
-
-    var historicoDatas = [];
-    for (var i = vazamentos.length - 1; i >= 0; i--) {
-        historicoDatas[i] = vazamentos[i].data.toString();
-    };
-
-    var myData = [
-      {
-        'volume': historicoVazamento,
-        'data': historicoDatas
-      }
-    ];
 
     var fields = [
     {
@@ -209,17 +175,6 @@ router.get('/relatorio/edificio/:edificio_id/csv/alertas', function(req, res) {
             }
         }
     };
-
-    var historicoDatas = [];
-    for (var i = alertas.length - 1; i >= 0; i--) {
-        historicoDatas[i] = alertas[i].data.toString();
-    };
-
-    var myData = [
-      {
-        'data': historicoDatas
-      }
-    ];
 
     var fields = [
     {
@@ -290,13 +245,25 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
         }
     };
 
-    var consumos = [];
-    for (var i = 0; i < edificio.historicoConsumo.length; i++) {
-        consumos[i, 0] = edificio.historicoConsumo[i].data.getDate() + '/' + edificio.historicoConsumo[i].data.getMonth() + '/' + edificio.historicoConsumo[i].data.getFullYear();
-        consumos[i, 1] = edificio.historicoConsumo[i].consumo.toString();
+    var consumosF = [];
+    for (var i = 0; i < consumos.length; i++) {
+        consumosF[i, 0] = consumos[i].data.getDate() + '/' + consumos[i].data.getMonth() + '/' + consumos[i].data.getFullYear();
+        consumosF[i, 1] = consumos[i].consumo.toString();
     };
 
-    var filePath = edificio.nome + '.pdf';
+    var vazamentosF = [];
+    for (var i = 0; i < vazamentos.length; i++) {
+        vazamentosF[i, 0] = vazamentos[i].data.getDate() + '/' + vazamentos[i].data.getMonth() + '/' + vazamentos[i].data.getFullYear();
+        vazamentosF[i, 1] = vazamentos[i].volume.toString();
+    };
+
+    var alertasF = [];
+    for (var i = 0; i < alertas.length; i++) {
+        alertasF[i, 0] = alertas[i].data.getDate() + '/' + alertas[i].data.getMonth() + '/' + alertas[i].data.getFullYear();
+    };
+
+    var estatisticas = EstatisticaAPI.calculaEstatisticas(consumos);
+
     var style= {
             title: {
                 fontSize: 16,
@@ -311,7 +278,7 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
         content: [
             {text: 'Edificação: ' + edificio.nome + '\n', fontSize: 20 },
             {text: [
-                { text: 'Descrição Suscinta: ', style: style['title'] }, { text: edificio.descricao + '\n', fontSize: 16},
+                { text: 'Descrição Sucinta: ', style: style['title'] }, { text: edificio.descricao + '\n', fontSize: 16},
                 { text: 'Atividade Preponderante: ', style: style['title'] }, { text: edificio.atividade + '\n', fontSize:16},
                 { text: 'Características Físicas:' + '\n', style: style['title'] },
                 { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco + '\n', style: style['body'] },
@@ -324,32 +291,42 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
                 { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros + '\n', style: style['body'] },
                 { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias + '\n', style: style['body'] },
                 { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³' + '\n' + '\n', style: style['body'] },
-                { text: 'Consumo de Água' + '\n', style: style['title'] },
-                { text: 'Por Dia:' + '\n', style: style['body'] }] 
+                { text: 'Consumo de Água' + '\n', style: style['title'] }] 
             },
             {table: {
                 headerRows: 1,
 
                 body: [
-                    ['DIA', 'CONSUMO (m³)'],
-                    consumos
+                    ['DATA', 'CONSUMO (m³)'],
+                    consumosF
                     ]
                 }
             },
-            { text: 'Por Mês:' + '\n', style: style['body'] },
+            { text: '\n' + 'Vazamentos:' + '\n', style: style['title'] },
             {table: {
                 headerRows: 1,
 
                 body: [
-                    [ 'MÊS', 'CONSUMO (m³)']
+                    [ 'DATA', 'VOLUME (m³)'],
+                    vazamentosF
                     ]
                 }
             },
-            {text: [
-                { text: '\n'},
-                { text: 'Média: ' + '\n', style: style['body'] },
-                { text: 'Maior Consumo: ' + '\n', style: style['body'] },
-                { text: 'Menor Consumo: ' + '\n', style: style['body'] }]}
+            { text: '\n' + 'Alertas:' + '\n', style: style['title'] },
+            {table: {
+                headerRows: 1,
+
+                body: [
+                    [ 'DATA'],
+                    alertasF
+                    ]
+                }
+            },
+            { text: '\n' + 'Consumo total: ' + estatisticas.total + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo médio: ' + estatisticas.media + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo médio esperado: ' + edificio.mediaEsperada + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo máximo: ' + estatisticas.maximo + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo mínimo: ' + estatisticas.minimo + 'm³' + '\n', style: style['title'] }
         ],
         
     };

@@ -73,11 +73,17 @@ var verificarMes = function(mes){
 
 var calculaEstatisticas = function(consumos){
   var sum = 0.0;
-  var max = -1;
-  var min = 9999999999;
+  var max = 0;
+  var min = 0;
   var acum = 0;
+  var med = 0;
   var maxdata;
   var mindata;
+  total = consumos.length;
+
+  if (total != 0){
+  var max = -1;
+  var min = 9999999999;
   consumos.forEach(function(cd){
     var consumo = cd.consumo;
     acum += consumo;
@@ -91,8 +97,10 @@ var calculaEstatisticas = function(consumos){
       mindata = cd.data;
     };
   });
-  total = consumos.length;
-  return {total: acum, media: sum/total, total: sum, maximo:max, data_max:maxdata, minimo: min, data_minimo: mindata};
+  med = sum/total;
+  };
+  
+  return {total: acum, media: med, total: sum, maximo:max, data_max:maxdata, minimo: min, data_minimo: mindata};
 };
 
 var filtrarPorAno = function(consumos, ano){
