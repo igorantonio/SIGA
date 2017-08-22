@@ -1,5 +1,6 @@
 angular.module('myApp')
-    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
+    .controller('PanelController', 
+        ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
         function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
 
             var self = this;
@@ -11,16 +12,6 @@ angular.module('myApp')
 
             var user = AuthService.getUser();
             self.user_email = user.username;
-
-            $scope.$on('closeEdificioEvent', function(event, args) {
-                self.loadEdificios();
-                console.log("closeEd");
-            });
-
-            $scope.$on('closeUserEvent', function(event, args) {
-                self.loadUsers();
-                console.log("closeUs");
-            });
 
             self.loadEdificios = function (ev) {
                 self.showUser = false;
@@ -77,7 +68,7 @@ angular.module('myApp')
                 });
             };
 
-            self.logout = function() {
+            self.logout = function () {
                 AuthService.logout()
                     .then(function () {
                         $location.path('/');
@@ -86,7 +77,7 @@ angular.module('myApp')
                 self.close();
             };
 
-            self.close = function(){
+            self.close = function () {
                 $mdDialog.cancel();
             };
 
@@ -144,7 +135,7 @@ angular.module('myApp')
                 });
             };
 
-            self.deleteUser = function(ev, user) {
+            self.deleteUser = function (ev, user) {
                 userService.setUser(user);
 
                 $mdDialog.show({
@@ -152,8 +143,29 @@ angular.module('myApp')
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen
+                    fullscreen: $scope.customFullscreen,
+                    controller: ManageUserController,
+                    controllerAs: 'ctrl'
                 });
+
+                function ManageUserController($scope, $http, $mdDialog, userService) {
+                    
+                    this.user = userService.getUser();
+                
+                    this.deleteUser = function(){
+                        // initial values
+                        $scope.error = false;
+                        $scope.disabled = true;
+        
+                        $http.delete('/userDelete/' + this.user.username)
+                            .success(function(){                                
+                                self.loadUsers();                                
+                                $mdDialog.hide();
+                            })
+                            .error(function(){
+                            });
+                    };
+                }                
             };
 
             self.editEdificio = function (ev, edificio) {
@@ -169,7 +181,7 @@ angular.module('myApp')
                 });
             };
 
-            self.deleteEdificio = function(ev, edificio) {
+            self.deleteEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
 
@@ -178,10 +190,30 @@ angular.module('myApp')
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen
+                    fullscreen: $scope.customFullscreen,
+                    controller: ManageEdificioController,
+                    controllerAs: 'ctrl'
                 });
-            }
 
+                function ManageEdificioController($scope, $http, $mdDialog, edificioService) {
+                    
+                    this.edificio = edificioService.getEdificio();
+                    
+                    this.deleteEdificio = function() {
+                        
+                        $scope.error = false;
+                        $scope.disabled = true;
+        
+                        $http.delete('/edificio/' + this.edificio._id)
+                            .success(function(){
+                                $mdDialog.hide();
+                                self.loadEdificios();
+                            })
+                            .error(function(){
+                            });
+                    };
+                } 
+            }
 
             self.newEdificio = function (ev) {
                 var edInicial = {
@@ -210,7 +242,7 @@ angular.module('myApp')
                 });
             };
 
-            self.addVazamento = function(ev, edificio) {
+            self.addVazamento = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
 

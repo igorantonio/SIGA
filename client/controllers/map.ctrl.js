@@ -218,6 +218,7 @@ angular.module('myApp')
             controller: MyDialogController,
             controllerAs: 'ctrl'
         });
+        
         function MyDialogController($scope, $mdDialog, $q, $http) {
             var self = this;
             $scope.showInfos = false;
