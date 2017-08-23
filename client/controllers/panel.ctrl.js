@@ -204,7 +204,7 @@ angular.module('myApp')
 
             self.newEdificio = function (ev) {
                 var edInicial = {
-                    nome: "", descricao: "", atividade: "",
+                    nome: "", descricao: "", atividade: "", img: "",
                     caracteristicasFisicas: {
                         localizacao: { setor: "", bloco: "" },
                         area: 0, n_pavimentos: 0, ocupacaoMedia: 0,

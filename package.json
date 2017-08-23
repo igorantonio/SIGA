@@ -4,7 +4,9 @@
     "start": "node server/server.js",
     "serve": "nodemon server/server.js",
     "test": "mocha",
-    "doc": "jsdoc server/routes/edificioApi.js"
+    "doc": "jsdoc server/routes/edificioApi.js",
+    "apidoc": "apidoc -i server/routes"
+
   },
   "dependencies": {
     "angular-openlayers-directive": "^1.19.3",
@@ -30,6 +32,6 @@
     "passport-local-mongoose": "^4.0.0",
     "pdfkit": "0.8.3",
     "serve-favicon": "2.1.5",
-    "supertest": "^3.0.0"
-  }
+    "supertest": "^3.0.0",
+    "nodemailer": "4.0.1"  }
 }
