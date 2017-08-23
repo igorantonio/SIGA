@@ -90,10 +90,11 @@
                         <input name="n_pias" ng-model="ctrl.edificio.caracteristicasFisicas.n_pias" md-autofocus required />
                     </md-input-container>
                   </div>
+                  <p>Selecione uma imagem:</p>
                   <md-input-container>
                     <input type="file" ng-file-select="onFileSelect($files)" ng-model="ctrl.edificio.img">
                   </md-input-container>
-                  <img ng-src="{{ctrl.edificio.img}}"/>
+                  <img id="foto" ng-src="{{ctrl.edificio.img}}"/>
                 </div>
             </md-dialog-content>
 
