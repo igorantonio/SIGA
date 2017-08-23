@@ -1,0 +1,34 @@
+<div ng-cloak="" ng-app="app">
+    
+        <md-dialog id="session-dialog" aria-label="Adicione nova conta de água" ng-cloak>
+    
+            <form name="addContaForm" ng-submit="ctrl.registrarAlteracao()">
+                <md-dialog-content>
+                    <div class="md-dialog-content">
+                        <h2>Registrar</h2>
+                        <md-divider></md-divider>
+                        <md-input-container class="md-block">
+                            <label>Valor</label>
+                            <input type="number" name="valor" ng-model="ctrl.valor" md-autofocus required />
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Mes</label>
+                            <input type="number" name="mes" ng-model="ctrl.mes" required />
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Data</label>
+                            <input type="date" name="data" ng-model="ctrl.data" required />
+                        </md-input-container>
+                    </div>
+                </md-dialog-content>
+    
+                <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
+    
+                <md-dialog-actions layout="row">
+                    <md-button ng-click="ctrl.close()" class="md-raised">Cancelar</md-button>
+                    <md-button type="submit" ng-disabled="addContaForm.$invalid" class="md-raised md-primary blue" md-autofocus>Adicionar</md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+        
+ </div>

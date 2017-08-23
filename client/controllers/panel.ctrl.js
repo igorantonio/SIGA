@@ -7,6 +7,7 @@ angular.module('myApp')
             self.showEdificio = false;
             self.showUser = false;
             self.showVazamento = false;
+            self.showContasDeAgua = false;
 
             self.data = [];
 
@@ -45,6 +46,20 @@ angular.module('myApp')
                 self.showVazamento = true;
 
                 $http.get("/edificio")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
+            };
+
+            self.loadContasDeAgua = function (ev) {
+                self.showUser = false;
+                self.showEdificio = false;
+                self.showVazamento = false;
+                self.showContasDeAgua = true;
+
+                $http.get("/universidade/contaDeAgua")
                     .then(function (response, ev) {
                         self.data = response.data;
                     }, function () {
@@ -222,6 +237,23 @@ angular.module('myApp')
                   });
 
             }
+
+            self.newContaDialog = function (ev) {
+                
+                                 var confirm = $mdDialog.confirm({
+                                    templateUrl: '../views/manage-conta.html',
+                                    parent: angular.element(document.body),
+                                    targetEvent: ev,
+                                    clickOutsideToClose: true,
+                                    fullscreen: $scope.customFullscreen,
+                                    controller: "ManageContaDialogController",
+                                    controllerAs: 'ctrl',
+                                  })
+                                  $mdDialog.show(confirm).then(function() {                                    
+                                    
+                                  });
+                
+                            };
 
             function ManageUserController($scope, $http, $mdDialog, userService) {
 
