@@ -1,13 +1,19 @@
 <h2>Gerenciar contas de água</h2>
 <md-divider></md-divider>
+<md-button class="md-icon-button md-accent pull-right" ng-click="ctrl.newContaDialog($event)">
+  <md-icon md-svg-icon="../lib/icons/add.svg"></md-icon>
+</md-button>
 <br>
 
 <md-list id="panel-list">
   <md-subheader class="md-no-sticky">Contas registradas</md-subheader>
   <md-list-item class="secondary-button-padding" ng-repeat="c in ctrl.data">
-    <p> Mês: {{c.mes}} | Valor: R${{c.valor}} | Data de Pagamento: {{c.dataDePagaento}}</p>
-    <md-button class="md-icon-button md-accent" ng-click="ctrl.editConta($event, c)">
+    <p> Mês: {{c.mes}} | Valor: R${{c.valor}} | Data de Pagamento: {{c.dataDePagamento}}</p>
+    <md-button class="md-icon-button md-accent" ng-click="ctrl.editContaDialog($event, c)">
       <md-icon md-svg-icon="../lib/icons/edit.svg"></md-icon>
+    </md-button>
+    <md-button class="md-icon-button md-accent" ng-click="ctrl.deleteConta($event, c)">
+      <md-icon md-svg-icon="../lib/icons/erase.svg"></md-icon>
     </md-button>
   </md-list-item>
 </md-list>        

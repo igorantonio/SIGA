@@ -51,10 +51,8 @@ angular.module('myApp')
                 $http.put('/edificio/' + self.edificio._id, self.edificio)
                     .success(function(){
                         self.close();
-                        console.log('muito bom');
                     })
                     .error(function(){
-                        console.log('muito ruim');
                     });
             };
 

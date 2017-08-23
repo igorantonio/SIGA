@@ -205,7 +205,7 @@ router.put('/universidade/contaDeAgua/:conta_id', function(req, res) {
 
 // Delete(ContaDeAgua)
 router.delete('/universidade/contaDeAgua/:conta_id', function(req, res) {
-    Conta.remove(req.params.conta_id, function(err) {
+    Conta.remove({_id: req.params.conta_id}, function(err) {
         if (err) {
             res.status(400).json({ error: err });
         } else {
