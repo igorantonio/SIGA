@@ -7,6 +7,10 @@ var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 var users = require('./userApi.js');
 var fs = require('fs');
+   var ANUAL = 'anual';
+                var MENSAL = 'mensal';
+                var DIARIO = 'diario';
+                var DETALHADO = 'detalhado';
 
 ///change the geolocalization of a building
 router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
@@ -55,10 +59,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 
             
             if(req.query.granularidade){
-                var ANUAL = 'anual';
-                var MENSAL = 'mensal';
-                var DIARIO = 'diario';
-                var DETALHADO = 'detalhado';
+             
                 var gran;
                 switch (req.query.granularidade) {
                 case ANUAL:
@@ -597,10 +598,28 @@ var FindEdificio = function(edificio_id, res) {
 
 
 var granularidade = function(historicoConsumo, g){
+    var gran;
+                switch (g) {
+                case ANUAL:
+                    gran = 'year';
+                    break;
+                case MENSAL:
+                    gran = 'month';
+                    break;
+                case DIARIO:
+                    gran = 'day';
+                    break;
+                case DETALHADO:
+                    gran = 'hour';
+                    break;
+                default:
+                    gran = g;
+            };
+
     novosConsumos = {};
     historicoConsumo.forEach(function(consumo){
         auxmoment = moment(consumo.data);
-        auxmoment = auxmoment.startOf(g);
+        auxmoment = auxmoment.startOf(gran);
         novaData = new Date(auxmoment);
         consumo.data = novaData;
         if (novosConsumos[novaData]==null){

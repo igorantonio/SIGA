@@ -7,6 +7,7 @@ var moment = require('moment');
 var Edificio = require('../models/edificio.js');
 var EstatisticaAPI = require('./estatisticaApi.js');
 EstatisticaAPI = EstatisticaAPI.data;
+EdificioAPI = require('./edificioApi.js');
 
 
 var localized = d3.locale({
@@ -39,17 +40,28 @@ router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
             };
 
         granularidade = req.query.granularidade;
-
         if (granularidade) {
             consumos = EdificioAPI.data.granularidade(consumos,granularidade);
         };
-        consumos.forEach(function(consumo){
+        consumosFiltrados = [];
+            for (key in consumos){
+                data = new Date(key);
+                var newConsumo = {
+                    data: data.getTime() - data.getTimezoneOffset() * 60 * 1000,
+                    consumo: consumos[key]
+                };
+                consumosFiltrados.push(newConsumo);
+            };
+            consumosFiltrados.sort(function(a, b) {
+              return a.data - b.data;
+             });
+        consumosFiltrados.forEach(function(consumo){
            switch (granularidade) {
            case 'anual':
-                consumo.data = localized.timeFormat('/%Y')(new Date(consumo.data));
+                consumo.data = localized.timeFormat('%Y')(new Date(consumo.data));
                 break;
             case 'mensal':
-                consumo.data = localized.timeFormat('%d/%m/%Y')(new Date(consumo.data));
+                consumo.data = localized.timeFormat('%m/%Y')(new Date(consumo.data));
                 break;
             case 'diario':
                 consumo.data = localized.timeFormat('%d/%m/%Y')(new Date(consumo.data));
@@ -103,7 +115,7 @@ router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
         },];
 
         var opts = {
-          data: consumos,
+          data: consumosFiltrados,
           fields: fields,
           unwindPath: ['consumo'],
           quotes: ''
