@@ -11,10 +11,9 @@
                         <label>Volume</label>
                         <input name="volume" ng-model="ctrl.volume" md-autofocus required />
                     </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Data</label>
-                        <input name="data" ng-model="ctrl.data" md-autofocus required />
-                    </md-input-container>
+                   
+                        <md-datepicker name="data" ng-model="ctrl.data" md-placeholder="Data" md-open-on-focus></md-datepicker>
+                    
                   </div>
             </md-dialog-content>
 
