@@ -570,6 +570,13 @@ var emAlerta = function(edificios, margem) {
                 total += cd.consumo;
             }
         });
+        flag = false;
+        ed.alertas.forEach(function(a){
+            if(!a.checked) flag = true;
+        })
+        if (flag){
+            edificiosFiltrados.push(ed);
+        }else{
         if (margem == 0.2) {
             if (total >= ed.mediaEsperada + margem * ed.mediaEsperada && (total < (ed.mediaEsperada + 0.3 * ed.mediaEsperada))) {
                 edificiosFiltrados.push(ed);
@@ -577,6 +584,7 @@ var emAlerta = function(edificios, margem) {
         } else if (total >= ed.mediaEsperada + margem * ed.mediaEsperada) {
             edificiosFiltrados.push(ed);
         }
+    }
     });
     return edificiosFiltrados;
 }
