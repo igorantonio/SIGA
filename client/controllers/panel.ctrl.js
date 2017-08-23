@@ -54,7 +54,7 @@ angular.module('myApp')
 
             self.logoutDialog = function (ev) {
                 self.showEdificio = false;
-                self.showUser = true;
+                self.showUser = false;
                 self.showContas = false;
 
                 var user = AuthService.getUser();
