@@ -5,6 +5,22 @@ angular.module('myApp')
         $scope.gran = edificioService.getGranularidade();
 
 
+        var localized = d3.locale({
+		  "decimal": ",",
+		  "thousands": ".",
+		  "grouping": [3],
+		  "currency": ["R$", ""],
+		  "dateTime": "%d/%m/%Y %H:%M:%S",
+		  "date": "%d/%m/%Y",
+		  "time": "%H:%M:%S",
+		  "periods": ["AM", "PM"],
+		  "days": ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+		  "shortDays": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+		  "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+		  "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+		});
+
+
         /* Definição de Variáveis auxiliares
          */
         var GRANULARIDADE_ANO = 'year';
@@ -20,51 +36,6 @@ angular.module('myApp')
             $mdOpenMenu(ev);
         };
 
-
-        /*
-         *Agrupamento de dados
-         */
-
-        this.agrupar = function(index) {
-            var ANUAL = 0;
-            var MENSAL = 1;
-            var DIARIO = 2;
-            var DETALHADO = 3;
-            switch (index) {
-                case ANUAL:
-                    $scope.gran = GRANULARIDADE_ANO;
-                    break;
-                case MENSAL:
-                    $scope.gran = GRANULARIDADE_MES;
-                    break;
-                case DIARIO:
-                    $scope.gran = GRANULARIDADE_DIA;
-                    break;
-                case DETALHADO:
-                    $scope.gran = GRANULARIDADE_HORA;
-                    break;
-                default:
-                    $scope.gran = GRANULARIDADE_DIA;
-            }
-            $scope.update();
-
-
-
-        };
-
-        // Atualização do texto de exibição
-        var updateText = function() {
-            if ($scope.gran == GRANULARIDADE_MES) {
-                $scope.texto_granularidade = "Mensal";
-            } else if ($scope.gran == GRANULARIDADE_ANO) {
-                $scope.texto_granularidade = "Anual"
-
-            } else if ($scope.gran == GRANULARIDADE_DIA) {
-                $scope.texto_granularidade = "Diário"
-            } else if ($scope.gran == GRANULARIDADE_HORA) {
-                $scope.texto_granularidade = "Detalhado"
-            };
-        };
 
         var ED_ROUT = "/edificio/" + edificioService.getEdificioId() + "/consumo";
         var CAIXA_ROUT = "/caixa/" + edificioService.getEdificioId() + "/consumo";
@@ -87,13 +58,7 @@ angular.module('myApp')
         self.finalDate = new Date();
         self.isOpen = false;
 
-        // Recarregar os dados levando em consideração o Range
-        $scope.reload = function() {
-            params.inicio = self.inicialDate;
-            params.fim = self.finalDate;
-            $scope.update();
-            updateText();
-        };
+        
 
 
 
@@ -239,8 +204,11 @@ angular.module('myApp')
                         area: true,
                         gran: $scope.gran,
                         ticks: getTicks(response.data, $scope.gran)
+
                     }];
                     if (chart) updateLook();
+                    $scope.estatisticas = calculaEstatisticas($scope.data[0].values);
+
 
 
                 }, function() {
@@ -248,12 +216,9 @@ angular.module('myApp')
                 });
         };
 
-        var load = function() {
-            $scope.loadData();
-        };
+        
 
 
-        var diasDaSemana = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
         var getTicks = function(xy, granularidade) {
             ticks = [];
             if (granularidade == "year") {
@@ -289,28 +254,108 @@ angular.module('myApp')
             return ticks;
         };
 
-        $scope.setYear = function() {
-            edificioService.setGranularidade('year');
-            $scope.data[0]['gran'] = $scope.gran;
-            $scope.data = $scope.data;
+/*
+         *Agrupamento de dados
+         */
+
+        this.agrupar = function(index) {
+            var ANUAL = 0;
+            var MENSAL = 1;
+            var DIARIO = 2;
+            var DETALHADO = 3;
+            switch (index) {
+                case ANUAL:
+                    $scope.gran = GRANULARIDADE_ANO;
+                    break;
+                case MENSAL:
+                    $scope.gran = GRANULARIDADE_MES;
+                    break;
+                case DIARIO:
+                    $scope.gran = GRANULARIDADE_DIA;
+                    break;
+                case DETALHADO:
+                    $scope.gran = GRANULARIDADE_HORA;
+                    break;
+                default:
+                    $scope.gran = GRANULARIDADE_DIA;
+            }
+            $scope.update();
+
+        };
+
+
+        // Atualização do texto de exibição
+        var updateText = function() {
+            if ($scope.gran == GRANULARIDADE_MES) {
+                $scope.texto_granularidade = "Mensal";
+            } else if ($scope.gran == GRANULARIDADE_ANO) {
+                $scope.texto_granularidade = "Anual"
+
+            } else if ($scope.gran == GRANULARIDADE_DIA) {
+                $scope.texto_granularidade = "Diário"
+            } else if ($scope.gran == GRANULARIDADE_HORA) {
+                $scope.texto_granularidade = "Detalhado"
+            };
+        };
+
+        // Recarregar os dados levando em consideração o Range
+        $scope.reload = function() {
+            params.inicio = self.inicialDate;
+            params.fim = self.finalDate;
+            $scope.update();
+            updateText();
+        };
+
+        $scope.estatisticas = {};
+
+        $scope.estatisticas.total = 0;
+
+
+
+        var calculaEstatisticas = function(consumos){
+		  var sum = 0.0;
+		  var max = -1;
+		  var min = 9999999999;
+		  var acum = 0;
+		  var maxdata;
+		  var mindata;
+		  consumos.forEach(function(cd){
+		    var consumo = cd.y;
+		    acum += consumo;
+		    sum += consumo;
+		    if (consumo> max){
+		      max = consumo;
+		      maxdata = cd.x;
+		    };
+		    if (min > consumo){
+		      min = consumo;
+		      mindata = cd.x;
+		    };
+		  });
+		  total = consumos.length;
+		  if ($scope.gran== GRANULARIDADE_MES){
+		  	media = sum / (moment(consumos[total-1].x).diff(moment(consumos[0].x), 'months') +1);
+	
+
+		  }
+		  else{
+		  	console.log($scope.gran);
+		  	media = sum/total;
+		  }
+		  return {total: acum, media: media, total: sum, maximo:max, data_max:maxdata, minimo: min, data_minimo: mindata};
+		};
+
+
+
+
+        
+        var load = function() {
+            $scope.loadData();
         };
 
         load();
 
-        var localized = d3.locale({
-		  "decimal": ",",
-		  "thousands": ".",
-		  "grouping": [3],
-		  "currency": ["R$", ""],
-		  "dateTime": "%d/%m/%Y %H:%M:%S",
-		  "date": "%d/%m/%Y",
-		  "time": "%H:%M:%S",
-		  "periods": ["AM", "PM"],
-		  "days": ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
-		  "shortDays": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-		  "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-		  "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
-		});
+        
 
 
 

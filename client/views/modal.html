@@ -64,7 +64,7 @@
                                 <!-- Gráficos/Agrupamento -->
                                 <md-menu md-position-mode="target-right target">
                                     <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
-                                        Agrupar
+                                        Detalhamento
                                         <md-icon class="md-filtro-ed">sort</md-icon>
                                     </md-button>
                                     <md-menu-content>
@@ -83,7 +83,7 @@
 
                                 <md-menu md-position-mode="target-right target">
                                     <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
-                                        Filtrar
+                                        Intervalo
                                         <md-icon class="md-filtro-ed">sort</md-icon>
                                     </md-button>
                                     <md-menu-content>
@@ -109,7 +109,13 @@
                                 <h3 class="topic">{{edificioId}}</h3>
                                 <div id="economyChart">
                                     <svg></svg>
+
                                 </div>
+                                <h5 class="topic">Consumo Total</h5> <h2 class="topic">{{estatisticas.total}}m<sup>3</sup></h1><br/>
+                                    
+
+                                <h5 class="topic">Consumo Médio</h5><h2 class="topic">{{estatisticas.media}}m<sup>3</sup></h1><br/>
+                                    
 
                             </div>
                         </div>
