@@ -83,7 +83,20 @@ angular.module('myApp')
                 return q.promise;
             }
             $scope.pdf = function(){
-                pdfMake.createPdf($scope.docDefinition).download();
+                pdfMake.createPdf($scope.docDefinition).download($scope.edificio.nome + '.pdf');
+            };
+
+            $scope.csvConsumos = function(){
+                var q = $q.defer();
+                if (!edificioService.isCaixa()){
+                    var route = "/relatorio/edificio/" + $scope.edificio._id + "/csv/consumos";
+                    $http.get(route).then(function(info) {
+                        q.resolve(info.data);
+                        $scope.docDefinition = info.data;
+                    }, function(info){
+                        console.log('Rota errada')
+                    });
+                }
             };
 
             var init = function () {
