@@ -597,6 +597,9 @@ module.exports.data = {
     },
   filtrarPorSetor: function(setor, edificios){
     return filtrarPorSetor(setor, edificios);
+  },
+  granularidade: function(historicoConsumo, granularidade){
+    return granularidade(historicoConsumo, granularidade);
   }
 
 }

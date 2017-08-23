@@ -12,12 +12,12 @@
                         <div class="content-tab1">
                             <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
 
-                            <p class="ed-bloco">Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
-                            <p class="ed-name">{{ctrl.pontoDeConsumo.nome}}</p>
+                                <p class="ed-bloco">Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
+                                <p class="ed-name">{{ctrl.pontoDeConsumo.nome}}</p>
                             </div>
                             <div ng-if="ctrl.pontoDeConsumo.isUFCG == true">
 
-                            <p class="ed-bloco">{{ctrl.pontoDeConsumo.nome}}</p>
+                                <p class="ed-bloco">{{ctrl.pontoDeConsumo.nome}}</p>
                             </div>
                             <p class="ed-atividade">Atividade: {{ctrl.pontoDeConsumo.atividade}}</p>
                             <p class="ed-descricao">{{ctrl.pontoDeConsumo.descricao}}</p>
@@ -26,15 +26,14 @@
                             <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}}</p>
                             <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
                             <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
-                            
+
                             <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
-                                <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
-                                        flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
+                                <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'" flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
                                 </md-button>
                                 <div id="info-detalhada" ng-if="showInfos">
                                     <p>Características</p>
-                                    <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco
-                                        {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
+                                    <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}
+                                    </p>
                                     <p>Area: {{ctrl.pontoDeConsumo.caracteristicasFisicas.area}} m²</p>
                                     <p>Nº de pavimentos: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pavimentos}}</p>
                                     <p>Ocupação média: {{ctrl.pontoDeConsumo.caracteristicasFisicas.ocupacaoMedia}}</p>
@@ -48,73 +47,72 @@
                             </div>
 
                         </div>
-                        <img src="lib/icons/default.jpg" alt=""/>
+                        <img src="lib/icons/default.jpg" alt="" />
                     </md-tab-body>
                 </md-tab>
 
                 <!-- Gráficos -->
                 <md-tab>
                     <md-tab-label>
-                       <md-icon md-svg-icon="lib/icons/bar-chart.svg"></md-icon>
+                        <md-icon md-svg-icon="lib/icons/bar-chart.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                      <div class="content-tab2">
-                          <div ng-app="myApp" ng-controller="ChartController as main"  ng-app="app">
-                            <h3 class="topic">Consumo {{texto_granularidade}}</h3>
-        <md-menu md-position-mode="target-right target" >
-          <md-button aria-label="Open demo menu"  ng-click="main.openMenu($mdOpenMenu, $event)">
-                    Agrupar <md-icon class="md-filtro-ed">sort</md-icon>
-          </md-button>
-          <md-menu-content >
-            <md-menu-item ng-repeat="item in ['Anual', 'Mensal', 'Diario']">
-              <md-button ng-click="main.agrupar($index)">
-                  <div layout="row" flex>
-                    <p flex>Consumo {{item}}</p>
-                    <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
-                  </div>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
+                        <div class="content-tab2">
+                            <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
+                                <h3 class="topic">Consumo {{texto_granularidade}}</h3>
+
+                                <!-- Gráficos/Agrupamento -->
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
+                                        Agrupar
+                                        <md-icon class="md-filtro-ed">sort</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item ng-repeat="item in ['Anual', 'Mensal', 'Diario']">
+                                            <md-button ng-click="main.agrupar($index)">
+                                                <div layout="row" flex>
+                                                    <p flex>Consumo {{item}}</p>
+                                                    <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+
+                                <!-- Gráficos/Filtragem -->
+
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
+                                        Filtrar
+                                        <md-icon class="md-filtro-ed">sort</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item>
+                                            <p>Data inicial:<br /></p>
+                                            <md-datepicker ng-model="main.inicialDate" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+                                        </md-menu-item>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <p>Data final:<br /></p>
+
+                                            <md-datepicker ng-model="main.finalDate" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+                                        </md-menu-item>
+                                        <md-menu-item>
+
+                                            <md-button class="md-primary md-raised" ng-click="reload()">Atualizar</md-button>
+                                        </md-menu-item>
+
+                                    </md-menu-content>
+                                </md-menu>
 
 
-        <md-menu md-position-mode="target-right target" >
-          <md-button aria-label="Open demo menu"  ng-click="main.openMenu($mdOpenMenu, $event)">
-                    Filtrar <md-icon class="md-filtro-ed">sort</md-icon>
-          </md-button>
-          <md-menu-content >
-<md-menu-item>
-    <p>Data inicial:<br /></p>
-                        <md-datepicker ng-model="main.inicialDate" md-placeholder="Enter date"  md-open-on-focus ></md-datepicker>
-                    </md-menu-item>
+                                <h3 class="topic">{{edificioId}}</h3>
+                                <div id="economyChart">
+                                    <svg></svg>
+                                </div>
 
-                  
-     </md-menu-item>
-
-          <md-menu-item>
-              <p>Data final:<br /></p>
-
-                        <md-datepicker ng-model="main.finalDate" md-placeholder="Enter date"  md-open-on-focus ></md-datepicker>
-                    </md-menu-item>
-          <md-menu-item>
-
-                    <md-button class="md-primary md-raised" ng-click="reload()" >Atualizar</md-button>
-                    </md-menu-item>
-
-          </md-menu-content>
-        </md-menu>
-
-
-                                                  
-                           
-
-                            <h3 class="topic">{{edificioId}}</h3>
-                            <div id="economyChart">
-                                <svg></svg>
                             </div>
-                            
-                          </div>
-                      </div>
+                        </div>
                     </md-tab-body>
                 </md-tab>
 
@@ -128,16 +126,12 @@
                             <h1 class="md-display-2">Tab Three</h1>
                             <md-button ng-click="pdf()">Relatorio
                             </md-button>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue.
-                                Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In
-                                sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec,
-                                feugiat ultricies mi.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
                         </div>
                     </md-tab-body>
                 </md-tab>
-      
+
             </md-tabs>
-    </md-dialog-content>
-  </form>
+        </md-dialog-content>
+    </form>
 </md-dialog>
-              
