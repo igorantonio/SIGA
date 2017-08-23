@@ -24,8 +24,6 @@ angular.module('myApp')
 
             self.close = function () {
                 $mdDialog.hide();
-
-
             };
 
             self.registerEdificio = function() {
