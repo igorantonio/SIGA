@@ -101,9 +101,24 @@ md-tabs .md-tab.md-active md-icon{
 
 .content-tab2 {
 	font-family: 'Roboto';
-	margin: 3%;
+	margin: 2%;
 	color: #18355b;
 	height: 80%;
+}
+.titulo{
+	margin: 0px;
+	font-family: 'Roboto';
+	font-size: 26px;
+	font-weight: bold;
+}
+.nomargin{
+		font-weight: 300;
+
+	margin: 0px;
+}
+.light{
+		margin: 0px;
+	font-weight: 300;
 }
 
 .content-tab3 {

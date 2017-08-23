@@ -99,6 +99,9 @@ var calculaEstatisticas = function(consumos){
   });
   med = sum/total;
   };
+  if (total==0){
+    return{acum: 0, media:0, total:0, maximo:0, minimo:0};
+  };
   
   return {total: acum, media: med, total: sum, maximo:max, data_max:maxdata, minimo: min, data_minimo: mindata};
 };

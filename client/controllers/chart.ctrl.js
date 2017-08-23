@@ -85,7 +85,7 @@ angular.module('myApp')
                     right: 50,
                     bottom: 38,
                     left: 40
-                }).color(["lightgrey", "rgba(242,94,34,0.58)"])
+                }).color(["#29548c", "rgba(242,94,34,0.58)"])
                 //.width(600)
                 //.useInteractiveGuideline(false)
                 //.transitionDuration(350)
@@ -101,6 +101,8 @@ angular.module('myApp')
             chartData.transition().duration(500).call(chart);
 
             nv.utils.windowResize(chart.update);
+            chart.noData("Nenhum consumo registrado no período selecionado.");
+
 
             return chart;
         });
@@ -178,6 +180,8 @@ angular.module('myApp')
             if (chartData) chartData.datum($scope.data).transition().duration(500).call(chart);
             nv.utils.windowResize(chart.update);
 
+
+
         };
 
 
@@ -234,9 +238,10 @@ angular.module('myApp')
                 })
                 .then(function(response, ev) {
                     $scope.data = [{
-                        key: 'Data',
+                        key: 'Volume',
                         values: response.data,
                         area: true,
+
                         gran: $scope.gran,
                         ticks: getTicks(response.data, $scope.gran)
 
@@ -392,9 +397,12 @@ angular.module('myApp')
 			  }
 			}
 		  else{
-		  	console.log($scope.gran);
 		  	media = sum/total;
 		  }
+
+          if (total==0){
+            return{acum: 0, media:0, total:0, maximo:0, minimo:0};
+          };
 		  return {total: acum, media: media, total: sum, maximo:max, data_max:maxdata, minimo: min, data_minimo: mindata};
 		};
 

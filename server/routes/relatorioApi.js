@@ -141,6 +141,8 @@ router.get('/relatorio/edificio/:edificio_id/csv/vazamentos', function(req, res)
 
         vazamentos  = edificio.vazamentos;
 
+        
+
         granularidade = req.query.granularidade;
         if (granularidade) {
             if (granularidade == 'sem') {
