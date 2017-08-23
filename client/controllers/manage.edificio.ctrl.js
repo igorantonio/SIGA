@@ -23,7 +23,7 @@ angular.module('myApp')
             };
 
             self.close = function () {
-                $mdDialog.cancel();
+                $mdDialog.hide();
             };
 
             self.registerEdificio = function() {
@@ -37,10 +37,8 @@ angular.module('myApp')
                 $http.post('/edificio', self.edificio)
                     .success(function(){
                         self.close();
-                        console.log('muito bom');
                     })
                     .error(function(){
-                        console.log('nada bom');
                     });
             };
 
@@ -61,17 +59,15 @@ angular.module('myApp')
             };
 
             self.deleteEdificio = function(){
-                // initial values
+
                 $scope.error = false;
                 $scope.disabled = true;
 
                 $http.delete('/edificio/' + self.edificio._id)
                     .success(function(){
                         self.close();
-                        console.log('muito bom');
                     })
                     .error(function(){
-                        console.log('muito ruim');
                     });
             };
 

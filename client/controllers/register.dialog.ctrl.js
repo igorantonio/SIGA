@@ -5,7 +5,7 @@ angular.module('myApp')
             var self = this;
 
             self.close = function () {
-                $mdDialog.cancel();
+                $mdDialog.hide();
             };
 
             self.register = function () {
