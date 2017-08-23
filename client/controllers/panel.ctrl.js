@@ -7,6 +7,7 @@ angular.module('myApp')
             self.showEdificio = false;
             self.showUser = false;
             self.showVazamento = false;
+            self.showContas = false;
 
             self.data = [];
 
@@ -14,9 +15,10 @@ angular.module('myApp')
             self.user_email = user.username;
 
             self.loadEdificios = function (ev) {
-                self.showUser = false;
                 self.showEdificio = true;
+                self.showUser = false;
                 self.showVazamento = false;
+                self.showContas = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -27,9 +29,10 @@ angular.module('myApp')
             };
 
             self.loadUsers = function (ev) {
-                self.showUser = true;
                 self.showEdificio = false;
+                self.showUser = true;
                 self.showVazamento = false;
+                self.showContas = false;
 
                 $http.get("/userIndex")
                     .then(function (response, ev) {
@@ -40,9 +43,10 @@ angular.module('myApp')
             };
 
             self.loadVazamentos = function (ev) {
-                self.showUser = false;
                 self.showEdificio = false;
+                self.showUser = false;
                 self.showVazamento = true;
+                self.showContas = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -52,10 +56,25 @@ angular.module('myApp')
                     });
             };
 
+            self.loadContasDeAgua = function(ev) {
+                self.showEdificio = false;
+                self.showUser = false;
+                self.showVazamento = false;
+                self.showContas = true;
+
+                $http.get("/universidade/contaDeAgua")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function() {
+                        self.data = "error on fetching data";
+                    });
+            };
+
             self.logoutDialog = function (ev) {
                 self.showEdificio = false;
                 self.showUser = true;
                 self.showVazamento = false;
+                self.showContas = false;
 
                 var user = AuthService.getUser();
 
@@ -172,7 +191,7 @@ angular.module('myApp')
 
             self.newEdificio = function (ev) {
                 var edInicial = {
-                    nome: "", descricao: "", atividade: "",
+                    nome: "", descricao: "", atividade: "", img: "",
                     caracteristicasFisicas: {
                         localizacao: { setor: "", bloco: "" },
                         area: 0, n_pavimentos: 0, ocupacaoMedia: 0,

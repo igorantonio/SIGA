@@ -245,14 +245,24 @@ router.get('/caixa/:caixa_id/consumo', function(req, res) {
             if (req.query.inicio != null && req.query.fim != null) {
                 consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
             };
+
+            if(req.query.granularidade != null){
+                consumos = EdificioAPI.data.granularidade(consumos,req.query.granularidade);
+            }else{
+                consumos = EdificioAPI.data.granularidade(consumos,'day');
+            };
+
             consumosFiltrados = [];
-            consumos.forEach(function(cd) {
+            for (key in consumos){
                 var newConsumo = {
-                    x: cd.data.getTime(),
-                    y: cd.consumo
+                    x: new Date(key).getTime(),
+                    y: consumos[key]
                 };
                 consumosFiltrados.push(newConsumo);
-            });
+            };
+
+
+           
             consumosFiltrados.sort(function(a, b) {
               return a.x - b.x;
              });

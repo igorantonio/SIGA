@@ -1,9 +1,13 @@
 angular.module('myApp')
     .controller('ManageEdificioController', ['$scope', '$http', '$mdDialog', 'edificioService',
-        function ($scope, $http, $mdDialog, edificioService) {
+        function ($scope, $http, $mdDialog, edificioService, fileReader) {
 
             var self = this;
             self.edificio = edificioService.getEdificio();
+
+            $scope.$on("fileProgress", function(e, progress) {
+                self.progress = progress.loaded / progress.total;
+            });
 
             self.message = function(){
                 if(edificioService.isNew())
@@ -20,6 +24,8 @@ angular.module('myApp')
 
             self.close = function () {
                 $mdDialog.hide();
+
+
             };
 
             self.registerEdificio = function() {
@@ -27,6 +33,8 @@ angular.module('myApp')
                 // initial values
                 $scope.error = false;
                 $scope.disabled = true;
+
+                console.log(self.edificio.img);
 
                 $http.post('/edificio', self.edificio)
                     .success(function(){
