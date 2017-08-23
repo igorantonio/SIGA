@@ -124,12 +124,16 @@ router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
         var csv = json2csv(opts);
         var filePath = 'consumos_' + edificio.nome + '.csv';
      
-        fs.writeFile(filePath, csv, function(err) {
+        /*fs.writeFile(filePath, csv, function(err) {
             if (err) {
                 res.status(400).json({error: err});
             }
-        });
-        res.status(200).download(filePath);
+        });*/
+        res.attachment(edificio.nome+'.csv');
+        res.status(200).send(csv);
+
+
+       // res.status(200).download(filePath);
     });
 });
 

@@ -121,6 +121,16 @@ angular.module('myApp')
                     var route = "/relatorio/edificio/" + $scope.edificio._id + "/csv/consumos";
                     $http.get(route, {params: {granularidade: gran}}).then(function(info) {
                         q.resolve(info.data);
+
+                    $scope.toJSON = '';
+                                $scope.toJSON = angular.toJson($scope.data);
+                                var blob = new Blob([info.data], { type:"text/css;charset=utf-8;" });           
+                                var downloadLink = angular.element('<a></a>');
+                                            downloadLink.attr('href',window.URL.createObjectURL(blob));
+                                            downloadLink.attr('download', $scope.edificio.nome+'_'+ gran+ '.csv');
+                                downloadLink[0].click();
+
+
                         $scope.docDefinition = info.data;
                     }, function(info){
                         console.log('Rota errada')
