@@ -8,7 +8,7 @@
 <md-list id="panel-list">
   <md-subheader class="md-no-sticky">Contas registradas</md-subheader>
   <md-list-item class="secondary-button-padding" ng-repeat="c in ctrl.data">
-    <p> {{c.dataDePagamento}}</p>
+    <p> Mês: {{c.mes}} | Valor: R${{c.valor}} | Data de Pagamento: {{c.dataDePagamento}}</p>
     <md-button class="md-icon-button md-accent" ng-click="ctrl.editContaDialog($event, c)">
       <md-icon md-svg-icon="../lib/icons/edit.svg"></md-icon>
     </md-button>
@@ -16,4 +16,4 @@
       <md-icon md-svg-icon="../lib/icons/erase.svg"></md-icon>
     </md-button>
   </md-list-item>
-</md-list>
+</md-list>        

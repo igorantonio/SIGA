@@ -234,10 +234,13 @@ angular.module('myApp')
             function getEstatisticas() {
                 var q = $q.defer();
                 var route = "/universidade";
+
                 
                 $http.get(route).then(function (info) {
                     q.resolve(info.data);
+                    self.pontoDeConsumo = info.data.infos;
                     self.estatisticas = info.data.estatisticas;
+                    self.pontoDeConsumo.isUFCG = true;
                 }, function (info) {
                 });
                 return q.promise;

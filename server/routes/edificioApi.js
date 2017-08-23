@@ -6,9 +6,9 @@ var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 var users = require('./userApi.js');
+var fs = require('fs');
 
 ///change the geolocalization of a building
-
 router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
         if (error) res.send(edificio);
@@ -25,6 +25,14 @@ router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
     });
 });
 
+/**
+ * @api {get} /edificio/:id/consumo Obter informações de consumo de um edificio
+ * @apiName GetUser
+ * @apiGroup Edificio
+ * @apiParam {Number} id Identificador unico para o edificio.
+* @apiParam {String/Date} [ano] Valor para filtrar os consumos do ano referente.
+ *
+ */
 /// Show/Index (Consumo)
 router.get('/edificio/:edificio_id/consumo', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
@@ -54,8 +62,9 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 
             consumosFiltrados = [];
             for (key in consumos){
+                data = new Date(key);
                 var newConsumo = {
-                    x: new Date(key).getTime(),
+                    x: data.getTime() - data.getTimezoneOffset() * 60 * 1000,
                     y: consumos[key]
                 };
                 consumosFiltrados.push(newConsumo);
@@ -70,24 +79,6 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
     )
 });
 
-var granularidade = function(historicoConsumo, granularidade){
-    novosConsumos = {};
-    historicoConsumo.forEach(function(consumo){
-        auxmoment = moment(consumo.data);
-        auxmoment = auxmoment.startOf(granularidade);
-        novaData = new Date(auxmoment);
-        consumo.data = novaData;
-        if (novosConsumos[novaData]==null){
-            novosConsumos[novaData] =  consumo.consumo;
-        }else{
-            novosConsumos[novaData] = novosConsumos[novaData] +consumo.consumo;
-        };
-       
-    });
-    
-
-    return novosConsumos;
-};
 
 // Create (Consumo)
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
@@ -476,9 +467,11 @@ router.get('/edificio/:edificio_id', function(req, res) {
 // Create (Edificio)
 router.post('/edificio', function(req, res) {
     var edificio = new Edificio();
+
     edificio.nome = req.body.nome;
     edificio.descricao = req.body.descricao;
     edificio.atividade = req.body.atividade;
+    edificio.img = req.body.img;
     edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
     edificio.geolocalizacao = req.body.geolocalizacao;
     edificio.historicoConsumo = req.body.historicoConsumo;
@@ -490,6 +483,7 @@ router.post('/edificio', function(req, res) {
     if (req.body.vazamentos == null) {
         edificio.vazamentos = [];
     }
+
     edificio.save(function(error) {
         if (error){ 
           res.status(400);
@@ -504,6 +498,7 @@ router.put('/edificio/:edificio_id', function(req, res) {
         if (req.body.nome) edificio.nome            = req.body.nome;
         if (req.body.descricao) edificio.descricao  = req.body.descricao;
         if (req.body.atividade) edificio.atividade  = req.body.atividade;
+        if (req.body.img) edificio.img              = req.body.img;
         if (req.body.caracteristicasFisicas) edificio.caracteristicasFisicas = req.body.caracteristicasFisicas;
         if (req.body.geolocalizacao) edificio.geolocalizacao        = req.body.geolocalizacao;
         if (req.body.historicoConsumo) edificio.historicoConsumo    = req.body.historicoConsumo;
@@ -579,6 +574,26 @@ var FindEdificio = function(edificio_id, res) {
 };
 
 
+var granularidade = function(historicoConsumo, g){
+    novosConsumos = {};
+    historicoConsumo.forEach(function(consumo){
+        auxmoment = moment(consumo.data);
+        auxmoment = auxmoment.startOf(g);
+        novaData = new Date(auxmoment);
+        consumo.data = novaData;
+        if (novosConsumos[novaData]==null){
+            novosConsumos[novaData] =  consumo.consumo;
+        }else{
+            novosConsumos[novaData] = novosConsumos[novaData] +consumo.consumo;
+        };
+       
+    });
+
+
+    return novosConsumos;
+};
+
+
 module.exports = router;
 
 
@@ -589,6 +604,9 @@ module.exports.data = {
     },
   filtrarPorSetor: function(setor, edificios){
     return filtrarPorSetor(setor, edificios);
+  },
+  granularidade: function(historicoConsumo, g){
+    return granularidade(historicoConsumo, g);
   }
 
 }

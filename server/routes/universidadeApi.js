@@ -5,6 +5,8 @@ var EstatisticaAPI = require('./estatisticaApi.js');
 var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 var Conta = require('../models/contaDeAgua');
+var EdificioAPI = require('./edificioApi.js');
+
 
 router.get('/universidade', function (req, res) {
 
@@ -44,6 +46,8 @@ router.get('/universidade', function (req, res) {
                 }
             });
         });
+
+       
 
         var consumoEstatisticas = EstatisticaAPI.data.calculaEstatisticas(consumos);
 
@@ -85,18 +89,37 @@ router.get('/universidade/consumo', function (req, res) {
 
                 if (!temData) {
                     var newConsumo = {
-                        x: c.data.getTime(),
-                        y: c.consumo
+                        data: c.data.getTime(),
+                        consumo: c.consumo
                     };
                     consumos.push(newConsumo);
                 }
             });
         });
 
-        consumos.sort(function(a, b) {
+        console.log(consumos);
+
+         if(req.query.granularidade != null){
+                consumos = EdificioAPI.data.granularidade(consumos,req.query.granularidade);
+        }else{
+                consumos = EdificioAPI.data.granularidade(consumos,'day');
+        };
+        console.log(consumos);
+
+         consumosFiltrados = [];
+            for (key in consumos){
+                var newConsumo = {
+                    x: new Date(key).getTime(),
+                    y: consumos[key]
+                };
+                consumosFiltrados.push(newConsumo);
+            };
+
+
+        consumosFiltrados.sort(function(a, b) {
           return a.x - b.x;
          });
-        res.json(consumos);
+        res.json(consumosFiltrados);
 
     })
 });

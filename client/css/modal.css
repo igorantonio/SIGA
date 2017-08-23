@@ -138,3 +138,31 @@ h2 {
 	color: #192332;
 	font-weight: 500;
 }
+
+#foto {
+	max-width:48%;
+	max-height:50%;
+	float: right;
+}
+
+#tab1 {
+	overflow:auto;
+  	display: flex;
+}
+
+#img {
+	margin-top: 5vh;
+	margin-right: 4vh;
+	width: 60%;
+	float: right;
+}
+
+#info {
+	width: 40%;
+	float: left;
+}
+
+#fotofront {
+	height: 60vh;
+	max-width: 90vh;
+}
