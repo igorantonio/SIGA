@@ -246,21 +246,23 @@ router.get('/caixa/:caixa_id/consumo', function(req, res) {
                 consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
             };
 
-            f(req.query.granularidade != null){
-                consumos = EdificioAPI.granularidade(consumos,req.query.granularidade);
+            if(req.query.granularidade != null){
+                consumos = EdificioAPI.data.granularidade(consumos,req.query.granularidade);
             }else{
-                consumos = EdfificioAPI.granularidade(consumos,'day');
+                consumos = EdificioAPI.data.granularidade(consumos,'day');
+            };
+
+            consumosFiltrados = [];
+            for (key in consumos){
+                var newConsumo = {
+                    x: new Date(key).getTime(),
+                    y: consumos[key]
+                };
+                consumosFiltrados.push(newConsumo);
             };
 
 
-            consumosFiltrados = [];
-            consumos.forEach(function(cd) {
-                var newConsumo = {
-                    x: cd.data.getTime(),
-                    y: cd.consumo
-                };
-                consumosFiltrados.push(newConsumo);
-            });
+           
             consumosFiltrados.sort(function(a, b) {
               return a.x - b.x;
              });
