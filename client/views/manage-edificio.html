@@ -91,9 +91,9 @@
                     </md-input-container>
                   </div>
                   <md-input-container>
-                    <p>Botão para fazer upload da imagem TODO</p>
-                    <input ng-model="image" type="image" />
+                    <input type="file" ng-file-select="onFileSelect($files)" ng-model="ctrl.edificio.img">
                   </md-input-container>
+                  <img ng-src="{{ctrl.edificio.img}}"/>
                 </div>
             </md-dialog-content>
 

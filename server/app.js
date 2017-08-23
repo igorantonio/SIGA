@@ -11,8 +11,7 @@ var passport = require('passport');
 var localStrategy = require('passport-local' ).Strategy;
 var nvd3 = require('nvd3');
 var favicon = require('serve-favicon');
-var multer = require('multer');
-var fs = require('fs');
+var bodyParser = require('body-parser');
 
 
 // mongoose
@@ -33,8 +32,8 @@ var app = express();
 
 // favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
-
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 // require routes
 var userRouter = require('./routes/userApi.js');

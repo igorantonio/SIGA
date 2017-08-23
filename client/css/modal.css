@@ -138,3 +138,9 @@ h2 {
 	color: #192332;
 	font-weight: 500;
 }
+
+img {
+	width:200px;
+	height:200px;
+	float: right;
+}
