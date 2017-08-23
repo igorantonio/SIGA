@@ -11,6 +11,8 @@ var passport = require('passport');
 var localStrategy = require('passport-local' ).Strategy;
 var nvd3 = require('nvd3');
 var favicon = require('serve-favicon');
+var multer = require('multer');
+var fs = require('fs');
 
 
 // mongoose
