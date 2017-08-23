@@ -9,6 +9,8 @@
                         <md-icon md-svg-icon="lib/icons/water-drop.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
+                                            <div id="tab1">
+
                         <div class="content-tab1">
                             <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
 
@@ -45,8 +47,9 @@
                                     <p>Volume do reservatório: {{ctrl.pontDeConsumo.caracteristicasFisicas.volumeReservatorio}}</p>
                                 </div>
                             </div>
-                            <div id="img"><img id="fotofront" ng-src="{{ctrl.pontoDeConsumo.img}}"/></div>
                         </div>
+                        <div id="img"><img id="fotofront" ng-src="{{ctrl.pontoDeConsumo.img}}"/></div>
+                    </div>
                     </md-tab-body>
                 </md-tab>
 
