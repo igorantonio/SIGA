@@ -75,6 +75,8 @@ angular.module('myApp')
                 self.showEdificio = false;
                 self.showUser = false;
                 self.showContas = false;
+                self.showVazamento = false;
+                self.showContasDeAgua = false;
 
                 var user = AuthService.getUser();
 
