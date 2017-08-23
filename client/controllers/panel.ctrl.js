@@ -1,6 +1,6 @@
 angular.module('myApp')
-    .controller('PanelController', 
-        ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
+    .controller('PanelController',
+    ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
         function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
 
             var self = this;
@@ -122,17 +122,21 @@ angular.module('myApp')
             };
 
             self.newUserDialog = function (ev) {
-                self.loadUsers();
 
-                $mdDialog.show({
+                 var confirm = $mdDialog.confirm({
                     templateUrl: '../views/register-dialog.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
                     fullscreen: $scope.customFullscreen,
                     controller: "RegisterDialogController",
-                    controllerAs: 'ctrl'
-                });
+                    controllerAs: 'ctrl',
+                  })
+                  $mdDialog.show(confirm).then(function() {
+                    console.log("confirmando......")
+                    self.loadUsers();
+                  });
+
             };
 
             self.deleteUser = function (ev, user) {
@@ -148,24 +152,6 @@ angular.module('myApp')
                     controllerAs: 'ctrl'
                 });
 
-                function ManageUserController($scope, $http, $mdDialog, userService) {
-                    
-                    this.user = userService.getUser();
-                
-                    this.deleteUser = function(){
-                        // initial values
-                        $scope.error = false;
-                        $scope.disabled = true;
-        
-                        $http.delete('/userDelete/' + this.user.username)
-                            .success(function(){                                
-                                self.loadUsers();                                
-                                $mdDialog.hide();
-                            })
-                            .error(function(){
-                            });
-                    };
-                }                
             };
 
             self.editEdificio = function (ev, edificio) {
@@ -177,7 +163,9 @@ angular.module('myApp')
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen
+                    fullscreen: $scope.customFullscreen,
+                    controller: ManageEdificioController,
+                    controllerAs: 'ctrl'
                 });
             };
 
@@ -194,25 +182,6 @@ angular.module('myApp')
                     controller: ManageEdificioController,
                     controllerAs: 'ctrl'
                 });
-
-                function ManageEdificioController($scope, $http, $mdDialog, edificioService) {
-                    
-                    this.edificio = edificioService.getEdificio();
-                    
-                    this.deleteEdificio = function() {
-                        
-                        $scope.error = false;
-                        $scope.disabled = true;
-        
-                        $http.delete('/edificio/' + this.edificio._id)
-                            .success(function(){
-                                $mdDialog.hide();
-                                self.loadEdificios();
-                            })
-                            .error(function(){
-                            });
-                    };
-                } 
             }
 
             self.newEdificio = function (ev) {
@@ -238,8 +207,12 @@ angular.module('myApp')
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen
+                    fullscreen: $scope.customFullscreen,
+                    controller: ManageEdificioController,
+                    controllerAs: 'ctrl'
                 });
+
+                self.loadEdificios();
             };
 
             self.addVazamento = function (ev, edificio) {
@@ -254,5 +227,101 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+            function ManageUserController($scope, $http, $mdDialog, userService) {
+
+                this.user = userService.getUser();
+
+                this.deleteUser = function () {
+                    // initial values
+                    $scope.error = false;
+                    $scope.disabled = true;
+
+                    $http.delete('/userDelete/' + this.user.username)
+                        .success(function () {
+                            self.loadUsers();
+                            $mdDialog.hide();
+                        })
+                        .error(function () {
+                        });
+                };
+            };
+
+            function ManageEdificioController($scope, $http, $mdDialog, edificioService) {
+
+                this.edificio = edificioService.getEdificio();
+
+                this.message = function () {
+                    if (edificioService.isNew())
+                        return "Novo edifício";
+                    return "Editar edificio";
+                };
+
+                this.operation = function () {
+                    if (edificioService.isNew())
+                        this.registerEdificio();
+                    if (!edificioService.isNew())
+                        this.editEdificio();
+                };
+
+                this.deleteEdificio = function () {
+
+                    $scope.error = false;
+                    $scope.disabled = true;
+
+                    $http.delete('/edificio/' + this.edificio._id)
+                        .success(function () {
+                            $mdDialog.hide();
+                            self.loadEdificios();
+                        })
+                        .error(function () {
+                        });
+                };
+
+                this.registerEdificio = function () {
+
+                    $scope.error = false;
+                    $scope.disabled = true;
+
+                    $http.post('/edificio', this.edificio)
+                        .success(function () {
+                            $mdDialog.hide();
+                            self.loadEdificios();
+                        })
+                        .error(function () {
+                        });
+                };
+
+                this.editEdificio = function () {
+
+                    // initial values
+                    $scope.error = false;
+                    $scope.disabled = true;
+
+                    $http.put('/edificio/' + this.edificio._id, this.edificio)
+                        .success(function () {
+                            $mdDialog.hide();
+                            self.loadEdificios();
+                        })
+                        .error(function () {
+                        });
+                };
+
+                self.addVazamento = function () {
+
+                    // initial values
+                    $scope.error = false;
+                    $scope.disabled = true;
+
+                    $http.post('/edificio/' + this.edificio._id + '/vazamentos/new', { volume: this.volume, data: this.data })
+                        .success(function () {
+                            $mdDialog.hide();
+                            self.loadEdificios();
+                        })
+                        .error(function () {
+                        });
+                };
+
+            }
 
         }]);

@@ -34,10 +34,8 @@ angular.module('myApp')
                 $http.post('/edificio', self.edificio)
                     .success(function(){
                         self.close();
-                        console.log('muito bom');
                     })
                     .error(function(){
-                        console.log('nada bom');
                     });
             };
 
