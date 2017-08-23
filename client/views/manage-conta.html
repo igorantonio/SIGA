@@ -2,22 +2,22 @@
     
         <md-dialog id="session-dialog" aria-label="Conta de água" ng-cloak>
     
-            <form name="contaAguaForm" ng-submit="ctrl.registrarAlteracao()">
+            <form name="contaAguaForm" ng-submit="ctrl.operation()">
                 <md-dialog-content>
                     <div class="md-dialog-content">
                         <h2>Registrar</h2>
                         <md-divider></md-divider>
                         <md-input-container class="md-block">
                             <label>Valor</label>
-                            <input type="number" name="valor" ng-model="ctrl.valor" md-autofocus required />
+                            <input type="number" name="valor" ng-model="ctrl.conta.valor" md-autofocus required />
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Mes</label>
-                            <input type="number" name="mes" ng-model="ctrl.mes" required />
+                            <input type="number" name="mes" ng-model="ctrl.conta.mes" required />
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Data</label>
-                            <input type="date" name="data" ng-model="ctrl.data" required />
+                            <input type="date" name="data" ng-model="ctrl.conta.data" required />
                         </md-input-container>
                     </div>
                 </md-dialog-content>

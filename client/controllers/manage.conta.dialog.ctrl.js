@@ -8,19 +8,25 @@ angular.module('myApp')
             self.close = function () {
                 $mdDialog.cancel();
             };
+
+            self.operation = function() {
+                if(contasService.isNew()) {
+                    self.addConta();
+                } else {
+                    self.editConta();
+                }
+            };
             
             self.mdDialogSubmit = function () {
                 $mdDialog.hide();
             };
 
-            self.registrarAlteracao = function() {
+            self.addConta = function() {
 
                 $scope.error = false;
                 $scope.disabled = true;
 
-                var conta = {valor: self.valor, mes: self.mes, dataDePagamento: self.data};
-
-                $http.post('/universidade/contaDeAgua', conta)
+                $http.post('/universidade/contaDeAgua', self.conta)
                     .success(function(){
                         self.mdDialogSubmit();
                     })
@@ -28,13 +34,12 @@ angular.module('myApp')
                     });
             };
 
-            self.editEdificio = function() {
+            self.editConta = function() {
 
-                // initial values
                 $scope.error = false;
                 $scope.disabled = true;
 
-                $http.put('/edificio/' + self.edificio._id, self.edificio)
+                $http.put('/edificio/' + self.conta._id, self.conta)
                     .success(function(){
                         self.close();
                         console.log('muito bom');
