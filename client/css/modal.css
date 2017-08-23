@@ -31,6 +31,7 @@ md-tabs .md-tab.md-active md-icon{
 }
 
 .content-tab1 {
+	font-family: 'Roboto';
 	margin: 3%;
 	color: #192332;
 	width: 60%;
@@ -99,7 +100,29 @@ md-tabs .md-tab.md-active md-icon{
 }
 
 .content-tab2 {
-	font-family: :'Roboto';
+	font-family: 'Roboto';
+	margin: 2%;
+	color: #18355b;
+	height: 80%;
+}
+.titulo{
+	margin: 0px;
+	font-family: 'Roboto';
+	font-size: 26px;
+	font-weight: bold;
+}
+.nomargin{
+		font-weight: 300;
+
+	margin: 0px;
+}
+.light{
+		margin: 0px;
+	font-weight: 300;
+}
+
+.content-tab3 {
+	font-family: 'Roboto';
 	margin: 3%;
 	color: #18355b;
 	height: 80%;
@@ -112,7 +135,7 @@ md-tabs .md-tab.md-active md-icon{
 }
 
 .topic {
-	font-family: 'Roboto'
+	font-family: 'Roboto';
 	font-weight: bold;
 	margin: 0px;
 	display: inline;
@@ -123,6 +146,11 @@ md-tabs .md-tab.md-active md-icon{
     width: 120vh;
     margin: 3%;
 	color: #192332;
+}
+
+#add-vazamento-dialog {
+	height: 45vh;
+    width: 80vh;
 }
 
 .blue {

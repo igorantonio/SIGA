@@ -7,6 +7,10 @@ var User = require('../models/user.js');
 var Edificio = require('../models/edificio.js');
 var users = require('./userApi.js');
 var fs = require('fs');
+   var ANUAL = 'anual';
+                var MENSAL = 'mensal';
+                var DIARIO = 'diario';
+                var DETALHADO = 'detalhado';
 
 ///change the geolocalization of a building
 router.post('/edificio/:edificio_id/geolocalizacao', function(req, res) {
@@ -40,22 +44,41 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
               res.status(400).json({err: error});
             };
             consumos = edificio.historicoConsumo;
-            if (req.query.ano != null) {
+            if (req.query.ano) {
                 consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
             };
-            if (req.query.mes != null) {
+            if (req.query.mes) {
                 consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
             };
-            if (req.query.dia != null) {
+            if (req.query.dia) {
                 consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
             };
-            if (req.query.inicio != null && req.query.fim != null) {
+            if (req.query.inicio && req.query.fim) {
                 consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
             };
 
             
-            if(req.query.granularidade != null){
-                consumos = granularidade(consumos,req.query.granularidade);
+            if(req.query.granularidade){
+             
+                var gran;
+                switch (req.query.granularidade) {
+                case ANUAL:
+                    gran = 'year';
+                    break;
+                case MENSAL:
+                    gran = 'month';
+                    break;
+                case DIARIO:
+                    gran = 'day';
+                    break;
+                case DETALHADO:
+                    gran = 'hour';
+                    break;
+                default:
+                    gran = req.query.granularidade;
+            };
+
+                consumos = granularidade(consumos,gran);
             }else{
                 consumos = granularidade(consumos,'day');
             }
@@ -64,7 +87,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
             for (key in consumos){
                 data = new Date(key);
                 var newConsumo = {
-                    x: data.getTime() - data.getTimezoneOffset() * 60 * 1000,
+                    x: data.getTime(), //- data.getTimezoneOffset() * 60 * 1000,
                     y: consumos[key]
                 };
                 consumosFiltrados.push(newConsumo);
@@ -108,7 +131,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         for (var i = 1; i <= qDias; i++) {
             data = new Date(datas[i-1]);
             novoConsumo = {
-                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                data: data.setTime(data.getTime()),
                 consumo: consumo/qDias
             };
             edificio.historicoConsumo.push(novoConsumo);
@@ -124,7 +147,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
 
             data = new Date(req.body.data);
             novoAlerta = {
-                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                data: data.setTime(data.getTime()),
                 checked: false
             };
             edificio.alertas.push(novoAlerta);
@@ -150,7 +173,7 @@ router.put('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
             edificio.historicoConsumo.forEach(function(consumo) {
                 if (consumo._id == req.params.consumo_id) {
                     data = new Date(req.body.data);
-                    if (req.body.data) consumo.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.data) consumo.data       = data.setTime(data.getTime());
                     if (req.body.consumo) consumo.consumo = req.body.consumo;
                 }
                 consumosAtualizado.push(consumo);
@@ -237,7 +260,7 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
         };
         data = new Date(req.body.data);
         novoVazamento = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            data: data.setTime(data.getTime()),
             volume: req.body.volume
         };
         edificio.vazamentos.push(novoVazamento);
@@ -265,7 +288,7 @@ router.put('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res)
             edificio.vazamentos.forEach(function(vazamento) {
                 if (vazamento._id == req.params.vazamento_id) {
                     data = new Date(req.body.data);
-                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.data) vazamento.data       = data.setTime(data.getTime());
                     if (req.body.volume) vazamento.volume = req.body.volume;
                 }
                 vazamentosAtualizado.push(vazamento);
@@ -353,7 +376,7 @@ router.post('/edificio/:edificio_id/alertas/new', function(req, res) {
 
         data = new Date(req.body.data);
         novoAlerta = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            data: data.setTime(data.getTime()),
             checked: req.body.checked
         };
 
@@ -547,6 +570,13 @@ var emAlerta = function(edificios, margem) {
                 total += cd.consumo;
             }
         });
+        flag = false;
+        ed.alertas.forEach(function(a){
+            if(!a.checked) flag = true;
+        })
+        if (flag){
+            edificiosFiltrados.push(ed);
+        }else{
         if (margem == 0.2) {
             if (total >= ed.mediaEsperada + margem * ed.mediaEsperada && (total < (ed.mediaEsperada + 0.3 * ed.mediaEsperada))) {
                 edificiosFiltrados.push(ed);
@@ -554,6 +584,7 @@ var emAlerta = function(edificios, margem) {
         } else if (total >= ed.mediaEsperada + margem * ed.mediaEsperada) {
             edificiosFiltrados.push(ed);
         }
+    }
     });
     return edificiosFiltrados;
 }
@@ -575,10 +606,28 @@ var FindEdificio = function(edificio_id, res) {
 
 
 var granularidade = function(historicoConsumo, g){
+    var gran;
+                switch (g) {
+                case ANUAL:
+                    gran = 'year';
+                    break;
+                case MENSAL:
+                    gran = 'month';
+                    break;
+                case DIARIO:
+                    gran = 'day';
+                    break;
+                case DETALHADO:
+                    gran = 'hour';
+                    break;
+                default:
+                    gran = g;
+            };
+
     novosConsumos = {};
     historicoConsumo.forEach(function(consumo){
         auxmoment = moment(consumo.data);
-        auxmoment = auxmoment.startOf(g);
+        auxmoment = (auxmoment.startOf(gran));
         novaData = new Date(auxmoment);
         consumo.data = novaData;
         if (novosConsumos[novaData]==null){
