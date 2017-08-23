@@ -1,7 +1,8 @@
 angular.module('myApp')
-    .controller('PanelController',
-    ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
-        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
+    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http',
+        'edificioService', 'userService', '$q', 'contasService',
+        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService,
+            $q, contasService) {
 
             var self = this;
             self.showEdificio = false;
@@ -18,6 +19,7 @@ angular.module('myApp')
                 self.showUser = false;
                 self.showEdificio = true;
                 self.showVazamento = false;
+                self.showContasDeAgua = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -31,6 +33,7 @@ angular.module('myApp')
                 self.showUser = true;
                 self.showEdificio = false;
                 self.showVazamento = false;
+                self.showContasDeAgua = false;
 
                 $http.get("/userIndex")
                     .then(function (response, ev) {
@@ -44,6 +47,7 @@ angular.module('myApp')
                 self.showUser = false;
                 self.showEdificio = false;
                 self.showVazamento = true;
+                self.showContasDeAgua = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -138,7 +142,7 @@ angular.module('myApp')
 
             self.newUserDialog = function (ev) {
 
-                 var confirm = $mdDialog.confirm({
+                var confirm = $mdDialog.confirm({
                     templateUrl: '../views/register-dialog.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
@@ -146,11 +150,11 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen,
                     controller: "RegisterDialogController",
                     controllerAs: 'ctrl',
-                  })
-                  $mdDialog.show(confirm).then(function() {
+                })
+                $mdDialog.show(confirm).then(function () {
                     console.log("confirmando......")
                     self.loadUsers();
-                  });
+                });
 
             };
 
@@ -172,7 +176,7 @@ angular.module('myApp')
             self.editEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
-                
+
                 var view = '../views/manage-edificio.html';
                 self.callEdificioMdDialog(ev, view);
             };
@@ -202,7 +206,7 @@ angular.module('myApp')
 
                 edificioService.setEdificio(edInicial);
                 edificioService.setNew(true);
-            
+
                 var view = '../views/manage-edificio.html';
                 self.callEdificioMdDialog(ev, view);
             };
@@ -220,7 +224,7 @@ angular.module('myApp')
                 });
             };
 
-            self.callEdificioMdDialog = function(ev, view) {
+            self.callEdificioMdDialog = function (ev, view) {
 
                 var confirm = $mdDialog.confirm({
                     templateUrl: view,
@@ -230,41 +234,55 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen,
                     controller: 'ManageEdificioController',
                     controllerAs: 'ctrl'
-                  })
-                  $mdDialog.show(confirm).then(function() {
+                })
+                $mdDialog.show(confirm).then(function () {
                     console.log("confirmando......")
                     self.loadEdificios();
-                  });
+                });
 
             }
 
             self.newContaDialog = function (ev) {
-                
-                                 var confirm = $mdDialog.confirm({
-                                    templateUrl: '../views/manage-conta.html',
-                                    parent: angular.element(document.body),
-                                    targetEvent: ev,
-                                    clickOutsideToClose: true,
-                                    fullscreen: $scope.customFullscreen,
-                                    controller: "ManageContaDialogController",
-                                    controllerAs: 'ctrl',
-                                  })
-                                  $mdDialog.show(confirm).then(function() {                                    
-                                    
-                                  });
-                
-                            };
+
+                var view = '../views/manage-conta.html';
+                self.callContaMdDialog(ev, view);
+            };
+
+            self.deleteConta = function (ev, conta) {
+                contasService.setConta(conta);
+                contasService.setIsNew(false);
+
+                var view = '../views/del-conta.html';
+                self.callContaMdDialog(ev, view);
+            };
+
+            self.callContaMdDialog = function (ev, view) {
+
+                var confirm = $mdDialog.confirm({
+                    templateUrl: view,
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen,
+                    controller: "ManageContaDialogController",
+                    controllerAs: 'ctrl',
+                })
+                $mdDialog.show(confirm).then(function () {
+                    self.loadContasDeAgua();
+                });
+
+            };
 
             function ManageUserController($scope, $http, $mdDialog, userService) {
 
                 this.user = userService.getUser();
 
-                this.close = function() {
+                this.close = function () {
                     $mdDialog.hide();
                 };
 
                 this.deleteUser = function () {
-                    
+
                     $scope.error = false;
                     $scope.disabled = true;
 

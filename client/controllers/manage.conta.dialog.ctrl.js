@@ -1,8 +1,9 @@
 angular.module('myApp')
-    .controller('ManageContaDialogController', ['$scope', '$http', '$mdDialog',
-        function ($scope, $http, $mdDialog) {
+    .controller('ManageContaDialogController', ['$scope', '$http', '$mdDialog', 'contasService',
+        function ($scope, $http, $mdDialog, contasService) {
 
             var self = this;
+            self.conta = contasService.getConta();
 
             self.close = function () {
                 $mdDialog.cancel();
@@ -43,32 +44,17 @@ angular.module('myApp')
                     });
             };
 
-            self.deleteEdificio = function(){
+            self.deleteConta = function(){
 
                 $scope.error = false;
                 $scope.disabled = true;
 
-                $http.delete('/edificio/' + self.edificio._id)
+                $http.delete('/universidade/contaDeAgua/' + self.conta._id)
                     .success(function(){
-                        self.close();
+                        console.log(self.conta);
+                        self.mdDialogSubmit();
                     })
                     .error(function(){
-                    });
-            };
-
-            self.addVazamento = function() {
-
-                // initial values
-                $scope.error = false;
-                $scope.disabled = true;
-
-                $http.post('/edificio/' + self.edificio._id + '/vazamentos/new', {volume: self.volume, data: self.data})
-                    .success(function(){
-                        self.close();
-                        console.log('muito bom');
-                    })
-                    .error(function(){
-                        console.log('muito ruim');
                     });
             };
 }]);
