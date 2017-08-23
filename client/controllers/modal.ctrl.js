@@ -58,7 +58,6 @@ angular.module('myApp')
                         $scope.docDefinition = info.data;
                      pdfMake.createPdf($scope.docDefinition).download($scope.edificio.nome + '.pdf');
                     }, function(info){
-                        console.log('Rota errada')
                     });
                 }
             };
@@ -66,7 +65,6 @@ angular.module('myApp')
             function getEstatisticas() {
                 var q = $q.defer();
                 if (!edificioService.isCaixa()){
-                    console.log("Falsas");
                 var route = "/estatistica/edificio/" + $scope.edificio._id;
                 
                 self.pontoDeConsumo = $scope.edificio;
