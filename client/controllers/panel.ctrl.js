@@ -6,7 +6,6 @@ angular.module('myApp')
             var self = this;
             self.showEdificio = false;
             self.showUser = false;
-            self.showVazamento = false;
             self.showContas = false;
 
             self.data = [];
@@ -17,7 +16,6 @@ angular.module('myApp')
             self.loadEdificios = function (ev) {
                 self.showEdificio = true;
                 self.showUser = false;
-                self.showVazamento = false;
                 self.showContas = false;
 
                 $http.get("/edificio")
@@ -30,8 +28,7 @@ angular.module('myApp')
 
             self.loadUsers = function (ev) {
                 self.showEdificio = false;
-                self.showUser = true;
-                self.showVazamento = false;
+                self.showUser = true
                 self.showContas = false;
 
                 $http.get("/userIndex")
@@ -42,24 +39,9 @@ angular.module('myApp')
                     });
             };
 
-            self.loadVazamentos = function (ev) {
-                self.showEdificio = false;
-                self.showUser = false;
-                self.showVazamento = true;
-                self.showContas = false;
-
-                $http.get("/edificio")
-                    .then(function (response, ev) {
-                        self.data = response.data;
-                    }, function () {
-                        self.data = "error in fetching data"; //return if error on fetch
-                    });
-            };
-
             self.loadContasDeAgua = function(ev) {
                 self.showEdificio = false;
                 self.showUser = false;
-                self.showVazamento = false;
                 self.showContas = true;
 
                 $http.get("/universidade/contaDeAgua")
@@ -73,7 +55,6 @@ angular.module('myApp')
             self.logoutDialog = function (ev) {
                 self.showEdificio = false;
                 self.showUser = true;
-                self.showVazamento = false;
                 self.showContas = false;
 
                 var user = AuthService.getUser();
@@ -239,7 +220,6 @@ angular.module('myApp')
                     console.log("confirmando......")
                     self.loadEdificios();
                   });
-
             }
 
             function ManageUserController($scope, $http, $mdDialog, userService) {

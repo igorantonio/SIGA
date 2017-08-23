@@ -13,7 +13,7 @@
                             <div class="content-tab1" id="info">
                                 <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
 
-                                <p class="ed-bloco">Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
+                                <h3 class="ed-bloco">Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</h3>
                                 <p class="ed-name">{{ctrl.pontoDeConsumo.nome}}</p>
                                 </div>
                                 <div ng-if="ctrl.pontoDeConsumo.isUFCG == true">
@@ -131,8 +131,9 @@
                         <md-icon md-svg-icon="lib/icons/report.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                        <div class="content">
-                            <h1 class="md-display-2">Relatórios</h1>
+                        <div class="content-tab3">
+                            <h3 class="topic" >Relatórios</h3>
+                            <br>
                             <md-button ng-click="pdf()">Baixar relatório PDF
                             </md-button>
                             <md-button ng-click="csvConsumos()">Baixar relatório CSV (Consumos)
