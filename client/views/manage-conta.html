@@ -15,10 +15,10 @@
                             <label>Mes</label>
                             <input type="number" name="mes" ng-model="ctrl.conta.mes" required />
                         </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Data</label>
-                            <input type="date" name="data" ng-model="ctrl.conta.data" required />
-                        </md-input-container>
+                        <md-datepicker class="md-block"
+                            name="data" ng-model="ctrl.conta.data" required 
+                            md-placeholder="Data" md-open-on-focus>
+                        </md-datepicker>
                     </div>
                 </md-dialog-content>
     

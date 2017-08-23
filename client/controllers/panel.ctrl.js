@@ -245,7 +245,7 @@ angular.module('myApp')
             self.newContaDialog = function (ev) {
 
                 var t = new Date();                
-                var mm = t.getMonth();
+                var mm = t.getMonth() + 1;
                 var contaDefault = {valor: 0, mes: mm, dataDePagamento: t};
                 
                 contasService.setConta(contaDefault);
@@ -256,7 +256,7 @@ angular.module('myApp')
             };
 
             self.editContaDialog = function (ev, c) {
-                contasService.setConta(conta);
+                contasService.setConta(c);
                 contasService.setIsNew(false);
 
                 var view = '../views/manage-conta.html';

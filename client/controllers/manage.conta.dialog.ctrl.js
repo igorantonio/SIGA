@@ -9,57 +9,55 @@ angular.module('myApp')
                 $mdDialog.cancel();
             };
 
-            self.operation = function() {
-                if(contasService.isNew()) {
+            self.operation = function () {
+                if (contasService.isNew()) {
                     self.addConta();
                 } else {
                     self.editConta();
                 }
             };
-            
+
             self.mdDialogSubmit = function () {
                 $mdDialog.hide();
             };
 
-            self.addConta = function() {
+            self.addConta = function () {
 
                 $scope.error = false;
                 $scope.disabled = true;
 
                 $http.post('/universidade/contaDeAgua', self.conta)
-                    .success(function(){
+                    .success(function () {
                         self.mdDialogSubmit();
                     })
-                    .error(function(){
+                    .error(function () {
                     });
             };
 
-            self.editConta = function() {
+            self.editConta = function () {
 
                 $scope.error = false;
                 $scope.disabled = true;
 
-                $http.put('/edificio/' + self.conta._id, self.conta)
-                    .success(function(){
-                        self.close();
-                        console.log('muito bom');
+                $http.put('/universidade/contaDeAgua' + self.conta._id, self.conta)
+                    .success(function () {
+                        self.mdDialogSubmit();
                     })
-                    .error(function(){
-                        console.log('muito ruim');
+                    .error(function () {
                     });
             };
 
-            self.deleteConta = function(){
+            self.deleteConta = function () {
 
                 $scope.error = false;
                 $scope.disabled = true;
 
                 $http.delete('/universidade/contaDeAgua/' + self.conta._id)
-                    .success(function(){
+                    .success(function () {
                         console.log(self.conta);
                         self.mdDialogSubmit();
                     })
-                    .error(function(){
+                    .error(function () {
                     });
             };
-}]);
+        }]);
