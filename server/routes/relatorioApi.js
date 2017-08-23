@@ -11,192 +11,193 @@ EstatisticaAPI = EstatisticaAPI.data;
 // EXMEMPLO localhost:3000/relatorio/edificio/:edifico_id/csv?cardinalidade=sem&data=2017-08-19
 router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
-    if (err) {
-        res.status(400).json({error: err});
-    }
-
-    consumos    = edificio.historicoConsumo;
-
-    cardinalidade = req.query.cardinalidade;
-    if (cardinalidade) {
-        if (cardinalidade == 'sem') {
-            if (req.query.data) {
-                mdataFinal = moment(req.query.data);
-                mdataFinal.add(1, 'days');
-                dataFinal = new Date(mdataFinal);
-                mdataInicial = moment(dataFinal).subtract(7, 'days');
-                dataInicial = new Date(mdataInicial);
-
-                consumos    = EstatisticaAPI.filtrarRange(consumos, dataInicial, dataFinal);
-            } else {
-                res.status(400).send('Data não informada.');
-            }
-        } else if (cardinalidade == 'mes') {
-            if (req.query.mes) {
-                consumos    = EstatisticaAPI.filtrarPorMes(consumos, req.query.mes);
-            } else {
-                res.status(400).send('Mês não informado.');
-            }
-        } else if (cardinalidade == 'ano') {
-            if (req.query.ano) {
-                consumos    = EstatisticaAPI.filtrarPorAno(consumos, req.query.ano);
-            } else {
-                res.status(400).send('Ano não informado.');
-            }
+        if (err) {
+            res.status(400).json({error: err});
         }
-    };
 
-    var fields = [
-    {
-        label: 'Consumo',
-        value: 'consumo'
-    },
-    {
-        label: 'Data',
-        value: 'data'
-    }];
+        consumos    = edificio.historicoConsumo;
 
-    var opts = {
-      data: consumos,
-      fields: fields,
-      unwindPath: ['consumo'],
-      quotes: ''
-    };
+        cardinalidade = req.query.cardinalidade;
+        if (cardinalidade) {
+            if (cardinalidade == 'sem') {
+                if (req.query.data) {
+                    mdataFinal = moment(req.query.data);
+                    mdataFinal.add(1, 'days');
+                    dataFinal = new Date(mdataFinal);
+                    mdataInicial = moment(dataFinal).subtract(7, 'days');
+                    dataInicial = new Date(mdataInicial);
 
-    var csv = json2csv(opts);
-    var filePath = 'Consumos ' + edificio.nome + '.csv';
- 
-    fs.writeFile(filePath, csv, function(err) {
-        if (err) throw err;
-        console.log('file saved');
-    });
-    res.json(edificio);
+                    consumos    = EstatisticaAPI.filtrarRange(consumos, dataInicial, dataFinal);
+                } else {
+                    res.status(400).send('Data não informada.');
+                }
+            } else if (cardinalidade == 'mes') {
+                if (req.query.mes) {
+                    consumos    = EstatisticaAPI.filtrarPorMes(consumos, req.query.mes);
+                } else {
+                    res.status(400).send('Mês não informado.');
+                }
+            } else if (cardinalidade == 'ano') {
+                if (req.query.ano) {
+                    consumos    = EstatisticaAPI.filtrarPorAno(consumos, req.query.ano);
+                } else {
+                    res.status(400).send('Ano não informado.');
+                }
+            }
+        };
+
+        var fields = [
+        {
+            label: 'Consumo',
+            value: 'consumo'
+        },
+        {
+            label: 'Data',
+            value: 'data'
+        }];
+
+        var opts = {
+          data: consumos,
+          fields: fields,
+          unwindPath: ['consumo'],
+          quotes: ''
+        };
+
+        var csv = json2csv(opts);
+        var filePath = 'consumos_' + edificio.nome + '.csv';
+     
+        fs.writeFile(filePath, csv, function(err) {
+            if (err) {
+                res.status(400).json({error: err});
+            }
+        });
+        res.status(200).download(filePath);
     });
 });
 
 router.get('/relatorio/edificio/:edificio_id/csv/vazamentos', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
-    if (err) {
-        res.status(400).json({error: err});
-    }
-
-    vazamentos  = edificio.vazamentos;
-
-    cardinalidade = req.query.cardinalidade;
-    if (cardinalidade) {
-        if (cardinalidade == 'sem') {
-            if (req.query.data) {
-                mdataFinal = moment(req.query.data);
-                mdataFinal.add(1, 'days');
-                dataFinal = new Date(mdataFinal);
-                mdataInicial = moment(dataFinal).subtract(7, 'days');
-                dataInicial = new Date(mdataInicial);
-
-                vazamentos  = EstatisticaAPI.filtrarRange(vazamentos, dataInicial, dataFinal);
-            } else {
-                res.status(400).send('Data não informada.');
-            }
-        } else if (cardinalidade == 'mes') {
-            if (req.query.mes) {
-                vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.mes);
-            } else {
-                res.status(400).send('Mês não informado.');
-            }
-        } else if (cardinalidade == 'ano') {
-            if (req.query.ano) {
-                vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.ano);
-            } else {
-                res.status(400).send('Ano não informado.');
-            }
+        if (err) {
+            res.status(400).json({error: err});
         }
-    };
 
-    var fields = [
-    {
-        label: 'Volume',
-        value: 'volume'
-    },
-    {
-        label: 'Data',
-        value: 'data'
-    }];
+        vazamentos  = edificio.vazamentos;
 
-    var opts = {
-      data: vazamentos,
-      fields: fields,
-      unwindPath: ['volume'],
-      quotes: ''
-    };
+        cardinalidade = req.query.cardinalidade;
+        if (cardinalidade) {
+            if (cardinalidade == 'sem') {
+                if (req.query.data) {
+                    mdataFinal = moment(req.query.data);
+                    mdataFinal.add(1, 'days');
+                    dataFinal = new Date(mdataFinal);
+                    mdataInicial = moment(dataFinal).subtract(7, 'days');
+                    dataInicial = new Date(mdataInicial);
 
-    var csv = json2csv(opts);
-    var filePath = 'Vazamentos ' + edificio.nome + '.csv';
- 
-    fs.writeFile(filePath, csv, function(err) {
-        if (err) throw err;
-        console.log('file saved');
-    });
-    res.json(edificio);
+                    vazamentos  = EstatisticaAPI.filtrarRange(vazamentos, dataInicial, dataFinal);
+                } else {
+                    res.status(400).send('Data não informada.');
+                }
+            } else if (cardinalidade == 'mes') {
+                if (req.query.mes) {
+                    vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.mes);
+                } else {
+                    res.status(400).send('Mês não informado.');
+                }
+            } else if (cardinalidade == 'ano') {
+                if (req.query.ano) {
+                    vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.ano);
+                } else {
+                    res.status(400).send('Ano não informado.');
+                }
+            }
+        };
+
+        var fields = [
+        {
+            label: 'Volume',
+            value: 'volume'
+        },
+        {
+            label: 'Data',
+            value: 'data'
+        }];
+
+        var opts = {
+          data: vazamentos,
+          fields: fields,
+          unwindPath: ['volume'],
+          quotes: ''
+        };
+
+        var csv = json2csv(opts);
+        var filePath = 'vazamentos_' + edificio.nome + '.csv';
+     
+        fs.writeFile(filePath, csv, function(err) {
+            if (err) throw err;
+            console.log('file saved');
+        });
+        res.status(200).download(filePath);
     });
 });
 
 router.get('/relatorio/edificio/:edificio_id/csv/alertas', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
-    if (err) {
-        res.status(400).json({error: err});
-    }
-
-    alertas  = edificio.alertas;
-
-    cardinalidade = req.query.cardinalidade;
-    if (cardinalidade) {
-        if (cardinalidade == 'sem') {
-            if (req.query.data) {
-                mdataFinal = moment(req.query.data);
-                mdataFinal.add(1, 'days');
-                dataFinal = new Date(mdataFinal);
-                mdataInicial = moment(dataFinal).subtract(7, 'days');
-                dataInicial = new Date(mdataInicial);
-
-                alertas     = EstatisticaAPI.filtrarRange(alertas, dataInicial, dataFinal);
-            } else {
-                res.status(400).send('Data não informada.');
-            }
-        } else if (cardinalidade == 'mes') {
-            if (req.query.mes) {
-                alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.mes);
-            } else {
-                res.status(400).send('Mês não informado.');
-            }
-        } else if (cardinalidade == 'ano') {
-            if (req.query.ano) {
-                alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.ano);
-            } else {
-                res.status(400).send('Ano não informado.');
-            }
+        if (err) {
+            res.status(400).json({error: err});
         }
-    };
 
-    var fields = [
-    {
-        label: 'Data',
-        value: 'data'
-    }];
+        alertas  = edificio.alertas;
 
-    var opts = {
-      data: alertas,
-      fields: fields,
-      unwindPath: ['data'],
-      quotes: ''
-    };
+        cardinalidade = req.query.cardinalidade;
+        if (cardinalidade) {
+            if (cardinalidade == 'sem') {
+                if (req.query.data) {
+                    mdataFinal = moment(req.query.data);
+                    mdataFinal.add(1, 'days');
+                    dataFinal = new Date(mdataFinal);
+                    mdataInicial = moment(dataFinal).subtract(7, 'days');
+                    dataInicial = new Date(mdataInicial);
 
-    var csv = json2csv(opts);
-    var filePath = 'Alertas ' + edificio.nome + '.csv';
- 
-    fs.writeFile(filePath, csv, function(err) {
-        if (err) throw err;
-        console.log('file saved');
-    });
-    res.json(edificio);
+                    alertas     = EstatisticaAPI.filtrarRange(alertas, dataInicial, dataFinal);
+                } else {
+                    res.status(400).send('Data não informada.');
+                }
+            } else if (cardinalidade == 'mes') {
+                if (req.query.mes) {
+                    alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.mes);
+                } else {
+                    res.status(400).send('Mês não informado.');
+                }
+            } else if (cardinalidade == 'ano') {
+                if (req.query.ano) {
+                    alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.ano);
+                } else {
+                    res.status(400).send('Ano não informado.');
+                }
+            }
+        };
+
+        var fields = [
+        {
+            label: 'Data',
+            value: 'data'
+        }];
+
+        var opts = {
+          data: alertas,
+          fields: fields,
+          unwindPath: ['data'],
+          quotes: ''
+        };
+
+        var csv = json2csv(opts);
+        var filePath = 'alertas_' + edificio.nome + '.csv';
+     
+        fs.writeFile(filePath, csv, function(err) {
+            if (err) throw err;
+            console.log('file saved');
+        });
+        res.status(200).download(filePath);
     });
 });  
 
