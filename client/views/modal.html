@@ -9,48 +9,44 @@
                         <md-icon md-svg-icon="lib/icons/water-drop.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                        <div id="tab1">
-                            <div class="content-tab1" id="info">
-                                <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
+                        <div class="content-tab1">
+                            <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
 
                                 <h3 class="ed-bloco">Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</h3>
                                 <p class="ed-name">{{ctrl.pontoDeConsumo.nome}}</p>
-                                </div>
-                                <div ng-if="ctrl.pontoDeConsumo.isUFCG == true">
+                            </div>
+                            <div ng-if="ctrl.pontoDeConsumo.isUFCG == true">
 
                                 <p class="ed-bloco">{{ctrl.pontoDeConsumo.nome}}</p>
-                                </div>
-                                <p class="ed-atividade">Atividade: {{ctrl.pontoDeConsumo.atividade}}</p>
-                                <p class="ed-descricao">{{ctrl.pontoDeConsumo.descricao}}</p>
-                                <p>Consumo total: {{ctrl.estatisticas.total}} m³</p>
-                                <p>Consumo médio: {{ctrl.estatisticas.media}} m³</p>
-                                <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}} m³</p>
-                                <p>Consumo máximo: {{ctrl.estatisticas.maximo}} m³</p>
-                                <p>Consumo mínimo: {{ctrl.estatisticas.minimo}} m³</p>
-                                
-                                <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
-                                    <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'"
-                                            flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
-                                    </md-button>
-                                    <div id="info-detalhada" ng-if="showInfos">
-                                        <p>Características</p>
-                                        <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco
-                                            {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}</p>
-                                        <p>Area: {{ctrl.pontoDeConsumo.caracteristicasFisicas.area}} m²</p>
-                                        <p>Nº de pavimentos: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pavimentos}}</p>
-                                        <p>Ocupação média: {{ctrl.pontoDeConsumo.caracteristicasFisicas.ocupacaoMedia}}</p>
-                                        <p>Nº de bacias sanitárias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_baciasSanitarias}}</p>
-                                        <p>Nº de torneiras: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_torneiras}}</p>
-                                        <p>Nº de duchas: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_duchas}}</p>
-                                        <p>Nº de chuveiros: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_chuveiros}}</p>
-                                        <p>Nº de pias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pias}}</p>
-                                        <p>Volume do reservatório: {{ctrl.pontoDeConsumo.caracteristicasFisicas.volumeReservatorio}} m³</p>
-                                    </div>
+                            </div>
+                            <p class="ed-atividade">Atividade: {{ctrl.pontoDeConsumo.atividade}}</p>
+                            <p class="ed-descricao">{{ctrl.pontoDeConsumo.descricao}}</p>
+                            <p>Consumo total: {{ctrl.estatisticas.total}}</p>
+                            <p>Consumo médio: {{ctrl.estatisticas.media}}</p>
+                            <p>Consumo médio esperado: {{ctrl.pontoDeConsumo.mediaEsperada}}</p>
+                            <p>Consumo máximo: {{ctrl.estatisticas.maximo}}</p>
+                            <p>Consumo mínimo: {{ctrl.estatisticas.minimo}}</p>
+
+                            <div ng-if="ctrl.pontoDeConsumo.isUFCG == false">
+                                <md-button ng-class="showInfos == true ? 'selected-button' : 'md-raised'" flex="50" ng-click="showInfos = !showInfos">Informações detalhadas
+                                </md-button>
+                                <div id="info-detalhada" ng-if="showInfos">
+                                    <p>Características</p>
+                                    <p>Localização: Setor {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.setor}}, Bloco {{ctrl.pontoDeConsumo.caracteristicasFisicas.localizacao.bloco}}
+                                    </p>
+                                    <p>Area: {{ctrl.pontoDeConsumo.caracteristicasFisicas.area}} m²</p>
+                                    <p>Nº de pavimentos: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pavimentos}}</p>
+                                    <p>Ocupação média: {{ctrl.pontoDeConsumo.caracteristicasFisicas.ocupacaoMedia}}</p>
+                                    <p>Nº de bacias sanitárias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_baciasSanitarias}}</p>
+                                    <p>Nº de torneiras: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_torneiras}}</p>
+                                    <p>Nº de duchas: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_duchas}}</p>
+                                    <p>Nº de chuveiros: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_chuveiros}}</p>
+                                    <p>Nº de pias: {{ctrl.pontoDeConsumo.caracteristicasFisicas.n_pias}}</p>
+                                    <p>Volume do reservatório: {{ctrl.pontDeConsumo.caracteristicasFisicas.volumeReservatorio}}</p>
                                 </div>
                             </div>
                             <div id="img"><img id="fotofront" ng-src="{{ctrl.pontoDeConsumo.img}}"/></div>
                         </div>
-
                     </md-tab-body>
                 </md-tab>
 
@@ -131,13 +127,49 @@
                         <md-icon md-svg-icon="lib/icons/report.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                        <div class="content-tab3">
-                            <h3 class="topic" >Relatórios</h3>
-                            <br>
-                            <md-button ng-click="pdf()">Baixar relatório PDF
+
+                        <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
+                                                <div class="content-tab2">
+
+                        <h3 class="topic">Consumo {{texto_granularidade}}</h3>
+                        <!-- Gráficos/Agrupamento -->
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
+                                        Detalhamento
+                                        <md-icon class="md-filtro-ed">sort</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item ng-repeat="item in ['Anual', 'Mensal', 'Diario', 'Detalhado']">
+                                            <md-button ng-click="main.agrupar($index)">
+                                                <div layout="row" flex>
+                                                    <p flex>Consumo {{item}}</p>
+                                                    <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                            <md-button ng-click="pdf(gran)">Baixar relatório PDF
                             </md-button>
-                            <md-button ng-click="csvConsumos()">Baixar relatório CSV (Consumos)
+                            <md-button ng-click="csvConsumos(gran)">Baixar relatório CSV (Consumos)
                             </md-button>
+                             <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Consumo</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in main.values">
+        <td>{{ dataString(item.x); }}</td>
+        <td>  {{item.y}}
+</td>
+       
+      </tr>
+    </tbody>
+  </table>
+                        </div>
                         </div>
                     </md-tab-body>
                 </md-tab>

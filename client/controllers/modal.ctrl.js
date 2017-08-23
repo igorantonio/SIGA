@@ -24,6 +24,16 @@ angular.module('myApp')
     .controller('DialogController', ['$scope','$mdDialog', '$q', '$http', 'edificioService',
         function ($scope, $mdDialog, $q, $http, edificioService,) {
 
+              var ANUAL = 'anual';
+                var MENSAL = 'mensal';
+                var DIARIO = 'diario';
+                var DETALHADO = 'detalhado';
+                var GRANULARIDADE_ANO = 'year';
+        var GRANULARIDADE_MES = 'month';
+        var GRANULARIDADE_DIA = 'day';
+        var GRANULARIDADE_HORA = 'hour';
+
+
             var self = this;
 
             $scope.showInfos = false;
@@ -39,13 +49,14 @@ angular.module('myApp')
             $scope.answer = function(answer) {
                 $mdDialog.hide(answer);
             };
-            var getPDF = function(){
+            var getPDF = function(granularidadeR){
                 var q = $q.defer();
                 if (!edificioService.isCaixa()){
                     var route = "/relatorio/edificio/" + $scope.edificio._id + "/pdf";
                     $http.get(route).then(function(info) {
                         q.resolve(info.data);
                         $scope.docDefinition = info.data;
+                     pdfMake.createPdf($scope.docDefinition).download($scope.edificio.nome + '.pdf');
                     }, function(info){
                         console.log('Rota errada')
                     });
@@ -82,16 +93,35 @@ angular.module('myApp')
 
                 return q.promise;
             }
-            $scope.pdf = function(){
-                getPDF();
-                pdfMake.createPdf($scope.docDefinition).download($scope.edificio.nome + '.pdf');
+            $scope.pdf = function(granularidadeR){
+                getPDF(granularidadeR);
+               
             };
 
-            $scope.csvConsumos = function(){
+            $scope.csvConsumos = function(granularidadeR){
+                                var gran;
+
+            switch (granularidadeR) {
+                case GRANULARIDADE_ANO:
+                    gran = 'anual';
+                    break;
+                case GRANULARIDADE_MES:
+                    gran = 'mensal';
+                    break;
+                case GRANULARIDADE_DIA:
+                    gran = 'diario';
+                    break;
+                case GRANULARIDADE_HORA:
+                    gran = 'detalhado';
+                    break;
+                default:
+                    gran = 'diario';
+            };
+
                 var q = $q.defer();
                 if (!edificioService.isCaixa()){
                     var route = "/relatorio/edificio/" + $scope.edificio._id + "/csv/consumos";
-                    $http.get(route).then(function(info) {
+                    $http.get(route, {params: {granularidade: gran}}).then(function(info) {
                         q.resolve(info.data);
                         $scope.docDefinition = info.data;
                     }, function(info){
@@ -102,7 +132,6 @@ angular.module('myApp')
 
             var init = function () {
                 getEstatisticas();
-                getPDF();
             };
 
             init();
