@@ -168,6 +168,25 @@ angular.module('myApp')
 
 
         $scope.update = function() {
+        	var granularidade_rota;
+        	switch ($scope.gran) {
+                case GRANULARIDADE_ANO:
+                    gran = 'anual';
+                    break;
+                case GRANULARIDADE_MES:
+                    gran = 'mensal';
+                    break;
+                case GRANULARIDADE_DIA:
+                    gran = 'diario';
+                    break;
+                case GRANULARIDADE_HORA:
+                    gran = 'detalhado';
+                    break;
+                default:
+                    gran = 'diario';
+            };
+
+
             params.granularidade = $scope.gran;
 
             $scope.loadData();

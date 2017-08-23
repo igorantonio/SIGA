@@ -40,22 +40,44 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
               res.status(400).json({err: error});
             };
             consumos = edificio.historicoConsumo;
-            if (req.query.ano != null) {
+            if (req.query.ano) {
                 consumos = EstatisticaAPI.data.filtrarPorAno(consumos, req.query.ano);
             };
-            if (req.query.mes != null) {
+            if (req.query.mes) {
                 consumos = EstatisticaAPI.data.filtrarPorMes(consumos, req.query.mes);
             };
-            if (req.query.dia != null) {
+            if (req.query.dia) {
                 consumos = EstatisticaAPI.data.filtrarPorDia(consumos, req.query.dia);
             };
-            if (req.query.inicio != null && req.query.fim != null) {
+            if (req.query.inicio && req.query.fim) {
                 consumos = EstatisticaAPI.data.filtrarRange(consumos, req.query.inicio, req.query.fim);
             };
 
             
-            if(req.query.granularidade != null){
-                consumos = granularidade(consumos,req.query.granularidade);
+            if(req.query.granularidade){
+                var ANUAL = 'anual';
+                var MENSAL = 'mensal';
+                var DIARIO = 'diario';
+                var DETALHADO = 'detalhado';
+                var gran;
+                switch (req.query.granularidade) {
+                case ANUAL:
+                    gran = 'year';
+                    break;
+                case MENSAL:
+                    gran = 'month';
+                    break;
+                case DIARIO:
+                    gran = 'day';
+                    break;
+                case DETALHADO:
+                    gran = 'hour';
+                    break;
+                default:
+                    gran = 'day';
+            };
+
+                consumos = granularidade(consumos,gran);
             }else{
                 consumos = granularidade(consumos,'day');
             }
