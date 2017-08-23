@@ -226,8 +226,12 @@ angular.module('myApp')
 
                 this.user = userService.getUser();
 
+                this.close = function() {
+                    $mdDialog.hide();
+                };
+
                 this.deleteUser = function () {
-                    // initial values
+                    
                     $scope.error = false;
                     $scope.disabled = true;
 

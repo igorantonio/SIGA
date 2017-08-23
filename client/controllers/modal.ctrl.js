@@ -39,7 +39,7 @@ angular.module('myApp')
             $scope.answer = function(answer) {
                 $mdDialog.hide(answer);
             };
-            function getPDF(){
+            var getPDF = function(){
                 var q = $q.defer();
                 if (!edificioService.isCaixa()){
                     var route = "/relatorio/edificio/" + $scope.edificio._id + "/pdf";
@@ -83,6 +83,7 @@ angular.module('myApp')
                 return q.promise;
             }
             $scope.pdf = function(){
+                getPDF();
                 pdfMake.createPdf($scope.docDefinition).download($scope.edificio.nome + '.pdf');
             };
 
