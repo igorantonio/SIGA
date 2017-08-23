@@ -9,130 +9,197 @@ var EstatisticaAPI = require('./estatisticaApi.js');
 EstatisticaAPI = EstatisticaAPI.data;
 
 // EXMEMPLO localhost:3000/relatorio/edificio/:edifico_id/csv?cardinalidade=sem&data=2017-08-19
-router.get('/relatorio/edificio/:edificio_id/csv', function(req, res) {
+router.get('/relatorio/edificio/:edificio_id/csv/consumos', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
-    if (err) {
-        res.status(400).json({error: err});
-    }
-
-    consumos    = edificio.historicoConsumo;
-    vazamentos  = edificio.vazamentos;
-    alertas     = edificio.alertas;
-
-    cardinalidade = req.query.cardinalidade;
-    if (cardinalidade) {
-        if (cardinalidade == 'sem') {
-            if (req.query.data) {
-                mdataFinal = moment(req.query.data);
-                mdataFinal.add(1, 'days');
-                dataFinal = new Date(mdataFinal);
-                mdataInicial = moment(dataFinal).subtract(7, 'days');
-                dataInicial = new Date(mdataInicial);
-
-                consumos    = EstatisticaAPI.filtrarRange(consumos, dataInicial, dataFinal);
-                vazamentos  = EstatisticaAPI.filtrarRange(vazamentos, dataInicial, dataFinal);
-                alertas     = EstatisticaAPI.filtrarRange(alertas, dataInicial, dataFinal);
-            } else {
-                res.status(400).send('Data não informada.');
-            }
-        } else if (cardinalidade == 'mes') {
-            if (req.query.mes) {
-                consumos    = EstatisticaAPI.filtrarPorMes(consumos, req.query.mes);
-                vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.mes);
-                alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.mes);
-            } else {
-                res.status(400).send('Mês não informado.');
-            }
-        } else if (cardinalidade == 'ano') {
-            if (req.query.ano) {
-                consumos    = EstatisticaAPI.filtrarPorAno(consumos, req.query.ano);
-                vazamentos  = EstatisticaAPI.filtrarPorAno(vazamentos, req.query.ano);
-                alertas     = EstatisticaAPI.filtrarPorAno(alertas, req.query.ano);
-            } else {
-                res.status(400).send('Ano não informado.');
-            }
+        if (err) {
+            res.status(400).json({error: err});
         }
-    };
 
-    var historicoConsumoString = '';
-    for (var i = consumos.length - 1; i >= 0; i--) {
-        historicoConsumoString += consumos[i].consumo.toString() + ' - ' + consumos[i].data.toString() + '\n';
-    };
+        consumos    = edificio.historicoConsumo;
 
-    var vazamentosString = '';
-    for (var i = vazamentos.length - 1; i >= 0; i--) {
-        vazamentosString += vazamentos[i].volume.toString() + ' - ' + vazamentos[i].data.toString() + '\n';
-    };
+        cardinalidade = req.query.cardinalidade;
+        if (cardinalidade) {
+            if (cardinalidade == 'sem') {
+                if (req.query.data) {
+                    mdataFinal = moment(req.query.data);
+                    mdataFinal.add(1, 'days');
+                    dataFinal = new Date(mdataFinal);
+                    mdataInicial = moment(dataFinal).subtract(7, 'days');
+                    dataInicial = new Date(mdataInicial);
 
-    var alertasString = '';
-    for (var i = alertas.length - 1; i >= 0; i--) {
-        alertasString += alertas[i].data.toString() + '\n';
-    };
+                    consumos    = EstatisticaAPI.filtrarRange(consumos, dataInicial, dataFinal);
+                } else {
+                    res.status(400).send('Data não informada.');
+                }
+            } else if (cardinalidade == 'mes') {
+                if (req.query.mes) {
+                    consumos    = EstatisticaAPI.filtrarPorMes(consumos, req.query.mes);
+                } else {
+                    res.status(400).send('Mês não informado.');
+                }
+            } else if (cardinalidade == 'ano') {
+                if (req.query.ano) {
+                    consumos    = EstatisticaAPI.filtrarPorAno(consumos, req.query.ano);
+                } else {
+                    res.status(400).send('Ano não informado.');
+                }
+            }
+        };
 
-    var myData = [
-      {
-        'caracteristicasFisicas.localizacao.setor': edificio.caracteristicasFisicas.localizacao.setor,
-        'caracteristicasFisicas.localizacao.bloco': edificio.caracteristicasFisicas.localizacao.bloco,
-        'caracteristicasFisicas.area': edificio.caracteristicasFisicas.area,
-        'caracteristicasFisicas.volumeReservatorio': edificio.caracteristicasFisicas.volumeReservatorio,
-        'mediaEsperada': edificio.mediaEsperada,
-        'historicoConsumo': historicoConsumoString,
-        'vazamentos': vazamentosString,
-        'alertas': alertasString
-      }
-    ];
+        var fields = [
+        {
+            label: 'Consumo',
+            value: 'consumo'
+        },
+        {
+            label: 'Data',
+            value: 'data'
+        }];
 
-    var fields = [
-    {
-        label: 'Setor',
-        value: 'caracteristicasFisicas.localizacao.setor'
-    },
-    {
-        label: 'Bloco',
-        value: 'caracteristicasFisicas.localizacao.bloco'
-    },
-    {
-        label: 'Area',
-        value: 'caracteristicasFisicas.area'
-    },
-    {
-        label: 'Volume do Reservatorio',
-        value: 'caracteristicasFisicas.volumeReservatorio'
-    },
-    {
-        label: 'Media Esperada',
-        value: 'mediaEsperada'
-    },
-    {
-        label: 'Consumo',
-        value: 'historicoConsumo'
-    },
-    {
-        label: 'Vazamento',
-        value: 'vazamentos'
-    },
-    {
-        label: 'Alerta',
-        value: 'alertas'
-    }];
+        var opts = {
+          data: consumos,
+          fields: fields,
+          unwindPath: ['consumo'],
+          quotes: ''
+        };
 
-    var opts = {
-      data: myData,
-      fields: fields,
-      //unwindPath: ['historicoConsumo', 'vazamentos', 'alertas'],
-      quotes: ''
-    };
-
-    var csv = json2csv(opts);
-    var filePath = edificio.nome + '.csv';
- 
-    fs.writeFile(filePath, csv, function(err) {
-        if (err) throw err;
-        console.log('file saved');
+        var csv = json2csv(opts);
+        var filePath = 'consumos_' + edificio.nome + '.csv';
+     
+        fs.writeFile(filePath, csv, function(err) {
+            if (err) {
+                res.status(400).json({error: err});
+            }
+        });
+        res.status(200).download(filePath);
     });
-    res.json(edificio);
+});
+
+router.get('/relatorio/edificio/:edificio_id/csv/vazamentos', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        }
+
+        vazamentos  = edificio.vazamentos;
+
+        cardinalidade = req.query.cardinalidade;
+        if (cardinalidade) {
+            if (cardinalidade == 'sem') {
+                if (req.query.data) {
+                    mdataFinal = moment(req.query.data);
+                    mdataFinal.add(1, 'days');
+                    dataFinal = new Date(mdataFinal);
+                    mdataInicial = moment(dataFinal).subtract(7, 'days');
+                    dataInicial = new Date(mdataInicial);
+
+                    vazamentos  = EstatisticaAPI.filtrarRange(vazamentos, dataInicial, dataFinal);
+                } else {
+                    res.status(400).send('Data não informada.');
+                }
+            } else if (cardinalidade == 'mes') {
+                if (req.query.mes) {
+                    vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.mes);
+                } else {
+                    res.status(400).send('Mês não informado.');
+                }
+            } else if (cardinalidade == 'ano') {
+                if (req.query.ano) {
+                    vazamentos  = EstatisticaAPI.filtrarPorMes(vazamentos, req.query.ano);
+                } else {
+                    res.status(400).send('Ano não informado.');
+                }
+            }
+        };
+
+        var fields = [
+        {
+            label: 'Volume',
+            value: 'volume'
+        },
+        {
+            label: 'Data',
+            value: 'data'
+        }];
+
+        var opts = {
+          data: vazamentos,
+          fields: fields,
+          unwindPath: ['volume'],
+          quotes: ''
+        };
+
+        var csv = json2csv(opts);
+        var filePath = 'vazamentos_' + edificio.nome + '.csv';
+     
+        fs.writeFile(filePath, csv, function(err) {
+            if (err) throw err;
+            console.log('file saved');
+        });
+        res.status(200).download(filePath);
     });
-}); 
+});
+
+router.get('/relatorio/edificio/:edificio_id/csv/alertas', function(req, res) {
+    Edificio.findById(req.params.edificio_id, function(err, edificio) {
+        if (err) {
+            res.status(400).json({error: err});
+        }
+
+        alertas  = edificio.alertas;
+
+        cardinalidade = req.query.cardinalidade;
+        if (cardinalidade) {
+            if (cardinalidade == 'sem') {
+                if (req.query.data) {
+                    mdataFinal = moment(req.query.data);
+                    mdataFinal.add(1, 'days');
+                    dataFinal = new Date(mdataFinal);
+                    mdataInicial = moment(dataFinal).subtract(7, 'days');
+                    dataInicial = new Date(mdataInicial);
+
+                    alertas     = EstatisticaAPI.filtrarRange(alertas, dataInicial, dataFinal);
+                } else {
+                    res.status(400).send('Data não informada.');
+                }
+            } else if (cardinalidade == 'mes') {
+                if (req.query.mes) {
+                    alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.mes);
+                } else {
+                    res.status(400).send('Mês não informado.');
+                }
+            } else if (cardinalidade == 'ano') {
+                if (req.query.ano) {
+                    alertas     = EstatisticaAPI.filtrarPorMes(alertas, req.query.ano);
+                } else {
+                    res.status(400).send('Ano não informado.');
+                }
+            }
+        };
+
+        var fields = [
+        {
+            label: 'Data',
+            value: 'data'
+        }];
+
+        var opts = {
+          data: alertas,
+          fields: fields,
+          unwindPath: ['data'],
+          quotes: ''
+        };
+
+        var csv = json2csv(opts);
+        var filePath = 'alertas_' + edificio.nome + '.csv';
+     
+        fs.writeFile(filePath, csv, function(err) {
+            if (err) throw err;
+            console.log('file saved');
+        });
+        res.status(200).download(filePath);
+    });
+});  
 
 router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
@@ -179,13 +246,25 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
         }
     };
 
-    var consumos = [];
-    for (var i = 0; i < edificio.historicoConsumo.length; i++) {
-        consumos[i, 0] = edificio.historicoConsumo[i].data.getDate() + '/' + edificio.historicoConsumo[i].data.getMonth() + '/' + edificio.historicoConsumo[i].data.getFullYear();
-        consumos[i, 1] = edificio.historicoConsumo[i].consumo.toString();
+    var consumosF = [];
+    for (var i = 0; i < consumos.length; i++) {
+        consumosF[i, 0] = consumos[i].data.getDate() + '/' + consumos[i].data.getMonth() + '/' + consumos[i].data.getFullYear();
+        consumosF[i, 1] = consumos[i].consumo.toString();
     };
 
-    var filePath = edificio.nome + '.pdf';
+    var vazamentosF = [];
+    for (var i = 0; i < vazamentos.length; i++) {
+        vazamentosF[i, 0] = vazamentos[i].data.getDate() + '/' + vazamentos[i].data.getMonth() + '/' + vazamentos[i].data.getFullYear();
+        vazamentosF[i, 1] = vazamentos[i].volume.toString();
+    };
+
+    var alertasF = [];
+    for (var i = 0; i < alertas.length; i++) {
+        alertasF[i, 0] = alertas[i].data.getDate() + '/' + alertas[i].data.getMonth() + '/' + alertas[i].data.getFullYear();
+    };
+
+    var estatisticas = EstatisticaAPI.calculaEstatisticas(consumos);
+
     var style= {
             title: {
                 fontSize: 16,
@@ -200,7 +279,7 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
         content: [
             {text: 'Edificação: ' + edificio.nome + '\n', fontSize: 20 },
             {text: [
-                { text: 'Descrição Suscinta: ', style: style['title'] }, { text: edificio.descricao + '\n', fontSize: 16},
+                { text: 'Descrição Sucinta: ', style: style['title'] }, { text: edificio.descricao + '\n', fontSize: 16},
                 { text: 'Atividade Preponderante: ', style: style['title'] }, { text: edificio.atividade + '\n', fontSize:16},
                 { text: 'Características Físicas:' + '\n', style: style['title'] },
                 { text: 'Localização = Setor ' + edificio.caracteristicasFisicas.localizacao.setor + ', Bloco ' + edificio.caracteristicasFisicas.localizacao.bloco + '\n', style: style['body'] },
@@ -213,56 +292,46 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
                 { text: 'Nº Chuveiros = ' + edificio.caracteristicasFisicas.n_chuveiros + '\n', style: style['body'] },
                 { text: 'Nº Pias = ' + edificio.caracteristicasFisicas.n_pias + '\n', style: style['body'] },
                 { text: 'Volume do Reservatório = ' + edificio.caracteristicasFisicas.volumeReservatorio + 'm³' + '\n' + '\n', style: style['body'] },
-                { text: 'Consumo de Água' + '\n', style: style['title'] },
-                { text: 'Por Dia:' + '\n', style: style['body'] }] 
+                { text: 'Consumo de Água' + '\n', style: style['title'] }] 
             },
             {table: {
                 headerRows: 1,
 
                 body: [
-                    ['DIA', 'CONSUMO (m³)'],
-                    consumos
+                    ['DATA', 'CONSUMO (m³)'],
+                    consumosF
                     ]
                 }
             },
-            { text: 'Por Mês:' + '\n', style: style['body'] },
+            { text: '\n' + 'Vazamentos:' + '\n', style: style['title'] },
             {table: {
                 headerRows: 1,
 
                 body: [
-                    [ 'MÊS', 'CONSUMO (m³)']
+                    [ 'DATA', 'VOLUME (m³)'],
+                    vazamentosF
                     ]
                 }
             },
-            {text: [
-                { text: '\n'},
-                { text: 'Média: ' + '\n', style: style['body'] },
-                { text: 'Maior Consumo: ' + '\n', style: style['body'] },
-                { text: 'Menor Consumo: ' + '\n', style: style['body'] }]}
+            { text: '\n' + 'Alertas:' + '\n', style: style['title'] },
+            {table: {
+                headerRows: 1,
+
+                body: [
+                    [ 'DATA'],
+                    alertasF
+                    ]
+                }
+            },
+            { text: '\n' + 'Consumo total: ' + estatisticas.total + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo médio: ' + estatisticas.media + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo médio esperado: ' + edificio.mediaEsperada + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo máximo: ' + estatisticas.maximo + 'm³' + '\n', style: style['title'] },
+            { text: 'Consumo mínimo: ' + estatisticas.minimo + 'm³' + '\n', style: style['title'] }
         ],
         
     };
-
-/*
-
-    doc.moveDown();
-    doc.fontSize(16);
-    doc.text('Consumo de Água:');
-    doc.fontSize(14);
-    doc.text('Por Dia:');
-    doc.text('Por Mês:');
-
-    doc.moveDown();
-    doc.fontSize(16);
-    doc.text('Estatísticas do Consumo de Água:');
-    doc.fontSize(14);
-    doc.text('Consumo Total:');
-    doc.text('Consumo Médio:');
-    doc.text('Consumo Médio Esperado:');
-    doc.text('Consumo Máximo:');
-    doc.text('Consumo Mínimo:');*/
     res.send(docDefinition);
-    //res.json(edificio);
     });
 });
 
