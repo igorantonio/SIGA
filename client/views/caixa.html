@@ -40,24 +40,68 @@
                 <!-- Gráficos -->
                 <md-tab>
                     <md-tab-label>
-                       <md-icon md-svg-icon="lib/icons/bar-chart.svg"></md-icon>
+                        <md-icon md-svg-icon="lib/icons/bar-chart.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                      <div class="content-tab2">
-                          <div ng-app="myApp" ng-controller="ChartController as main"  ng-app="app">
-                            <h3 class="topic">Consumo {{gran}}</h3>
-                        <md-button id="update">
-                            Mudar
-                        </md-button>                           
-                            <h3 class="topic">{{edificioId}}</h3>
-                            <div id="economyChart">
-                                <svg></svg>
+                        <div class="content-tab2">
+                            <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
+                                <h3 class="topic">Consumo {{texto_granularidade}}</h3>
+
+                                <!-- Gráficos/Agrupamento -->
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
+                                        Detalhamento
+                                        <md-icon class="md-filtro-ed">sort</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item ng-repeat="item in ['Anual', 'Mensal', 'Diario', 'Detalhado']">
+                                            <md-button ng-click="main.agrupar($index)">
+                                                <div layout="row" flex>
+                                                    <p flex>Consumo {{item}}</p>
+                                                    <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+
+                                <!-- Gráficos/Filtragem -->
+
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
+                                        Intervalo
+                                        <md-icon class="md-filtro-ed">sort</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item>
+                                            <p>Data inicial:<br /></p>
+                                            <md-datepicker ng-model="main.inicialDate" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+                                        </md-menu-item>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <p>Data final:<br /></p>
+
+                                            <md-datepicker ng-model="main.finalDate" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+                                        </md-menu-item>
+                                        <md-menu-item>
+
+                                            <md-button class="md-primary md-raised" ng-click="reload()">Atualizar</md-button>
+                                        </md-menu-item>
+
+                                    </md-menu-content>
+                                </md-menu>
+
+
+                                <h3 class="topic">{{edificioId}}</h3>
+                                <div id="economyChart">
+                                    <svg></svg>
+                                </div>
+
                             </div>
-                            
-                          </div>
-                      </div>
+                        </div>
                     </md-tab-body>
                 </md-tab>
+
 
                 <!-- Relatórios -->
                 <md-tab>
