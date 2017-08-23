@@ -1,19 +1,33 @@
 angular.module('myApp')
-    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', '$q',
-        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, $q) {
+    .controller('PanelController', ['$scope', 'AuthService', '$mdDialog', '$location', '$http', 'edificioService', 'userService', '$q',
+        function ($scope, AuthService, $mdDialog, $location, $http, edificioService, userService, $q) {
 
             var self = this;
             self.showEdificio = false;
             self.showUser = false;
+            self.showVazamento = false;
+            self.showContas = false;
 
             self.data = [];
 
             var user = AuthService.getUser();
             self.user_email = user.username;
 
+            $scope.$on('closeEdificioEvent', function(event, args) {
+                self.loadEdificios();
+                console.log("closeEd");
+            });
+
+            $scope.$on('closeUserEvent', function(event, args) {
+                self.loadUsers();
+                console.log("closeUs");
+            });
+
             self.loadEdificios = function (ev) {
-                self.showUser = false;
                 self.showEdificio = true;
+                self.showUser = false;
+                self.showVazamento = false;
+                self.showContas = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -24,29 +38,75 @@ angular.module('myApp')
             };
 
             self.loadUsers = function (ev) {
-                self.showUser = true;
                 self.showEdificio = false;
+                self.showUser = true;
+                self.showVazamento = false;
+                self.showContas = false;
+
+                $http.get("/userIndex")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
             };
 
-            self.logout = function (ev) {
+            self.loadVazamentos = function (ev) {
+                self.showEdificio = false;
+                self.showUser = false;
+                self.showVazamento = true;
+                self.showContas = false;
+
+                $http.get("/edificio")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
+            };
+
+            self.loadContasDeAgua = function(ev) {
+                self.showEdificio = false;
+                self.showUser = false;
+                self.showVazamento = false;
+                self.showContas = true;
+
+                $http.get("/universidade/contaDeAgua")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function() {
+                        self.data = "error on fetching data";
+                    });
+            };
+
+            self.logoutDialog = function (ev) {
                 self.showEdificio = false;
                 self.showUser = true;
+                self.showVazamento = false;
+                self.showContas = false;
 
                 var user = AuthService.getUser();
 
-                var confirm = $mdDialog.confirm()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
-                    .clickOutsideToClose(true)
-                    .title(user.username + ', você está logado. Deseja deslogar?')
-                    .targetEvent(ev)
-                    .ok('Deslogar');
-
-                $mdDialog.show(confirm).then(function () {
-                    AuthService.logout()
-                        .then(function () {
-                            $location.path('/');
-                        });
+                $mdDialog.show({
+                    templateUrl: '../views/logout.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
                 });
+            };
+
+            self.logout = function() {
+                AuthService.logout()
+                    .then(function () {
+                        $location.path('/');
+                    });
+
+                self.close();
+            };
+
+            self.close = function(){
+                $mdDialog.cancel();
             };
 
             self.updatePassword = function () {
@@ -103,6 +163,18 @@ angular.module('myApp')
                 });
             };
 
+            self.deleteUser = function(ev, user) {
+                userService.setUser(user);
+
+                $mdDialog.show({
+                    templateUrl: '../views/del-user.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            };
+
             self.editEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
@@ -115,6 +187,20 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+            self.deleteEdificio = function(ev, edificio) {
+                edificioService.setEdificio(edificio);
+                edificioService.setNew(false);
+
+                $mdDialog.show({
+                    templateUrl: '../views/del-edificio.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            }
+
 
             self.newEdificio = function (ev) {
                 var edInicial = {
@@ -142,4 +228,18 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+            self.addVazamento = function(ev, edificio) {
+                edificioService.setEdificio(edificio);
+                edificioService.setNew(false);
+
+                $mdDialog.show({
+                    templateUrl: '../views/add-vazamento.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
+            };
+
         }]);

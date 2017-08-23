@@ -179,7 +179,6 @@ angular.module('myApp')
             .then(function (response, ev) {
                 for (var i in response.data) {
                     var edificio = response.data[i];
-                    console.log(edificio);
                     if (nivelAlerta == '1') {
                         self.markers[edificio._id].setIcon(icons.alerta1);
                         self.markers[edificio._id].setVisible(true);
@@ -234,12 +233,14 @@ angular.module('myApp')
             function getEstatisticas() {
                 var q = $q.defer();
                 var route = "/universidade";
+
                 
                 $http.get(route).then(function (info) {
                     q.resolve(info.data);
+                    self.pontoDeConsumo = info.data.infos;
                     self.estatisticas = info.data.estatisticas;
+                    self.pontoDeConsumo.isUFCG = true;
                 }, function (info) {
-                    console.log('Rota errada')
                 });
                 return q.promise;
             }

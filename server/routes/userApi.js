@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var User = require('../models/user.js');
+var Email = require('../email.js');
 
 //Index
 router.get('/userIndex', function(req, res) {
@@ -35,10 +36,10 @@ router.put('/userPassword', function(req, res) {
 });
 
 //Delete
-router.delete('/userDelete', function(req, res) {
-  User.remove(req.body.email, function(err, usuario) {
+router.delete('/userDelete/:email', function(req, res) {
+  User.remove({username: req.params.email}, function(err) {
     if (err) {
-      res.status(400).json({error: err});
+      res.status(400).json(err);
     } else {
       res.status(200).json({status: 'Administrador removido do sistema.'});
     }
@@ -115,4 +116,22 @@ router.get('/status', function(req, res) {
   }
 });
 
+var sendEmail = function(ed) {
+  User.find({}, function(err, usuarios) {
+    usuarios.forEach(function(user){
+      Email.send(ed, user.username);
+    })
+  });
+}
+
 module.exports = router;
+
+module.exports.data = {
+  router: router,
+  sendEmail: function(ed) {
+    return sendEmail(ed);
+    }
+}
+
+
+

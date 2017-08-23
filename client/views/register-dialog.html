@@ -3,19 +3,10 @@
     <md-dialog id="session-dialog" aria-label="Register" ng-cloak>
 
         <form name="registerForm" ng-submit="ctrl.register()">
-
-            <md-toolbar>
-                <div class="md-toolbar-tools">
-                    <h2>Register</h2>
-                    <span flex></span>
-                    <md-button class="md-icon-button" ng-click="ctrl.close()">
-                        <md-icon aria-label="Close dialog">close</md-icon>
-                    </md-button>
-                </div>
-            </md-toolbar>
-
             <md-dialog-content>
                 <div class="md-dialog-content">
+                    <h2>Registrar</h2>
+                    <md-divider></md-divider>
                     <md-input-container class="md-block">
                         <label>E-mail</label>
                         <input name="username" ng-model="ctrl.username" md-autofocus required />
@@ -34,7 +25,8 @@
             <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
 
             <md-dialog-actions layout="row">
-                <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary" md-autofocus>Register!</md-button>
+                <md-button ng-click="ctrl.close()" class="md-raised">Cancelar</md-button>
+                <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary blue" md-autofocus>Registrar</md-button>
             </md-dialog-actions>
         </form>
     </md-dialog>

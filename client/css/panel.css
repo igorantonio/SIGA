@@ -1,33 +1,48 @@
+#content {
+	height: 100%;
+	width: 100%;
+}
+
 #row {
 	display: grid;
 }
 
 #menu {
-	width: 30%;
+	width: 15%;
 	float: left;
 }
 
 #menu ul {
-	margin: 30%;
+	margin-top: 25%;
+	margin-right: 10%;
 }
 
 #menu ul li {
 	margin: 0px;
 	padding: 0px;
-	border-bottom: 1px solid #CCC;
-	text-align: left;
 	list-style-type: none;
 }
 
+#option {
+	color: #18355b;
+	font-size: medium;
+}
+
+#option:hover {
+	color: #18355b;
+}
+
 #panel {
-	margin-top: 5%;
-	width: 70%; 
+	margin-top: 5vh;
+	width: 85%; 
 	float: right;
+	border-left: solid #e0e0e0 1px;
+    padding-left: 10vh;
 }
 
 #divs {
 	overflow:auto;
-	width: 80%;
+	width: 95%;
   	display: inline-block;
  }
 
@@ -41,5 +56,6 @@
 	margin-top: 3vh;
 }
 
-
-
+md-list-item {
+	padding-left: 3vh;
+}

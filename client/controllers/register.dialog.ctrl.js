@@ -1,6 +1,6 @@
 angular.module('myApp')
-    .controller('RegisterDialogController', ['$scope', '$location', 'AuthService', '$mdDialog',
-        function ($scope, $location, AuthService, $mdDialog) {
+    .controller('RegisterDialogController', ['$scope', '$location', 'AuthService', '$mdDialog', '$http',
+        function ($scope, $location, AuthService, $mdDialog, $http) {
 
             var self = this;
 
@@ -30,5 +30,4 @@ angular.module('myApp')
                         self.registerForm = {};
                     });
             };
-
         }]);
