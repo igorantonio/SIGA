@@ -19,10 +19,7 @@ angular.module('myApp')
             };
 
             self.close = function () {
-                $mdDialog.cancel();
-                $scope.$emit('closeEdificioEvent', "oi");
-                $scope.$emit('someEvent', [1,2,3]);
-                $scope.$broadcast('someEvent', [1,2,3]);
+                $mdDialog.hide();
             };
 
             self.registerEdificio = function() {
@@ -52,6 +49,19 @@ angular.module('myApp')
                     })
                     .error(function(){
                         console.log('muito ruim');
+                    });
+            };
+
+            self.deleteEdificio = function(){
+
+                $scope.error = false;
+                $scope.disabled = true;
+
+                $http.delete('/edificio/' + self.edificio._id)
+                    .success(function(){
+                        self.close();
+                    })
+                    .error(function(){
                     });
             };
 

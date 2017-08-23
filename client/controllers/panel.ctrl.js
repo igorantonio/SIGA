@@ -78,7 +78,7 @@ angular.module('myApp')
             };
 
             self.close = function () {
-                $mdDialog.cancel();
+                $mdDialog.hide();
             };
 
             self.updatePassword = function () {
@@ -157,31 +157,17 @@ angular.module('myApp')
             self.editEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
-
-                $mdDialog.show({
-                    templateUrl: '../views/manage-edificio.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen,
-                    controller: ManageEdificioController,
-                    controllerAs: 'ctrl'
-                });
+                
+                var view = '../views/manage-edificio.html';
+                self.callEdificioMdDialog(ev, view);
             };
 
             self.deleteEdificio = function (ev, edificio) {
                 edificioService.setEdificio(edificio);
                 edificioService.setNew(false);
 
-                $mdDialog.show({
-                    templateUrl: '../views/del-edificio.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen,
-                    controller: ManageEdificioController,
-                    controllerAs: 'ctrl'
-                });
+                var view = '../views/del-edificio.html';
+                self.callEdificioMdDialog(ev, view);
             }
 
             self.newEdificio = function (ev) {
@@ -201,18 +187,9 @@ angular.module('myApp')
 
                 edificioService.setEdificio(edInicial);
                 edificioService.setNew(true);
-
-                $mdDialog.show({
-                    templateUrl: '../views/manage-edificio.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen,
-                    controller: ManageEdificioController,
-                    controllerAs: 'ctrl'
-                });
-
-                self.loadEdificios();
+            
+                var view = '../views/manage-edificio.html';
+                self.callEdificioMdDialog(ev, view);
             };
 
             self.addVazamento = function (ev, edificio) {
@@ -227,6 +204,24 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+            self.callEdificioMdDialog = function(ev, view) {
+
+                var confirm = $mdDialog.confirm({
+                    templateUrl: view,
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen,
+                    controller: 'ManageEdificioController',
+                    controllerAs: 'ctrl'
+                  })
+                  $mdDialog.show(confirm).then(function() {
+                    console.log("confirmando......")
+                    self.loadEdificios();
+                  });
+
+            }
 
             function ManageUserController($scope, $http, $mdDialog, userService) {
 
@@ -246,82 +241,5 @@ angular.module('myApp')
                         });
                 };
             };
-
-            function ManageEdificioController($scope, $http, $mdDialog, edificioService) {
-
-                this.edificio = edificioService.getEdificio();
-
-                this.message = function () {
-                    if (edificioService.isNew())
-                        return "Novo edifício";
-                    return "Editar edificio";
-                };
-
-                this.operation = function () {
-                    if (edificioService.isNew())
-                        this.registerEdificio();
-                    if (!edificioService.isNew())
-                        this.editEdificio();
-                };
-
-                this.deleteEdificio = function () {
-
-                    $scope.error = false;
-                    $scope.disabled = true;
-
-                    $http.delete('/edificio/' + this.edificio._id)
-                        .success(function () {
-                            $mdDialog.hide();
-                            self.loadEdificios();
-                        })
-                        .error(function () {
-                        });
-                };
-
-                this.registerEdificio = function () {
-
-                    $scope.error = false;
-                    $scope.disabled = true;
-
-                    $http.post('/edificio', this.edificio)
-                        .success(function () {
-                            $mdDialog.hide();
-                            self.loadEdificios();
-                        })
-                        .error(function () {
-                        });
-                };
-
-                this.editEdificio = function () {
-
-                    // initial values
-                    $scope.error = false;
-                    $scope.disabled = true;
-
-                    $http.put('/edificio/' + this.edificio._id, this.edificio)
-                        .success(function () {
-                            $mdDialog.hide();
-                            self.loadEdificios();
-                        })
-                        .error(function () {
-                        });
-                };
-
-                self.addVazamento = function () {
-
-                    // initial values
-                    $scope.error = false;
-                    $scope.disabled = true;
-
-                    $http.post('/edificio/' + this.edificio._id + '/vazamentos/new', { volume: this.volume, data: this.data })
-                        .success(function () {
-                            $mdDialog.hide();
-                            self.loadEdificios();
-                        })
-                        .error(function () {
-                        });
-                };
-
-            }
 
         }]);
