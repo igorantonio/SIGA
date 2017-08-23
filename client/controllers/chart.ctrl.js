@@ -1,9 +1,8 @@
 angular.module('myApp')
-    .controller('ChartController', ['$scope', 'edificioService', '$http', '$mdDialog', function($scope, edificioService, $http, $mdDialog) {
+    .controller('ChartController', ['$scope', 'edificioService', '$http', '$mdDialog', '$timeout', function($scope, edificioService, $http, $mdDialog, $timeout) {
         self = this;
         $scope.texto_granularidade = "Diário";
         $scope.gran = edificioService.getGranularidade();
-
 
         var localized = d3.locale({
 		  "decimal": ",",
@@ -19,6 +18,10 @@ angular.module('myApp')
 		  "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
 		  "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 		});
+        $scope.localized= localized;
+
+
+
 
 
         /* Definição de Variáveis auxiliares
@@ -30,6 +33,18 @@ angular.module('myApp')
         var chart;
         var chartData;
         var originatorEv;
+
+        $scope.dataString = function(x){
+            if($scope.gran == GRANULARIDADE_ANO){
+                return localized.timeFormat('%Y')(new Date(x));
+            }else if ($scope.gran == GRANULARIDADE_DIA){
+                return localized.timeFormat('%d/%m/%Y')(new Date(x));
+            }else if ($scope.gran == GRANULARIDADE_HORA){
+                return localized.timeFormat('%d/%m/%Y - %H:%M%:%S')(new Date(x));
+            }else if ($scope.gran == GRANULARIDADE_MES){
+                return localized.timeFormat('%m/%Y')(new Date(x));
+            }
+        }
 
         this.openMenu = function($mdOpenMenu, ev) {
             originatorEv = ev;
@@ -51,6 +66,7 @@ angular.module('myApp')
             }],
             area: true,
         }];
+        self.values = $scope.data.values;
 
         // Filtragem (Range)
 
@@ -225,8 +241,15 @@ angular.module('myApp')
                         ticks: getTicks(response.data, $scope.gran)
 
                     }];
+
                     if (chart) updateLook();
                     $scope.estatisticas = calculaEstatisticas($scope.data[0].values);
+                    tamanhomax = Math.min(100, response.data.length);
+                    self.values = response.data.slice(0,tamanhomax);
+                    $timeout(function () {
+                                
+            $scope.$apply();
+        }, 300);
 
 
 

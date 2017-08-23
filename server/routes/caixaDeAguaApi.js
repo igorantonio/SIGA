@@ -152,7 +152,7 @@ router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
         };
         data = new Date(req.body.data);
         novoVazamento = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            data: data.setTime(data.getTime()),
             volume: req.body.volume
         };
         caixa.vazamentos.push(novoVazamento);
@@ -179,7 +179,7 @@ router.put('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
             caixa.vazamentos.forEach(function(vazamento) {
                 if (vazamento._id == req.params.vazamento_id) {
                     data = new Date(req.body.data);
-                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() );
                     if (req.body.volume) vazamento.volume = req.body.volume;
                 }
                 vazamentosAtualizado.push(vazamento);

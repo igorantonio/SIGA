@@ -75,7 +75,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
                     gran = 'hour';
                     break;
                 default:
-                    gran = 'day';
+                    gran = req.query.granularidade;
             };
 
                 consumos = granularidade(consumos,gran);
@@ -87,7 +87,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
             for (key in consumos){
                 data = new Date(key);
                 var newConsumo = {
-                    x: data.getTime() - data.getTimezoneOffset() * 60 * 1000,
+                    x: data.getTime(), //- data.getTimezoneOffset() * 60 * 1000,
                     y: consumos[key]
                 };
                 consumosFiltrados.push(newConsumo);
@@ -131,7 +131,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         for (var i = 1; i <= qDias; i++) {
             data = new Date(datas[i-1]);
             novoConsumo = {
-                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                data: data.setTime(data.getTime()),
                 consumo: consumo/qDias
             };
             edificio.historicoConsumo.push(novoConsumo);
@@ -147,7 +147,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
 
             data = new Date(req.body.data);
             novoAlerta = {
-                data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+                data: data.setTime(data.getTime()),
                 checked: false
             };
             edificio.alertas.push(novoAlerta);
@@ -173,7 +173,7 @@ router.put('/edificio/:edificio_id/consumo/:consumo_id', function(req, res) {
             edificio.historicoConsumo.forEach(function(consumo) {
                 if (consumo._id == req.params.consumo_id) {
                     data = new Date(req.body.data);
-                    if (req.body.data) consumo.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.data) consumo.data       = data.setTime(data.getTime());
                     if (req.body.consumo) consumo.consumo = req.body.consumo;
                 }
                 consumosAtualizado.push(consumo);
@@ -260,7 +260,7 @@ router.post('/edificio/:edificio_id/vazamentos/new', function(req, res) {
         };
         data = new Date(req.body.data);
         novoVazamento = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            data: data.setTime(data.getTime()),
             volume: req.body.volume
         };
         edificio.vazamentos.push(novoVazamento);
@@ -288,7 +288,7 @@ router.put('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, res)
             edificio.vazamentos.forEach(function(vazamento) {
                 if (vazamento._id == req.params.vazamento_id) {
                     data = new Date(req.body.data);
-                    if (req.body.data) vazamento.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.data) vazamento.data       = data.setTime(data.getTime());
                     if (req.body.volume) vazamento.volume = req.body.volume;
                 }
                 vazamentosAtualizado.push(vazamento);
@@ -376,7 +376,7 @@ router.post('/edificio/:edificio_id/alertas/new', function(req, res) {
 
         data = new Date(req.body.data);
         novoAlerta = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            data: data.setTime(data.getTime()),
             checked: req.body.checked
         };
 
@@ -627,7 +627,7 @@ var granularidade = function(historicoConsumo, g){
     novosConsumos = {};
     historicoConsumo.forEach(function(consumo){
         auxmoment = moment(consumo.data);
-        auxmoment = auxmoment.startOf(gran);
+        auxmoment = (auxmoment.startOf(gran));
         novaData = new Date(auxmoment);
         consumo.data = novaData;
         if (novosConsumos[novaData]==null){

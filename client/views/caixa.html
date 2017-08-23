@@ -37,7 +37,7 @@
                     </md-tab-body>
                 </md-tab>
 
-                <!-- Gráficos -->
+                                <!-- Gráficos -->
                 <md-tab>
                     <md-tab-label>
                         <md-icon md-svg-icon="lib/icons/bar-chart.svg"></md-icon>
@@ -95,26 +95,67 @@
                                 <h3 class="topic">{{edificioId}}</h3>
                                 <div id="economyChart">
                                     <svg></svg>
+
                                 </div>
+                                <h5 class="topic">Consumo Total:<br/></h5> <h2 class="topic">{{estatisticas.total}}m<sup>3</sup></h1><br/>
+                                    
+
+                                <h5 class="topic">Consumo Médio:<br/></h5><h2 class="topic">{{estatisticas.media}}m<sup>3</sup></h1><br/>
+                                    
 
                             </div>
                         </div>
                     </md-tab-body>
                 </md-tab>
 
-
                 <!-- Relatórios -->
                 <md-tab>
                     <md-tab-label>
-                        <md-icon md-svg-icon="lib/icons/clock.svg"></md-icon>
+                        <md-icon md-svg-icon="lib/icons/report.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                        <div class="content">
-                            <h1 class="md-display-2">Tab Three</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue.
-                                Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In
-                                sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec,
-                                feugiat ultricies mi.</p>
+                        <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
+                                                <div class="content-tab2">
+
+                        <h3 class="topic">Consumo {{texto_granularidade}}</h3>
+                        <!-- Gráficos/Agrupamento -->
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open demo menu" ng-click="main.openMenu($mdOpenMenu, $event)">
+                                        Detalhamento
+                                        <md-icon class="md-filtro-ed">sort</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item ng-repeat="item in ['Anual', 'Mensal', 'Diario', 'Detalhado']">
+                                            <md-button ng-click="main.agrupar($index)">
+                                                <div layout="row" flex>
+                                                    <p flex>Consumo {{item}}</p>
+                                                    <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                            <md-button ng-click="pdf(gran)">Baixar relatório PDF
+                            </md-button>
+                            <md-button ng-click="csvConsumos(gran)">Baixar relatório CSV (Consumos)
+                            </md-button>
+                             <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Consumo</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in main.values">
+        <td>{{ dataString(item.x); }}</td>
+        <td>  {{item.y}}
+</td>
+       
+      </tr>
+    </tbody>
+  </table>
+                        </div>
                         </div>
                     </md-tab-body>
                 </md-tab>

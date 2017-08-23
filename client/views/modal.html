@@ -129,7 +129,8 @@
                     </md-tab-label>
                     <md-tab-body>
                         <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
-                        <div class="content">
+                                                <div class="content-tab2">
+
                         <h3 class="topic">Consumo {{texto_granularidade}}</h3>
                         <!-- Gráficos/Agrupamento -->
                                 <md-menu md-position-mode="target-right target">
@@ -152,6 +153,22 @@
                             </md-button>
                             <md-button ng-click="csvConsumos(gran)">Baixar relatório CSV (Consumos)
                             </md-button>
+                             <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Consumo</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in main.values">
+        <td>{{ dataString(item.x); }}</td>
+        <td>  {{item.y}}
+</td>
+       
+      </tr>
+    </tbody>
+  </table>
                         </div>
                         </div>
                     </md-tab-body>
