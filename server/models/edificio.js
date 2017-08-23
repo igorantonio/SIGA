@@ -6,6 +6,7 @@ var Edificio = new Schema({
 	nome: {type: String, required: true, minlength: 1},
   	descricao: {type: String, required: true, default: "Nenhuma descrição informada", minlength:10},
   	atividade: {type:String, required: true, default: "Desconhecida", minlength:3},
+  	img: { data: Buffer, contentType: String },
 	caracteristicasFisicas: {
 		localizacao: { setor: String, bloco: {type:String, required:true} },
 		area: Number,
