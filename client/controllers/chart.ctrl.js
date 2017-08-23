@@ -333,20 +333,22 @@ angular.module('myApp')
 		    };
 		  });
 		  total = consumos.length;
-		  maisnova = moment(consumos[total-1].x);
-		  maisantiga = moment(consumos[0].x);
-		  if ($scope.gran== GRANULARIDADE_MES){
-		  	media = sum / (maisnova.diff(maisantiga, 'months') +1);
-		  }
-		  else if ($scope.gran== GRANULARIDADE_ANO){
-		  	media = sum / (maisnova.diff(maisantiga, 'years') +1);
-		  }
-		  else if($scope.gran == GRANULARIDADE_DIA){
-		  	media = sum / (maisnova.diff(maisantiga, 'days') +1);
-		  }
-		  else if($scope.gran == GRANULARIDADE_HORA){
-		  	media = sum / (maisnova.diff(maisantiga, 'hours') +1);
-		  }
+		  if (consumos.length>=1){
+			  maisnova = moment(consumos[total-1].x);
+			  maisantiga = moment(consumos[0].x);
+			  if ($scope.gran== GRANULARIDADE_MES){
+			  	media = sum / (maisnova.diff(maisantiga, 'months') +1);
+			  }
+			  else if ($scope.gran== GRANULARIDADE_ANO){
+			  	media = sum / (maisnova.diff(maisantiga, 'years') +1);
+			  }
+			  else if($scope.gran == GRANULARIDADE_DIA){
+			  	media = sum / (maisnova.diff(maisantiga, 'days') +1);
+			  }
+			  else if($scope.gran == GRANULARIDADE_HORA){
+			  	media = sum / (maisnova.diff(maisantiga, 'hours') +1);
+			  }
+			}
 		  else{
 		  	console.log($scope.gran);
 		  	media = sum/total;

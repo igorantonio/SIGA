@@ -12,71 +12,69 @@
             </div>
             <div>
                 <md-menu>
-                <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
-                    <md-icon class="md-filtro-ed">sort</md-icon>
-                </md-button>
+                    <md-button class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+                        <md-icon class="md-filtro-ed">sort</md-icon>
+                    </md-button>
 
-                <md-menu-content>
-                    <md-menu-item>
-                        <md-button ng-click="ctrl.redial($event)">
-                            <md-icon>check_box</md-icon>
-                            Todos os prédios
-                        </md-button>
+                    <md-menu-content>
+                        <md-menu-item>
+                            <md-button ng-click="ctrl.redial($event)">
+                                <md-icon>check_box</md-icon>
+                                Todos os prédios
+                            </md-button>
 
-                    </md-menu-item>
-<md-menu-item>
-          <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
-           Filtrar por consumo
-                </md-button>
-            </md-menu-item>
-                                        <md-menu-divider></md-menu-divider>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                                Filtrar por consumo
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
 
-                    <md-menu-item>
-                        <md-button ng-click="ctrl.showEdificiosAlerta('0')">
-                            <md-icon>check_box_outline_blank</md-icon>
-                            Um pouco acima da média
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="ctrl.showEdificiosAlerta('1')">
-                            <md-icon>check_box_outline_blank</md-icon>
-                            Muito acima da média
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-          <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
-           Filtrar por setor
-                </md-button>
-            </md-menu-item>
-                                <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button ng-click="ctrl.showEdificiosAlerta('0')">
+                                <md-icon>check_box_outline_blank</md-icon>
+                                Um pouco acima da média
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="ctrl.showEdificiosAlerta('1')">
+                                <md-icon>check_box_outline_blank</md-icon>
+                                Muito acima da média
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                                Filtrar por setor
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
 
-                    <md-menu-item>
+                        <md-menu-item>
 
-                        <md-button ng-click="ctrl.showOnlySetor('A');">
-                            <md-icon>check_box_outline_blank</md-icon>
-                            Setor A
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="ctrl.showOnlySetor('B');">
-                            <md-icon>check_box_outline_blank</md-icon>
-                            Setor B
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="ctrl.showOnlySetor('C');">
-                            <md-icon>check_box_outline_blank</md-icon>
-                            Setor C
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-
+                            <md-button ng-click="ctrl.showOnlySetor('A');">
+                                <md-icon>check_box_outline_blank</md-icon>
+                                Setor A
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="ctrl.showOnlySetor('B');">
+                                <md-icon>check_box_outline_blank</md-icon>
+                                Setor B
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="ctrl.showOnlySetor('C');">
+                                <md-icon>check_box_outline_blank</md-icon>
+                                Setor C
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
         </div>
 
         <div id="map"></div>
     </div>
-
 
 </div>

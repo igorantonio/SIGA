@@ -206,7 +206,6 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
     if (error) {
         res.status(400).json({error: error});
     }
-
     consumos    = edificio.historicoConsumo;
     vazamentos  = edificio.vazamentos;
     alertas     = edificio.alertas;
@@ -246,22 +245,37 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
         }
     };
 
-    var consumosF = [];
-    for (var i = 0; i < consumos.length; i++) {
-        consumosF[i, 0] = consumos[i].data.getDate() + '/' + consumos[i].data.getMonth() + '/' + consumos[i].data.getFullYear();
-        consumosF[i, 1] = consumos[i].consumo.toString();
-    };
+    var consumosF = [['DATA', 'CONSUMO (m³)']];
+    consumos.forEach(function(consumo){
+        data = d3.time.format('%d/%m/%Y')(new Date(consumo.data));
+        consumosF.push([data, consumo.consumo.toString()]);
+    });
 
-    var vazamentosF = [];
-    for (var i = 0; i < vazamentos.length; i++) {
-        vazamentosF[i, 0] = vazamentos[i].data.getDate() + '/' + vazamentos[i].data.getMonth() + '/' + vazamentos[i].data.getFullYear();
-        vazamentosF[i, 1] = vazamentos[i].volume.toString();
-    };
 
-    var alertasF = [];
-    for (var i = 0; i < alertas.length; i++) {
-        alertasF[i, 0] = alertas[i].data.getDate() + '/' + alertas[i].data.getMonth() + '/' + alertas[i].data.getFullYear();
-    };
+
+    var vazamentosF = [[ 'DATA', 'VOLUME (m³)']];
+
+    vazamentos.forEach(function(vazamento){
+        data = d3.time.format('%d/%m/%Y')(new Date(vazamento.data));
+        vazamentosF.push([data, vazamento.volume.toString()]);
+    })
+    
+    if (vazamentosF.length ==0){
+        vazamentosF =['--',['--']]
+    }
+
+    var alertasF =  [[ 'DATA', 'VERIFICADO EM']];
+    alertas.forEach(function(alerta){
+        data = d3.time.format('%d/%m/%Y')(new Date(alertas.data));;
+        alertasF.push([data,'--']);
+    })
+   
+    if (alertasF.length ==0){
+        alertasF =['--',['--']]
+    }
+    if (consumosF.length ==0){
+        consumosF =['--',['--']]
+    }
 
     var estatisticas = EstatisticaAPI.calculaEstatisticas(consumos);
 
@@ -296,31 +310,21 @@ router.get('/relatorio/edificio/:edificio_id/pdf', function(req, res) {
             },
             {table: {
                 headerRows: 1,
-
-                body: [
-                    ['DATA', 'CONSUMO (m³)'],
-                    consumosF
-                    ]
+                body: consumosF                    
                 }
             },
             { text: '\n' + 'Vazamentos:' + '\n', style: style['title'] },
             {table: {
                 headerRows: 1,
 
-                body: [
-                    [ 'DATA', 'VOLUME (m³)'],
-                    vazamentosF
-                    ]
+                body: vazamentosF
                 }
             },
             { text: '\n' + 'Alertas:' + '\n', style: style['title'] },
             {table: {
                 headerRows: 1,
 
-                body: [
-                    [ 'DATA'],
-                    alertasF
-                    ]
+                body: alertasF
                 }
             },
             { text: '\n' + 'Consumo total: ' + estatisticas.total + 'm³' + '\n', style: style['title'] },

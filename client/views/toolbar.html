@@ -1,9 +1,9 @@
 <div class="toolbar">
     <div class="myrow">
-        <div class="title">
+        <div class="title" ng-controller="HomeController as ctrl">
             <h5></h5>
-       		<h2 id="name">SIGA</h2>
-            <p>Sistema de Gerenciamento de Água</p>
+       		<h2 id="name" ng-click='ctrl.goToHome()'>SIGA</h2>
+            <p ng-click='ctrl.goToHome()'>Sistema de Gerenciamento de Água</p>
         </div>
 
         <div class="session" ng-controller="SessionController as ctrl">
