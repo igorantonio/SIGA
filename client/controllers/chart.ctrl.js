@@ -246,16 +246,14 @@ angular.module('myApp')
                         ticks: getTicks(response.data, $scope.gran)
 
                     }];
+                                if (chart) nv.utils.windowResize(chart.update);
+
 
                     if (chart) updateLook();
                     $scope.estatisticas = calculaEstatisticas($scope.data[0].values);
                     tamanhomax = Math.min(100, response.data.length);
                     self.values = response.data.slice(0,tamanhomax);
-                    $timeout(function () {
-                                
-            $scope.$apply();
-        }, 300);
-
+                    
 
 
                 }, function() {

@@ -1,4 +1,4 @@
-<md-dialog class="popup" ng-cloak="" ng-app="app">
+<md-dialog class="popup" ng-app="app">
     <form>
         <md-dialog-content>
             <md-tabs md-border-bottom>
@@ -46,15 +46,18 @@
                             <div id="img"><img id="fotofront" ng-src="{{ctrl.pontoDeConsumo.img}}" /></div>
                         </div>
                     </md-tab-body>
+
                 </md-tab>
+
                 <!-- Gráficos -->
+                                            <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
+
                 <md-tab>
                     <md-tab-label>
                         <md-icon md-svg-icon="lib/icons/bar-chart.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
                         <div class="content-tab2">
-                            <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h3 class="titulo">Consumo {{texto_granularidade}}</h3>
@@ -109,43 +112,42 @@
                                     <svg></svg>
                                 </div>
                                 <div ng-if="estatisticas.total >0">
-                                 <div class="row">
-                                    <div class="col-sm-3">
-                                        <h5 class="topic">Consumo Total:<br/></h5>
-                                        <h2 class="light">{{estatisticas.total.toFixed(3)}}m<sup>3</sup></h2><br/></h2></div>
-
-                                    <div class="col-sm-3">
-                                        <h5 class="topic">Consumo Médio:<br/></h5>
-                                        <h2 class="light">{{estatisticas.media.toFixed(3)}}m<sup>3</sup></h2><br/></div>
-                                    
-                                    <div class="col-sm-3">
-                                    <h5 class="topic">Menor Consumo:<br/></h5>
-                                        <h2 class="light">{{estatisticas.minimo.toFixed(3)}}m<sup>3</sup></h2>
-                                        <p class="nomargin"> em {{dataString(estatisticas.data_minimo)}}</p></div>
-                                    
-                        
-
-                         <div class="col-sm-3">
-                                    <h5 class="topic">Maior Consumo:<br/></h5>
-                                        <h2 class="light">{{estatisticas.maximo.toFixed(3)}}m<sup>3</sup></h2>
-                                        <p class="nomargin"> em {{dataString(estatisticas.data_max)}}</p></div>
-
-                                        </div>
+                                     <div class="row">
+                                        <div class="col-sm-3">
+                                            <h5 class="topic">Consumo Total:<br/></h5>
+                                            <h2 class="light">{{estatisticas.total.toFixed(3)}}m<sup>3</sup></h2><br/>
                                         </div>
 
+                                        <div class="col-sm-3">
+                                            <h5 class="topic">Consumo Médio:<br/></h5>
+                                            <h2 class="light">{{estatisticas.media.toFixed(3)}}m<sup>3</sup></h2><br/></div>
+                                        
+                                        <div class="col-sm-3">
+                                        <h5 class="topic">Menor Consumo:<br/></h5>
+                                            <h2 class="light">{{estatisticas.minimo.toFixed(3)}}m<sup>3</sup></h2>
+                                            <p class="nomargin"> em {{dataString(estatisticas.data_minimo)}}</p></div>
+                                        
+                            
 
-                            </div>
+                                        <div class="col-sm-3">
+                                            <h5 class="topic">Maior Consumo:<br/></h5>
+                                                <h2 class="light">{{estatisticas.maximo.toFixed(3)}}m<sup>3</sup></h2>
+                                                <p class="nomargin"> em {{dataString(estatisticas.data_max)}}</p></div>
+
+                                    </div>
+                                </div>
+
+
                         </div>
                     </md-tab-body>
                 </md-tab>
-
-                <!-- Relatórios -->
+<!-- Relatórios -->
+                
                 <md-tab>
                     <md-tab-label>
                         <md-icon md-svg-icon="lib/icons/report.svg"></md-icon>
                     </md-tab-label>
                     <md-tab-body>
-                        <div ng-app="myApp" ng-controller="ChartController as main" ng-app="app">
                             <div class="content-tab2">
                                 <div class="row">
                                     <div class="col-sm-7">
@@ -197,9 +199,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+
                     </md-tab-body>
                 </md-tab>
+                </div>
+
+
+
 
             </md-tabs>
         </md-dialog-content>
