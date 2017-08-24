@@ -5,8 +5,6 @@ angular.module('myApp')
             var self = this;
             self.conta = contasService.getConta();
 
-            console.log(typeof(self.conta.dataDePagamento));
-
             self.close = function () {
                 $mdDialog.cancel();
             };
