@@ -26,7 +26,7 @@ angular.module('myApp')
                 $scope.error = false;
                 $scope.disabled = true;
 
-                $http.post('/universidade/contaDeAgua', self.conta)
+                $http.post('/universidade/contaDeAgua/', self.conta)
                     .success(function () {
                         self.mdDialogSubmit();
                     })
@@ -39,7 +39,7 @@ angular.module('myApp')
                 $scope.error = false;
                 $scope.disabled = true;
 
-                $http.put('/universidade/contaDeAgua' + self.conta._id, self.conta)
+                $http.put('/universidade/contaDeAgua/' + self.conta._id, self.conta)
                     .success(function () {
                         self.mdDialogSubmit();
                     })
