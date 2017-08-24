@@ -256,6 +256,7 @@ angular.module('myApp')
             };
 
             self.editContaDialog = function (ev, c) {
+                c.dataDePagamento = new Date(c.dataDePagamento);
                 contasService.setConta(c);
                 contasService.setIsNew(false);
 
