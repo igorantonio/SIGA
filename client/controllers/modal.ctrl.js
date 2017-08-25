@@ -22,7 +22,7 @@ angular.module('myApp')
 
 angular.module('myApp')
     .controller('DialogController', ['$scope','$mdDialog', '$q', '$http', 'edificioService',
-        function ($scope, $mdDialog, $q, $http, edificioService,) {
+        function ($scope, $mdDialog, $q, $http, edificioService) {
 
               var ANUAL = 'anual';
                 var MENSAL = 'mensal';

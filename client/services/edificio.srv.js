@@ -7,7 +7,14 @@ angular.module('myApp')
   	var isNew = false;
   	var edificio = {};
     var granularidade = 'day';
+    var alerta = {};
 
+    this.getAlerta = function(){
+      return alerta;
+    };
+    this.setAlerta = function(a){
+      alerta = a;
+    }
 
     this.setGranularidade = function(granularidade){
       granularidade = granularidade;

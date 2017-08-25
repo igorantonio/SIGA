@@ -1,0 +1,30 @@
+<div ng-controller="ManageEdificioController as ctrl">
+    <md-dialog id="add-vazamento-dialog" aria-label="Alertas" ng-cloak>
+    <div >
+
+    <h2 class="titulo">Alertas</h2>
+      <md-subheader class="md-no-sticky">Alertas que ainda não foram checados</md-subheader>
+
+    <div ng-repeat="alerta in ctrl.edificio.alertas">
+        <form name="form" ng-submit="ctrl.updateAlerta(alerta._id)">
+            <div ng-show="ctrl.error" class="alert alert-danger">{{ctrl.errorMessage}}</div>
+            <md-dialog-actions layout="row"><p>{{alerta.data}}</p>
+              <div ng-if="!alerta.checked">
+                <md-button class="md-icon-button md-accent" type="submit" ng-disabled="registerForm.$invalid" md-autofocus>
+                                      <md-icon md-svg-icon="lib/icons/check.svg" ></md-icon>
+                </md-button>
+                  </div>
+
+                    <div ng-if="alerta.checked">
+                <md-button class="md-icon-button md-accent" ng-disabled="registerForm.$invalid" md-autofocus>
+                                      <md-icon md-svg-icon="lib/icons/checked.svg" ></md-icon>
+                </md-button>
+                  </div>
+
+            </md-dialog-actions>
+        </form>
+        </div>
+        </div>
+
+    </md-dialog>
+</div>

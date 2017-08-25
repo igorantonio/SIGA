@@ -9,6 +9,7 @@ angular.module('myApp')
             self.showUser = false;
             self.showVazamento = false;
             self.showContasDeAgua = false;
+            self.showAlerta = false;
 
             self.data = [];
 
@@ -20,6 +21,7 @@ angular.module('myApp')
                 self.showUser = false;
                 self.showVazamento = false;
                 self.showContasDeAgua = false;
+                self.showAlerta = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -34,6 +36,7 @@ angular.module('myApp')
                 self.showUser = true;
                 self.showVazamento = false;
                 self.showContasDeAgua = false;
+                self.showAlerta = false;
 
                 $http.get("/userIndex")
                     .then(function (response, ev) {
@@ -48,6 +51,7 @@ angular.module('myApp')
                 self.showUser = false;
                 self.showVazamento = true;
                 self.showContasDeAgua = false;
+                self.showAlerta = false;
 
                 $http.get("/edificio")
                     .then(function (response, ev) {
@@ -62,8 +66,24 @@ angular.module('myApp')
                 self.showEdificio = false;
                 self.showVazamento = false;
                 self.showContasDeAgua = true;
+                self.showAlerta = false;
 
                 $http.get("/universidade/contaDeAgua")
+                    .then(function (response, ev) {
+                        self.data = response.data;
+                    }, function () {
+                        self.data = "error in fetching data"; //return if error on fetch
+                    });
+            };
+
+            self.loadAlerta = function(ev) {
+                self.showUser = false;
+                self.showEdificio = false;
+                self.showVazamento = false;
+                self.showContasDeAgua = false;
+                self.showAlerta = true;
+
+                $http.get("/edificio")
                     .then(function (response, ev) {
                         self.data = response.data;
                     }, function () {
@@ -77,6 +97,7 @@ angular.module('myApp')
                 self.showContas = false;
                 self.showVazamento = false;
                 self.showContasDeAgua = false;
+                self.showAlerta = false;
 
                 var user = AuthService.getUser();
 
@@ -88,6 +109,8 @@ angular.module('myApp')
                     fullscreen: $scope.customFullscreen
                 });
             };
+
+
 
             self.logout = function () {
                 AuthService.logout()
@@ -173,6 +196,28 @@ angular.module('myApp')
                     controllerAs: 'ctrl'
                 });
 
+            };
+
+            self.checkAlert = function(edificio){
+                var r = false;
+                edificio.alertas.forEach(function(a){
+                    if (!a.checked){
+                        r = true;
+                    }
+                });
+                return r;
+            };
+
+            self.listarAlertas = function (ev, edificio) {
+                edificioService.setEdificio(edificio);
+                edificioService.setNew(false);
+                $mdDialog.show({
+                    templateUrl: '../views/lista-alertas.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen
+                });
             };
 
             self.editEdificio = function (ev, edificio) {

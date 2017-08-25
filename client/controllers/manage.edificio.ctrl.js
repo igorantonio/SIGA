@@ -4,6 +4,7 @@ angular.module('myApp')
 
             var self = this;
             self.edificio = edificioService.getEdificio();
+            self.alerta = edificioService.getAlerta();
 
             $scope.$on("fileProgress", function(e, progress) {
                 self.progress = progress.loaded / progress.total;
@@ -76,6 +77,21 @@ angular.module('myApp')
                 $scope.disabled = true;
 
                 $http.post('/edificio/' + self.edificio._id + '/vazamentos/new', {volume: self.volume, data: self.data})
+                    .success(function(){
+                        self.close();
+                    })
+                    .error(function(){
+                    });
+            };
+
+
+            self.updateAlerta = function(alertaID) {
+
+                // initial values
+                $scope.error = false;
+                $scope.disabled = true;
+
+                $http.put('/edificio/' + self.edificio._id + '/alertas/' + alertaID, {checked: true})
                     .success(function(){
                         self.close();
                         console.log('muito bom');

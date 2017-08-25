@@ -107,6 +107,7 @@ router.get('/edificio/:edificio_id/consumo', function(req, res) {
 router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
               res.status(400).json({err: 'Campo de data não informado.'});
+              return;
     };
 
     var qDias = 1;
@@ -117,6 +118,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
         if (err) {
             res.status(400).json({error: err});
+            return;
         }
 
         dataFinal = moment(req.body.data);
@@ -140,7 +142,31 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         alerta = false;
         aux = [];
         aux = emAlerta([edificio], 0.3);
-        if (Object.keys(aux).length > 0) alerta = true;
+
+        var maisrecente;
+        edificio.alertas.forEach(function(alerta){
+            if (maisrecente == null || moment(alerta.data).isAfter(moment(maisrecente))){
+                maisrecente = alerta.data;
+            };
+
+        });
+
+        console.log('rs',maisrecente);
+        if( (moment(maisrecente).isBefore(moment(req.body.data)))) {
+            total = 0;
+                edificio.historicoConsumo.forEach(function(cd) {
+                if ( moment(cd.data).isSame(moment(req.body.data)),'day') {
+                    total += cd.consumo;
+                }
+            });
+                console.log(total);
+
+            if (total >= 0.2* edificio.mediaEsperada){
+                alerta = true;
+            }
+
+        };
+
 
         if (alerta) {
             users.data.sendEmail(edificio);
@@ -156,6 +182,7 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         edificio.save(function(err) {
             if (err) {
                 res.status(400).json({error: err});
+                return;
             } else {
                 res.status(200).json(edificio.historicoConsumo);
             }
