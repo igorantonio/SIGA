@@ -171,9 +171,9 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
         if (alerta) {
             users.data.sendEmail(edificio);
 
-            data = new Date(req.body.data);
+            data = moment(req.body.data);
             novoAlerta = {
-                data: data.setTime(data.getTime()),
+                data: data,
                 checked: false
             };
             edificio.alertas.push(novoAlerta);

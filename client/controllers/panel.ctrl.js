@@ -14,7 +14,9 @@ angular.module('myApp')
             self.data = [];
 
             var user = AuthService.getUser();
-            self.user_email = user.username;
+         
+                        self.user_email = user.username;
+
 
             self.loadEdificios = function (ev) {
                 self.showEdificio = true;
