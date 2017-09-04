@@ -12,7 +12,6 @@ angular.module('myApp')
             self.showAlerta = false;
 
             self.data = [];
-
             var user = AuthService.getUser();
          
                         self.user_email = user.username;
@@ -337,6 +336,8 @@ angular.module('myApp')
                 });
 
             };
+
+
 
             function ManageUserController($scope, $http, $mdDialog, userService) {
 
