@@ -30,8 +30,8 @@ angular.module('myApp')
             self.registerEdificio = function() {
 
                 // initial values
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 console.log(self.edificio.img);
 
@@ -40,47 +40,65 @@ angular.module('myApp')
                         self.close();
                     })
                     .error(function(){
+                        self.error = true;
+                        self.errorMessage = "Algo está errado! Lembre-se que: "
+                                            + "A atividade deve ter no mínimo 3 caracteres; "
+                                            + "A descrição deve ter no mínimo 10 caracteres; "
+                                            + "É importante que  a latitude e longitude sejam "
+                                            + "diferentes de zero; Os valores não devem ser "
+                                            + "negativos (exceto para latitude e longitude);";
                     });
             };
 
             self.editEdificio = function() {
 
                 // initial values
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.put('/edificio/' + self.edificio._id, self.edificio)
                     .success(function(){
                         self.close();
                     })
                     .error(function(){
+                        self.error = true;
+                        self.errorMessage = "Algo está errado! Lembre-se que: "
+                                            + "A atividade deve ter no mínimo 3 caracteres; "
+                                            + "A descrição deve ter no mínimo 10 caracteres; "
+                                            + "É importante que  a latitude e longitude sejam "
+                                            + "diferentes de zero; Os valores não devem ser "
+                                            + "negativos (exceto para latitude e longitude);";
                     });
             };
 
             self.deleteEdificio = function(){
 
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.delete('/edificio/' + self.edificio._id)
                     .success(function(){
                         self.close();
                     })
                     .error(function(){
+                        self.error = true;
+                        self.errorMessage = "Algo está errado!";
                     });
             };
 
             self.addVazamento = function() {
 
                 // initial values
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.post('/edificio/' + self.edificio._id + '/vazamentos/new', {volume: self.volume, data: self.data})
                     .success(function(){
                         self.close();
                     })
-                    .error(function(){
+                    .error(function(status){
+                        self.error = true;
+                        self.errorMessage = "Algo está errado! " + status;
                     });
             };
 
@@ -88,16 +106,16 @@ angular.module('myApp')
             self.updateAlerta = function(alertaID) {
 
                 // initial values
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.put('/edificio/' + self.edificio._id + '/alertas/' + alertaID, {checked: true})
                     .success(function(){
                         self.close();
-                        console.log('muito bom');
                     })
-                    .error(function(){
-                        console.log('muito ruim');
+                    .error(function(status){
+                        self.error = true;
+                        self.errorMessage = "Algo está errado! " + status;
                     });
             };
 }]);

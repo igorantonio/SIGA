@@ -23,34 +23,38 @@ angular.module('myApp')
 
             self.addConta = function () {
 
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.post('/universidade/contaDeAgua/', self.conta)
                     .success(function () {
                         self.mdDialogSubmit();
                     })
-                    .error(function () {
+                    .error(function (status) {
+                        self.error = true;
+                        self.errorMessage = "Algo está errado! " + status;
                     });
             };
 
             self.editConta = function () {
 
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.put('/universidade/contaDeAgua/' + self.conta._id, self.conta)
                     .success(function () {
                         self.mdDialogSubmit();
                     })
-                    .error(function () {
+                    .error(function (status) {
+                        self.error = true;
+                        self.errorMessage = "Algo está errado! " + status;
                     });
             };
 
             self.deleteConta = function () {
 
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 $http.delete('/universidade/contaDeAgua/' + self.conta._id)
                     .success(function () {
@@ -58,6 +62,8 @@ angular.module('myApp')
                         self.mdDialogSubmit();
                     })
                     .error(function () {
+                        self.error = true;
+                        self.errorMessage = "Algo está errado!";
                     });
             };
         }]);

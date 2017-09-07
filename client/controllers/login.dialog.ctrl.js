@@ -24,7 +24,7 @@ angular.module('myApp')
                     // handle error
                     .catch(function () {
                         self.error = true;
-                        self.errorMessage = "Invalid username and/or password";
+                        self.errorMessage = "Usuário ou senha inválidos!";
                     });
             };
 

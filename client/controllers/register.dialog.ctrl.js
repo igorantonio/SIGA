@@ -11,8 +11,8 @@ angular.module('myApp')
             self.register = function () {
 
                 // initial values
-                $scope.error = false;
-                $scope.disabled = true;
+                self.error = false;
+                self.disabled = true;
 
                 // call register from service
                 AuthService.register(self.username, self.password, self.confirm_pass)
@@ -25,7 +25,7 @@ angular.module('myApp')
                     // handle error
                     .catch(function () {
                         self.error = true;
-                        self.errorMessage = "Something went wrong!";
+                        self.errorMessage = "Algo está errado! Verifique os dados.";
                         self.disabled = false;
                         self.registerForm = {};
                     });
