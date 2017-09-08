@@ -7,6 +7,28 @@ var User = require('../models/user.js');
 var CaixaDeAgua = require('../models/caixaDeAgua.js');
 
 
+/**
+ * @api {post} /caixa/ Criação de caixa de agua
+ * @apiName createCaixa
+ * @apiGroup Caixa
+ * @apiDescription Todos os parâmetros devem estar encapsulados em um json.
+ * @apiParam {String} nome     Nome para a caixa de agua (Obrigatório).
+ * @apiParam {String {10..}} descricao="Nenhuma descrição informada"     Descrição para a caixa de agua (Obrigatório).
+ * @apiParam {json} caracteristicasFisicas     Caracteristicas fisicas da caixa de agua.
+ * @apiParam {json} caracteristicasFisicas.localizacao     Localização da caixa d'agua.
+ * @apiParam {String} caracteristicasFisicas.localizacao.setor     Setor onde a caixa d'água está localizada.
+ * @apiParam {String} caracteristicasFisicas.localizacao.bloco     Bloco onde a caixa d'água está localizada.
+ * @apiParam {Number} caracteristicasFisicas.area     Área ocupada pela caixa d'agua.
+ * @apiParam {Number} caracteristicasFisicas.n_pavimentos     Número de pavimentos da caixa d'agua.
+ * @apiParam {Number} caracteristicasFisicas.ocupacaoMedia     Ocupação Média da caixa d'agua.
+ * @apiParam {Number} caracteristicasFisicas.volumeReservatorio     Capacidade da caixa d'agua.
+ * @apiParam {Number} mediaEsperada     Média de consumo esperada (No dia).
+ * @apiParam {json[]} [historicoConsumo]     Histórico de consumo da caixa. Exemplo de item:
+ * @apiParam {json} [historicoConsumo.0]     Exemplo de Item da lista. (Referente ao registro de consumo da caixa). 
+ * @apiParam {Date} historicoConsumo.0.data     Data do registro.
+ * @apiParam {Number} historicoConsumo.0.consumo     Volume consumido registrado.
+
+ */
 
 //CREATE
 router.post('/caixa', function(req, res) {
@@ -32,6 +54,17 @@ router.post('/caixa', function(req, res) {
     });
 
 });
+
+
+/**
+ * @api {get} /caixa Index
+ * @apiName IndexCaixa
+ * @apiGroup Caixa
+ * @apiParam {String} nivelAlerta (Query) Filtrar o resultado obtido por estado de alerta, nível 0 ou 1.
+ * @apiParam {String} withAlerta (Query) Filtrar o resultado para edificios com algum dos níveis de alerta. {'true'}
+ * @apiSuccess {json} caixas Todas as caixas d'agua obtidas.
+ *
+ */
 
 //INDEX
 router.get('/caixa', function(req, res) {
@@ -70,7 +103,17 @@ router.get('/caixa', function(req, res) {
     });
 });
 
+
+
 //SHOW
+/**
+ * @api {get} /caixa/:caixa_id Obter informações de um caixa
+ * @apiName ShowCaixa
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id Identificador para a caixa.
+ * @apiSuccess {json} edificio informações sobre o edificio.
+ *
+ */
 router.get('/caixa/:caixa_id', function(req, res) {
     CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
         if (error){ 
@@ -83,6 +126,27 @@ router.get('/caixa/:caixa_id', function(req, res) {
 });
 
 //UPDATE
+
+/**
+ * @api {post} /caixa/:caixa_id Atualizar informações de caixa de agua
+ * @apiName updateCaixa
+ * @apiGroup Caixa
+ * @apiDescription Todos os parâmetros devem estar encapsulados em um json.
+ * @apiParam {String} caixa_id Identificador da caixa.
+ * @apiParam {String} nome     Nome para a caixa de agua (Obrigatório).
+ * @apiParam {String {10..}} descricao="Nenhuma descrição informada"     Descrição para a caixa de agua (Obrigatório).
+ * @apiParam {json} caracteristicasFisicas     Caracteristicas fisicas da caixa de agua.
+ * @apiParam {json} caracteristicasFisicas.localizacao     Localização da caixa d'agua.
+ * @apiParam {String} caracteristicasFisicas.localizacao.setor     Setor onde a caixa d'água está localizada.
+ * @apiParam {String} caracteristicasFisicas.localizacao.bloco     Bloco onde a caixa d'água está localizada.
+ * @apiParam {Number} caracteristicasFisicas.area     Área ocupada pela caixa d'agua.
+ * @apiParam {Number} caracteristicasFisicas.n_pavimentos     Número de pavimentos da caixa d'agua.
+ * @apiParam {Number} caracteristicasFisicas.ocupacaoMedia     Ocupação Média da caixa d'agua.
+ * @apiParam {Number} caracteristicasFisicas.volumeReservatorio     Capacidade da caixa d'agua.
+ * @apiParam {Number} mediaEsperada     Média de consumo esperada (No dia).
+ * @apiParam {json[]} [historicoConsumo]     Histórico de consumo da caixa. 
+ * @apiParam {json[]} [vazamentos]     Histórico de vazamentos da caixa. 
+ */
 router.put('/caixa/:caixa_id', function(req, res) {
    	CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
         if (error) res.send(caixa);
@@ -104,6 +168,15 @@ router.put('/caixa/:caixa_id', function(req, res) {
 });
 
 //DELETE
+
+/**
+ * @api {delete} /caixa/:caixa_id Remover um edificio
+ * @apiName deleteCaixa
+ * @apiGroup Caixa
+ * @apiParam {Number} caixa_id Identificador da caixa.
+ * @apiSuccess {json} message Mensagem informando que a caixa foi removida.
+ *
+ */
 router.route('/caixa/:caixa_id')
     .delete(function(req, res) {
         CaixaDeAgua.remove({
@@ -118,6 +191,15 @@ router.route('/caixa/:caixa_id')
         });
     });
 
+
+
+/**
+ * @api {get} /caixa/:caixa_id/vazamentos Obter vazamentos
+ * @apiName getVazamentos
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiSuccess {json} vazamentos Vazamentos da caixa.
+ */
 
 //VAZAMENTO
 //SHOW
@@ -137,6 +219,16 @@ router.get('/caixa/:caixa_id/vazamentos', function(req, res) {
 });
 
 
+
+/**
+ * @api {post} /caixa/:caixa_id/vazamentos/new Adicionar vazamento
+ * @apiName createVazamentos
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {Date} data     Data do vazamento.
+ * @apiParam {Date} volume     Volume do vazamento. 
+ * @apiSuccess {json} vazamentos Vazamentos da caixa (incluindo novo vazamento).
+ */
 // CREATE
 router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
     if (req.body.data == null) {
@@ -169,6 +261,17 @@ router.post('/caixa/:caixa_id/vazamentos/new', function(req, res) {
 });
 
 
+/**
+ * @api {post} /caixa/:caixa_id/vazamentos/:vazamento_id  Atualizar informações de um vazamento
+ * @apiName updateVazamento
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {String} vazamento_id     Identificador do vazamento a ser removido.
+ * @apiParam {Date} data     Data do vazamento.
+ * @apiParam {Date} volume     Volume do vazamento. 
+ * @apiSuccess {json} resposta 
+ * @apiSuccess {json} resposta.message Mensagem informando o sucesso da alteração: "Vazamento atualizado".
+ */
 // Update (Vazamento)
 router.put('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
     CaixaDeAgua.findById(req.params.caixa_id, function(err, caixa) {
@@ -198,6 +301,14 @@ router.put('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
 
 
 
+/**
+ * @api {delete} /caixa/:caixa_id/vazamentos/:vazamento_id  Remover um vazamento
+ * @apiName deleteVazamento
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {String} vazamento_id     Identificador do vazamento a ser removido.
+ * @apiSuccess {json} vazamentos Vazamentos da caixa (após a exclusão).
+ */
 // DELETE
 router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
     CaixaDeAgua.findById(req.params.caixa_id, function(error, caixa) {
@@ -224,7 +335,19 @@ router.delete('/caixa/:caixa_id/vazamentos/:vazamento_id', function(req, res) {
 
 });
 
-
+/**
+ * @api {get} /caixa/:caixa_id/consumo  Obter consumos
+ * @apiName getConsumo
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {Number} [ano]     Filtrar para obter apenas consumos de um determinado ano.
+ * @apiParam {Number} [mes]     Filtrar para obter apenas consumos de um determinado mês.
+ * @apiParam {Number} [dia]     Filtrar para obter apenas consumos de um determinado dia.
+ * @apiParam {String} [inicio]     Filtrar para obter apenas consumos a partir de uma certa data (inicio). A String deve seguir o padrão de representação de data javascript.
+ * @apiParam {String} [fim]     Filtrar para obter apenas consumos até uma certa data (fim). A String deve seguir o padrão de representação de data javascript.
+ * @apiParam {String} [granularidade='day']     Definir agrupamento dos consumos. valores permitidos: {'anual','mensal','diario',detalhado}.
+ * @apiSuccess {json} consumos Consumos da caixa (respeitando as restrições de filtro e agrupamento).
+ */
 //CONSUMO
 //SHOW
 router.get('/caixa/:caixa_id/consumo', function(req, res) {
@@ -273,7 +396,19 @@ router.get('/caixa/:caixa_id/consumo', function(req, res) {
     )
 });
 
+
 //CREATE
+/**
+**
+ * @api {post} /caixa/:caixa_id/consumo/new  Adicionar consumo
+ * @apiName createConsumo
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {Date} data     Data do registro. (Caso o consumo seja referente a varios dias, este é o ultimo dia).
+ * @apiParam {Number} consumo     Volume consumido registrado.
+ * @apiParam {Number} [qDias=1]     Quantidade de dias que o consumo é referente. 
+ * @apiSuccess {json} consumos Consumos da caixa (após a adição do novo consumo).
+ */
 router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
     if (req.body.data == null) {
               res.status(400).json({err: error});
@@ -283,7 +418,7 @@ router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
         if (error) res.send(caixa);
         data = new Date(req.body.data);
         novoConsumo = {
-            data: data.setTime(data.getTime() + data.getTimezoneOffset() * 60 * 1000),
+            data: data.setTime(data.getTime()),
             consumo: req.body.consumo
         };
         caixa.historicoConsumo.push(novoConsumo);
@@ -298,6 +433,17 @@ router.post('/caixa/:caixa_id/consumo/new', function(req, res) {
 });
 
 
+/**
+**
+ * @api {put} /caixa/:caixa_id/consumo/:consumo_id Atualizar informações sobre um consumo
+ * @apiName updateConsumo
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {String} consumo_id     Identificador do consumo.
+ * @apiParam {Date} data     Data do registro.
+ * @apiParam {Number} consumo     Volume consumido registrado.
+ * @apiSuccess {json} consumos Consumos da caixa (após a atualização do consumo).
+ */
 // Update (Consumo)
 router.put('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
     CaixaDeAgua.findById(req.params.caixa_id, function(err, caixa) {
@@ -308,7 +454,7 @@ router.put('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
             caixa.historicoConsumo.forEach(function(consumo) {
                 if (consumo._id == req.params.consumo_id) {
                     data = new Date(req.body.data);
-                    if (req.body.data) consumo.data       = data.setTime(data.getTime() + data.getTimezoneOffset() * 60 *1000);
+                    if (req.body.data) consumo.data       = data.setTime(data.getTime());
                     if (req.body.consumo) consumo.consumo = req.body.consumo;
                 }
                 consumosAtualizado.push(consumo);
@@ -318,12 +464,23 @@ router.put('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
                 if (err) {
                     res.status(400).json({error: err});
                 } else {
-                    res.status(200).json({message: 'Consumo atualizado.'});
+                    res.status(200).json(consumosAtualizado);
                 }
             });
         }
     });
 });
+
+
+/**
+**
+ * @api {delete} /caixa/:caixa_id/consumo/:consumo_id Remover um consumo
+ * @apiName deleteConsumo
+ * @apiGroup Caixa
+ * @apiParam {String} caixa_id     Identificador da caixa de agua.
+ * @apiParam {String} consumo_id     Identificador do consumo.
+ * @apiSuccess {json} consumos Consumos da caixa (após a exclusão do consumo).
+ */
 
 // Delete (Consumo)
 router.delete('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
@@ -343,7 +500,7 @@ router.delete('/caixa/:caixa_id/consumo/:consumo_id', function(req, res) {
                 if (err) {
                     res.status(400).json({error: err});
                 } else {
-                    res.status(200).json({message: 'Consumo removido.'});
+                    res.status(200).json(consumosFiltrados);
                 }
             });
         }

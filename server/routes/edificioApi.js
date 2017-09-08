@@ -148,7 +148,6 @@ router.post('/edificio/:edificio_id/consumo/new', function(req, res) {
             if (maisrecente == null || moment(alerta.data).isAfter(moment(maisrecente))){
                 maisrecente = alerta.data;
             };
-
         });
 
         console.log('rs',maisrecente);
@@ -358,6 +357,14 @@ router.delete('/edificio/:edificio_id/vazamentos/:vazamento_id', function(req, r
     });
 });
 
+/**
+ * @api {get} /edificio/:edificio_id/alertas Obter todos alertas de um edificio
+ * @apiName IndexAlertas
+ * @apiGroup Edificio-Alertas
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiSuccess {json} alertas Todos os alertas do edificio.
+ *
+ */
 // Index    (Alerta)
 router.get('/edificio/:edificio_id/alertas', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificios) {
@@ -369,7 +376,15 @@ router.get('/edificio/:edificio_id/alertas', function(req, res) {
     });
 });
 
-
+/**
+ * @api {get} /edificio/:edificio_id/alertas/:alerta_id Obter um alerta de um edificio.
+ * @apiName ShowAlertas
+ * @apiGroup Edificio-Alertas
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiParam {Number} alerta_id Identificador unico para o alerta.
+ * @apiSuccess {json} alerta O alerta requisitado do edificio requisitado.
+ *
+ */
 // Show     (Alerta)
 router.get('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
@@ -388,6 +403,21 @@ router.get('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
     });
 });
 
+/**
+ * @api {post} /edificio/:edificio_id/alertas/new Adicionar um novo alerta a um edificio
+ * @apiName CreateAlerta
+ * @apiGroup Edificio-Alertas
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiParam {Date} data Data em que o alerta foi gerado, se a hora não for informada ela será 00:00:00BRT
+ * @apiParam {Boolean} checked Se o alerta foi verificado ou não.
+ * @apiParamExample {json} alerta:
+ *     {
+ *       "data": 2011-07-14T19:43:37
+ *       "checked": False
+ *     }
+ * @apiSuccess {json} alertas Todos os alertas do edificio, incluindo o inserido.
+ *
+ */
 // Create   (Alerta)
 router.post('/edificio/:edificio_id/alertas/new', function(req, res) {
     if (req.body.data == null) {
@@ -419,6 +449,22 @@ router.post('/edificio/:edificio_id/alertas/new', function(req, res) {
     });
 });
 
+/**
+ * @api {put} /edificio/:edificio_id/alertas/:alerta_id Atualizar um alerta de um edificio.
+ * @apiName UpdateAlerta
+ * @apiGroup Edificio-Alertas
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiParam {Number} alerta_id Identificador unico para o alerta.
+ * @apiParam {Date} [data] Data em que o alerta foi gerado, se a hora não for informada ela será 00:00:00BRT
+ * @apiParam {Boolean} [checked] Se o alerta foi verificado ou não.
+ * @apiParamExample {json} alerta:
+ *     {
+ *       "data": 2011-07-14T19:43:37
+ *       "checked": True
+ *     }
+ * @apiSuccess {json} message Json com uma mensagem informando que o alerta foi atualizado.
+ *
+ */
 // Update   (Alerta)
 router.put('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
@@ -445,6 +491,15 @@ router.put('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
     });
 });
 
+/**
+ * @api {delete} /edificio/:edificio_id/alertas/:alerta_id Deletar um alerta de um edificio.
+ * @apiName DeleteAlerta
+ * @apiGroup Edificio-Alertas
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiParam {Number} alerta_id Identificador unico para o alerta.
+ * @apiSuccess {json} message Json com uma mensagem informando que o alerta foi removido.
+ *
+ */
 // Delete   (Alerta)
 router.delete('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
@@ -469,6 +524,16 @@ router.delete('/edificio/:edificio_id/alertas/:alerta_id', function(req, res) {
     });
 });
 
+/**
+ * @api {get} /edificio Obter todos os edificios.
+ * @apiName IndexEdificio
+ * @apiGroup Edificio
+ * @apiParam {String} setor (Query) Filtrar o resultado obtido por setor.
+ * @apiParam {String} nivelAlerta (Query) Filtrar o resultado obtido por estado de alerta, nível 0 ou 1.
+ * @apiParam {String} withAlerta (Query) Filtrar o resultado para edificios com algum dos níveis de alerta.
+ * @apiSuccess {json} edificios Todos edificios obtidos.
+ *
+ */
 // Index (Edificio)
 router.get('/edificio', function(req, res) {
     Edificio.find(function(err, edificios) {
@@ -506,6 +571,14 @@ router.get('/edificio', function(req, res) {
     });
 });
 
+/**
+ * @api {get} /edificio Obter um edificio.
+ * @apiName ShowEdificio
+ * @apiGroup Edificio
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiSuccess {json} edificio O edificio de id informado.
+ *
+ */
 // Show (Edificio)
 router.get('/edificio/:edificio_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(error, edificio) {
@@ -514,6 +587,56 @@ router.get('/edificio/:edificio_id', function(req, res) {
     });
 });
 
+/**
+ * @api {post} /edificio/ Adicionar um edificio.
+ * @apiName CreateEdificio
+ * @apiGroup Edificio
+ * @apiDescription Todos os parâmetros devem estar encapsulados em um json.
+ * @apiParam {String} nome     Nome para o edificio (Obrigatório).
+ * @apiParam {String {10..}} descricao="Nenhuma descrição informada"     Descrição para o edificio d'agua (Obrigatório).
+ * @apiParam {String} [img] Imagem do edifício.
+ * @apiParam {json} caracteristicasFisicas     Caracteristicas fisicas do edificio d'agua.
+ * @apiParam {json} caracteristicasFisicas.localizacao     Localização do edificio.
+ * @apiParam {String} caracteristicasFisicas.localizacao.setor     Setor onde o edificio está localizado.
+ * @apiParam {String} caracteristicasFisicas.localizacao.bloco     Bloco onde o edificio está localizado.
+ * @apiParam {Number} caracteristicasFisicas.area     Área ocupada pelo edificio.
+ * @apiParam {Number} caracteristicasFisicas.n_pavimentos     Número de pavimentos do edificio.
+ * @apiParam {Number} caracteristicasFisicas.ocupacaoMedia     Ocupação Média do edificio.
+ * @apiParam {Number} caracteristicasFisicas.volumeReservatorio     Capacidade do edificio.
+ * @apiParam {Number} caracteristicasFisicas.n_baciasSanitarias     Número de bacias sanitárias do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_torneiras    Número de torneiras do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_duchas       Número de duchas do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_chuveiros    Número de chuveiros do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_pias         Número de pias do edifício.
+ * @apiParam {Number} mediaEsperada     Média de consumo esperada (No dia).
+ * @apiParam {json[]} [historicoConsumo]     Histórico de consumo do edificio.
+ * @apiParamExample {json} edificio:
+ *   "mediaEsperada": 200,
+ *   "geolocalizacao": {
+ *           "latitude": -7.2131092,
+ *           "longitude": -35.9076118
+ *    },
+ *   "caracteristicasFisicas": {
+ *           "area": 100,
+ *           "n_pavimentos": 3,
+ *           "ocupacaoMedia": 0,
+ *           "n_baciasSanitarias": 0,
+ *           "n_torneiras": 32,
+ *           "n_duchas": 2,
+ *           "n_chuveiros": 0,
+ *           "n_pias": 22,
+ *           "volumeReservatorio": 40,
+ *           "localizacao": {
+ *               "setor": "B",
+ *               "bloco": "CH"
+ *           }
+ *       },
+ *    "nome": "Centro de Humanidades",
+ *    "atividade": "Educativo",
+ *    "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate."
+ *    }
+ * @apiSuccess {json} edifico O edificio adicionado. 
+ */
 // Create (Edificio)
 router.post('/edificio', function(req, res) {
     var edificio = new Edificio();
@@ -542,6 +665,57 @@ router.post('/edificio', function(req, res) {
     });
 });
 
+/**
+ * @api {put} /edificio/:edificio_id Atualizar um edificio.
+ * @apiName UpdateEdificio
+ * @apiGroup Edificio
+ * @apiDescription Todos os parâmetros devem estar encapsulados em um json.
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiParam {String} [nome]     Nome para o edificio (Obrigatório).
+ * @apiParam {String {10..}} [descricao]="Nenhuma descrição informada"     Descrição para o edificio d'agua (Obrigatório).
+ * @apiParam {String} [img] Imagem do edifício.
+ * @apiParam {json} [caracteristicasFisicas]     Caracteristicas fisicas do edificio d'agua.
+ * @apiParam {json} caracteristicasFisicas.localizacao     Localização do edificio.
+ * @apiParam {String} caracteristicasFisicas.localizacao.setor     Setor onde o edificio está localizado.
+ * @apiParam {String} caracteristicasFisicas.localizacao.bloco     Bloco onde o edificio está localizado.
+ * @apiParam {Number} caracteristicasFisicas.area     Área ocupada pelo edificio.
+ * @apiParam {Number} caracteristicasFisicas.n_pavimentos     Número de pavimentos do edificio.
+ * @apiParam {Number} caracteristicasFisicas.ocupacaoMedia     Ocupação Média do edificio.
+ * @apiParam {Number} caracteristicasFisicas.volumeReservatorio     Capacidade do edificio.
+ * @apiParam {Number} caracteristicasFisicas.n_baciasSanitarias     Número de bacias sanitárias do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_torneiras    Número de torneiras do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_duchas       Número de duchas do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_chuveiros    Número de chuveiros do edifício.
+ * @apiParam {Number} caracteristicasFisicas.n_pias         Número de pias do edifício.
+ * @apiParam {Number} [mediaEsperada]     Média de consumo esperada (No dia).
+ * @apiParam {json[]} [historicoConsumo]     Histórico de consumo do edificio.
+ * @apiParamExample {json} edificio:
+ *   "mediaEsperada": 200,
+ *   "geolocalizacao": {
+ *           "latitude": -7.2131092,
+ *           "longitude": -35.9076118
+ *    },
+ *   "caracteristicasFisicas": {
+ *           "area": 100,
+ *           "n_pavimentos": 3,
+ *           "ocupacaoMedia": 0,
+ *           "n_baciasSanitarias": 0,
+ *           "n_torneiras": 32,
+ *           "n_duchas": 2,
+ *           "n_chuveiros": 0,
+ *           "n_pias": 22,
+ *           "volumeReservatorio": 40,
+ *           "localizacao": {
+ *               "setor": "B",
+ *               "bloco": "CH"
+ *           }
+ *       },
+ *    "nome": "Centro de Humanidades",
+ *    "atividade": "Educativo",
+ *    "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate."
+ *    }
+ * @apiSuccess {json} Mensagem Um mensagem informando que o edifício atualizado. 
+ */
 // Uṕdate (Edificio)
 router.put('/edificio/:edificio_id', function(req, res) {
     Edificio.findById(req.params.edificio_id, function(err, edificio) {
@@ -564,6 +738,14 @@ router.put('/edificio/:edificio_id', function(req, res) {
     });
 });
 
+/**
+ * @api {delete} /edificio/:edificio_id Remover um edificio.
+ * @apiName ShowEdificio
+ * @apiGroup Edificio
+ * @apiParam {Number} edificio_id Identificador unico para o edificio
+ * @apiSuccess {json} edificio Mensagem informando que o edificio de id informado foi removido.
+ *
+ */
 //Delete (Edificio)
 router.delete('/edificio/:edificio_id', function(req, res) {
     Edificio.remove({ _id: req.params.edificio_id }, function(error) {
@@ -572,12 +754,6 @@ router.delete('/edificio/:edificio_id', function(req, res) {
     });
 });
 
-/**
-* Represents a book.
- * @constructor
- * @param {string} title - The title of the book.
- * @param {string} author - The author of the book.
- */
 var filtrarPorSetor = function(setor, edificios) {
     edificiosFiltrados = [];
     edificios.forEach(function(edificio) {
@@ -686,4 +862,3 @@ module.exports.data = {
   }
 
 }
-

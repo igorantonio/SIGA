@@ -12,9 +12,10 @@ angular.module('myApp')
             self.showAlerta = false;
 
             self.data = [];
-
             var user = AuthService.getUser();
-            self.user_email = user.username;
+         
+                        self.user_email = user.username;
+
 
             self.loadEdificios = function (ev) {
                 self.showEdificio = true;
@@ -335,6 +336,8 @@ angular.module('myApp')
                 });
 
             };
+
+
 
             function ManageUserController($scope, $http, $mdDialog, userService) {
 

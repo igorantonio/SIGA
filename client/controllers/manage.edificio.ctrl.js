@@ -5,6 +5,11 @@ angular.module('myApp')
             var self = this;
             self.edificio = edificioService.getEdificio();
             self.alerta = edificioService.getAlerta();
+            self.getData = function(data){
+                m = moment(new Date(data));
+                return (m.date() +  "/" + (m.month()+1) + "/" +m.year() ); 
+
+            };
 
             $scope.$on("fileProgress", function(e, progress) {
                 self.progress = progress.loaded / progress.total;
