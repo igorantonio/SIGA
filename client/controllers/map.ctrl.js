@@ -2,6 +2,8 @@ angular.module('myApp')
 .controller('MapController', ['$scope', '$http', '$mdDialog', '$window', 'edificioService', function ($scope, $http, $mdDialog, $window, edificioService) {
 
     var self = this;
+
+    self.menuSelectedIten = 'T';
     self.markers = {};
     var icons = {
         todos: {
@@ -89,7 +91,6 @@ angular.module('myApp')
         self.markers[edificio._id] = marker;
     };
 
-
     // request the edificios' data from the api and send it to the addMarker method to be drawn
     $scope.loadData = function () {
 
@@ -151,8 +152,6 @@ angular.module('myApp')
 
     self.initMap();
 
-
-
     self.showOnlySetor = function (setor) {
         for (key in self.markers) {
             self.markers[key].setVisible(false);
@@ -168,7 +167,7 @@ angular.module('myApp')
             }, function () {
                 $scope.data = "error in fetching data"; //return if error on fetch
             });
-
+        self.menuSelectedIten = setor;
     };
 
     self.showEdificiosAlerta = function (nivelAlerta) {
@@ -188,6 +187,7 @@ angular.module('myApp')
                     }
                 }
             });
+        self.menuSelectedIten = nivelAlerta;
     };
 
     this.openMenu = function ($mdOpenMenu, ev) {
@@ -199,7 +199,7 @@ angular.module('myApp')
         for (key in self.markers) {
             self.markers[key].setVisible(true);
         }
-        ;
+        self.menuSelectedIten = 'T';        
     };
 
     self.openGeneralInfoDialog = function (ev) {
@@ -252,4 +252,4 @@ angular.module('myApp')
         }
     }
 
-}]);
+}])
