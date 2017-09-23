@@ -15,7 +15,7 @@ var bodyParser = require('body-parser');
 
 
 // mongoose
-mongoose.connect('mongodb://db:27017/mean-auth');
+mongoose.connect('mongodb://localhost/mean-auth');
 
 //Get the default connection
 var db = mongoose.connection;
