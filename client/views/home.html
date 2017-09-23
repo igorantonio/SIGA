@@ -2,9 +2,9 @@
     <toolbar></toolbar>
 
     <div ng-controller="MapController as ctrl">
+  
         <!-- Menu Toolbar-->
         <div class="menu-demo-container" layout="row" layout-align="end center">
-
             <div>
                 <md-icon class="md-ufcg-info-button" ng-click='ctrl.openGeneralInfoDialog($event)'>
                     home
@@ -19,53 +19,57 @@
                     <md-menu-content>
                         <md-menu-item>
                             <md-button ng-click="ctrl.redial($event)">
-                                <md-icon>check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten == 'T'">check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten != 'T'">check_box_outline_blank</md-icon>
                                 Todos os prédios
                             </md-button>
-
                         </md-menu-item>
+
                         <md-menu-item>
-                            <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                            <md-button disabled="disabled">
                                 Filtrar por consumo
                             </md-button>
                         </md-menu-item>
                         <md-menu-divider></md-menu-divider>
-
                         <md-menu-item>
                             <md-button ng-click="ctrl.showEdificiosAlerta('0')">
-                                <md-icon>check_box_outline_blank</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten == '0'">check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten != '0'">check_box_outline_blank</md-icon>
                                 Um pouco acima da média
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button ng-click="ctrl.showEdificiosAlerta('1')">
-                                <md-icon>check_box_outline_blank</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten == '1'">check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten != '1'">check_box_outline_blank</md-icon>
                                 Muito acima da média
                             </md-button>
                         </md-menu-item>
+
                         <md-menu-item>
                             <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
                                 Filtrar por setor
                             </md-button>
                         </md-menu-item>
                         <md-menu-divider></md-menu-divider>
-
                         <md-menu-item>
-
                             <md-button ng-click="ctrl.showOnlySetor('A');">
-                                <md-icon>check_box_outline_blank</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten == 'A'">check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten != 'A'">check_box_outline_blank</md-icon>
                                 Setor A
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button ng-click="ctrl.showOnlySetor('B');">
-                                <md-icon>check_box_outline_blank</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten == 'B'">check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten != 'B'">check_box_outline_blank</md-icon>
                                 Setor B
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button ng-click="ctrl.showOnlySetor('C');">
-                                <md-icon>check_box_outline_blank</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten == 'C'">check_box</md-icon>
+                                <md-icon ng-if="ctrl.menuSelectedIten != 'C'">check_box_outline_blank</md-icon>
                                 Setor C
                             </md-button>
                         </md-menu-item>
