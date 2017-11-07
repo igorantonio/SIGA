@@ -1,5 +1,5 @@
 # SIGA
-## Sistema Integrado de Monitoriamento de Água (UFCG)
+## Sistema Integrado de Monitoramento de Água (UFCG)
 
 ### Requisitos
 MongoDB v3.2.14
