@@ -5,7 +5,7 @@ WORKDIR /home/mean
 # Install Mean.JS packages
 ADD package.json /home/mean/package.json
 RUN npm config set registry http://registry.npmjs.org/
-#RUN npm install
+RUN npm install
 
 # Make everything available for start
 ADD . /home/mean
