@@ -13,9 +13,16 @@ var nvd3 = require('nvd3');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 
-
-// mongoose
-mongoose.connect('mongodb://localhost/mean-auth');
+var MONGO_DB;
+var DOCKER_DB = process.env.DB_PORT;
+if ( DOCKER_DB ) {
+  MONGO_DB = DOCKER_DB.replace( 'tcp', 'mongodb' ) + '/mean-auth';
+} else {
+  MONGO_DB = process.env.MONGODB;
+}
+var retry = 0;
+mongoose.connect(MONGO_DB);
+console.log(process.env);
 
 //Get the default connection
 var db = mongoose.connection;

@@ -11,11 +11,11 @@ RUN npm install
 ADD . /home/mean
 
 # currently only works for development
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 # Port 3000 for server
 # Port 35729 for livereload
 EXPOSE 3000 35729
 
 # Run MEAN.JS server
-CMD npm install && npm start
+CMD npm install & npm start
